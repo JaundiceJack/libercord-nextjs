@@ -1,0 +1,8 @@
+instead of having the user click login/create and be taken to that page
+i want to make a mini-window with 2 tabs at the top for login/create
+and place it on the homepage
+
+i could remove the hero image,
+move the swiper to its place
+and put blurred backgrounds to each slide
+with the expo text overlayed

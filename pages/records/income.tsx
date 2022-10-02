@@ -1,14 +1,18 @@
-import { FC } from "react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import PageLayout from "../../components/pageLayout";
+import IncomeContent from "../../components/income/incomeContent";
 
-interface IncomeProps {
-  totalIncome: number;
-}
-
-const Income: FC<IncomeProps> = ({ totalIncome }) => {
+const Income: NextPage = () => {
   return (
-    <>
-      <h1>{totalIncome}</h1>
-    </>
+    <PageLayout>
+      <Head>
+        <title>Libercord - Income</title>
+        <meta name="description" content="Liberty through finance" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <IncomeContent />
+    </PageLayout>
   );
 };
 

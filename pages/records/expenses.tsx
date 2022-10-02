@@ -1,19 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import PageLayout from "../components/pageLayout";
-import HomeContent from "../components/home/homeContent";
+import PageLayout from "../../components/pageLayout";
+import ExpenseContent from "../../components/expense/expenseContent";
 
-const Home: NextPage = () => {
+const Expense: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Home</title>
+        <title>Libercord - Expenses</title>
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HomeContent />
+      <ExpenseContent />
     </PageLayout>
   );
 };
 
-export default Home;
+export default Expense;
