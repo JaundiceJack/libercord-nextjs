@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { useTypedSelector } from "../../store/hooks";
 import { RootState } from "../../store/store";
 import NavLinks from "./navlinks";
 import Logout from "./logout";
 import Logo from "./logo";
+import useUser from "../../hooks/useUser";
 
 const Nav: FC = () => {
-  const user = useTypedSelector((state: RootState) => state.user);
+  const { user } = useUser({});
 
   return (
     <nav
@@ -16,10 +16,12 @@ const Nav: FC = () => {
         className={`flex flex-row items-center sticky top-2 p-2 sm:flex-col `}
       >
         <Logo />
-        <NavLinks />
-      </div>
 
-      {user && user.token && <Logout />}
+        {user && <NavLinks />}
+      </div>
+      <div className="grow" />
+      {user && <Logout />}
+      <div className="sm:h-6" />
     </nav>
   );
 };

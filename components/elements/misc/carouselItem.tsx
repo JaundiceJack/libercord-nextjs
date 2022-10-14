@@ -28,7 +28,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
             src={image}
             layout="fill"
             objectFit="cover"
-            objectPosition="-50px 0px"
+            objectPosition="center"
             quality={100}
           />
         </div>

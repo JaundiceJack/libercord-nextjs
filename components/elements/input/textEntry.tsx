@@ -1,12 +1,12 @@
 import { TextInput } from "@mantine/core";
-import { FC } from "react";
+import React, { FC } from "react";
 
 interface TextEntryProps {
   label: string;
   labelColor?: string;
   value: string;
   name: string;
-  onChange?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   required?: boolean;
   className?: string;

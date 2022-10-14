@@ -1,28 +1,22 @@
 import { FC } from "react";
 
-interface BasicButtonProps {
+interface HrefButtonProps {
   label: string;
   icon?: any;
   color: string;
-  type?: "button" | "submit" | "reset";
-  onClick?: () => void;
+  href: string;
   className?: string;
 }
 
-const BasicButton: FC<BasicButtonProps> = ({
+const HrefButton: FC<HrefButtonProps> = ({
   label,
   icon,
   color,
-  type = "button",
-  onClick,
+  href,
   className,
 }) => {
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={`h-12 flex items-end ${className}`}
-    >
+    <a href={href} className={`h-12 flex items-end ${className}`}>
       <div
         className={`flex flex-row justify-center cursor-pointer py-2 px-6 rounded-lg border-b-4 transform 
         duration-150 hover:border-b-0 focus:outline-none text-gray-900 hover:text-black 
@@ -37,8 +31,8 @@ const BasicButton: FC<BasicButtonProps> = ({
           {label}
         </p>
       </div>
-    </button>
+    </a>
   );
 };
 
-export default BasicButton;
+export default HrefButton;

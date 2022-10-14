@@ -2,8 +2,10 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import PageLayout from "../../components/pageLayout";
 import IncomeContent from "../../components/income/incomeContent";
+import useUser from "../../hooks/useUser";
 
 const Income: NextPage = () => {
+  const { user } = useUser({});
   return (
     <PageLayout>
       <Head>
@@ -11,7 +13,7 @@ const Income: NextPage = () => {
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <IncomeContent />
+      {user && <IncomeContent />}
     </PageLayout>
   );
 };

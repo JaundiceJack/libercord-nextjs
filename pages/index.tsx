@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head";
 import PageLayout from "../components/pageLayout";
 import HomeContent from "../components/home/homeContent";
