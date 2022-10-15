@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../store";
+import type { ReduxState } from "./store";
 
-interface YearState {
+export interface YearState {
   year: number;
 }
 
@@ -14,10 +14,10 @@ export const yearSlice = createSlice({
   initialState,
   reducers: {
     incrementYear: (state) => {
-      state.year = state.year + 1;
+      state.year += 1;
     },
     decrementYear: (state) => {
-      state.year = state.year - 1;
+      state.year -= 1;
     },
     resetYear: (state) => {
       state.year = new Date().getFullYear();
@@ -26,5 +26,5 @@ export const yearSlice = createSlice({
 });
 
 export const { incrementYear, decrementYear, resetYear } = yearSlice.actions;
-export const selectYear = (state: RootState) => state.year;
+export const selectYear = (state: ReduxState) => state.year;
 export default yearSlice.reducer;

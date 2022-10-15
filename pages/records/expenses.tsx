@@ -6,6 +6,7 @@ import useUser from "../../hooks/useUser";
 
 const Expense: NextPage = () => {
   const { user } = useUser({});
+
   return (
     <PageLayout>
       <Head>

@@ -5,7 +5,6 @@ import { findUser } from "../../lib/user";
 const user = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getLoginSession(req);
-    console.log("Session: ", session);
     const user = (session && (await findUser(session.email))) ?? null;
     res.status(200).json({ user });
   } catch (error) {

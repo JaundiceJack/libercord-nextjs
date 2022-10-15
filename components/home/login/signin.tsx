@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Router from "next/router";
-import React, { useState, FC, useEffect, useRef } from "react";
-import useUser from "../../../hooks/useUser";
+import React, { useState, FC } from "react";
 import BasicButton from "../../elements/input/basicButton";
 import TextEntry from "../../elements/input/textEntry";
-import { errString } from "../../../utils/helpers";
-import Message from "../../elements/misc/message";
-import { time } from "console";
+import { errString } from "../../../tools/helperFunctions";
+import ErrorMessages from "../../elements/misc/errorMessages";
 import Spinner from "../../elements/misc/spinner";
+import useErrMsgs from "../../../hooks/useErrMsgs";
 
 interface SignInProps {
   toggle: () => void;
@@ -24,17 +23,7 @@ const SignIn: FC<SignInProps> = ({
   password,
   setPassword,
 }) => {
-  // Clear error messages after 5 seconds
-  const [errMsgs, setErrMsgs] = useState<string[]>([]);
-  const timer = useRef<null | NodeJS.Timeout>(null);
-  useEffect(() => {
-    if (!timer.current) {
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        return setErrMsgs([]);
-      }, 5000);
-    }
-  }, [errMsgs]);
+  const { errMsgs, setErrMsgs } = useErrMsgs();
   const [loading, setLoading] = useState<boolean>(false);
 
   // Try to log in
@@ -82,10 +71,7 @@ const SignIn: FC<SignInProps> = ({
         value={password}
         onChange={setPassword}
       />
-      {errMsgs &&
-        errMsgs.map((err, i) => {
-          return <Message error={err} key={i} className="mt-2" />;
-        })}
+      <ErrorMessages errors={errMsgs} />
       <div className="grid grid-cols-6">
         {loading ? (
           <Spinner className="my-2 col-span-6 sm:col-start-3 sm:col-span-4" />
@@ -98,25 +84,27 @@ const SignIn: FC<SignInProps> = ({
           />
         )}
       </div>
-      <div className="flex flex-row mt-2 ">
-        <button onClick={toggle}>
-          <p
-            className={`font-jose text-sm text-white cursor-pointer z-50 
-            transform duration-300 hover:scale-105`}
-          >
-            Make a new account.
-          </p>
-        </button>
-        <div className="grow" />
-        <Link href="forgot">
-          <p
-            className={`font-jose text-sm text-white cursor-pointer z-50 
-            transform duration-300 hover:scale-105`}
-          >
-            Forgot password?
-          </p>
-        </Link>
-      </div>
+      {!loading && (
+        <div className="flex flex-row mt-2 ">
+          <button onClick={toggle}>
+            <p
+              className={`font-jose text-sm text-white cursor-pointer z-50 
+          transform duration-300 hover:scale-105`}
+            >
+              Make a new account.
+            </p>
+          </button>
+          <div className="grow" />
+          <Link href="forgot">
+            <p
+              className={`font-jose text-sm text-white cursor-pointer z-50 
+          transform duration-300 hover:scale-105`}
+            >
+              Forgot password?
+            </p>
+          </Link>
+        </div>
+      )}
     </form>
   );
 };

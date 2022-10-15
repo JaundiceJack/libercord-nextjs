@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { errString } from "../../utils/helpers";
+import { errString } from "../../tools/helperFunctions";
 import { createUser } from "../../lib/user";
 import { setLoginSession } from "../../lib/auth";
 

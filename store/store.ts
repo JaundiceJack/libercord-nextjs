@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import yearReducer from "./slices/year";
+import yearReducer from "./yearSlice";
 
 const store = configureStore({
   reducer: {
@@ -7,7 +7,7 @@ const store = configureStore({
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type RootDispatch = typeof store.dispatch;
+export type ReduxState = ReturnType<typeof store.getState>;
+export type ReduxDispatch = typeof store.dispatch;
 
 export default store;

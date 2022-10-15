@@ -1,9 +1,10 @@
 import Router from "next/router";
-import React, { useState, FC, useEffect, useRef } from "react";
-import { errString } from "../../../utils/helpers";
+import React, { useState, FC } from "react";
+import useErrMsgs from "../../../hooks/useErrMsgs";
+import { errString } from "../../../tools/helperFunctions";
 import BasicButton from "../../elements/input/basicButton";
 import TextEntry from "../../elements/input/textEntry";
-import Message from "../../elements/misc/message";
+import ErrorMessages from "../../elements/misc/errorMessages";
 import Spinner from "../../elements/misc/spinner";
 
 interface SignUpProps {
@@ -25,17 +26,7 @@ const SignUp: FC<SignUpProps> = ({
   confirm,
   setConfirm,
 }) => {
-  // Clear error messages after 5 seconds
-  const [errMsgs, setErrMsgs] = useState<string[]>([]);
-  const timer = useRef<null | NodeJS.Timeout>(null);
-  useEffect(() => {
-    if (!timer.current) {
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        return setErrMsgs([]);
-      }, 5000);
-    }
-  }, [errMsgs]);
+  const { errMsgs, setErrMsgs } = useErrMsgs();
   const [loading, setLoading] = useState<boolean>(false);
 
   // Try to create a new user
@@ -94,10 +85,7 @@ const SignUp: FC<SignUpProps> = ({
         value={confirm}
         onChange={setConfirm}
       />
-      {errMsgs &&
-        errMsgs.map((err, i) => {
-          return <Message error={err} key={i} className="mt-2" />;
-        })}
+      <ErrorMessages errors={errMsgs} />
       <div className="grid grid-cols-6 mb-2">
         {loading ? (
           <Spinner className="my-2 col-span-6 sm:col-start-3 sm:col-span-4" />

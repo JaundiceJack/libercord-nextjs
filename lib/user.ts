@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
-import dbConnect from "../utils/dbConnect";
+import dbConnect from "../tools/dbConnect";
 import UserType from "../types/UserType";
 import User from "../models/User";
 

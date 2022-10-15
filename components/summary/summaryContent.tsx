@@ -2,6 +2,12 @@
 import { useState } from "react";
 // Import icons
 import { IoWalletOutline } from "react-icons/io5";
+import { useReduxDispatch, useReduxSelector } from "../../hooks/useRedux";
+import {
+  selectYear,
+  incrementYear,
+  decrementYear,
+} from "../../store/yearSlice";
 // Import components
 //import SavingsChart from './savings/chart/savingsChart.js';
 //import SavingsInfo  from './savings/info/savingsInfo.js';
@@ -9,14 +15,8 @@ import { IoWalletOutline } from "react-icons/io5";
 import DetailWindow from "../elements/containers/detailWindow";
 
 const SummaryContent = () => {
-  // Set a year to filter expenses
-  const [year, setYear] = useState(new Date().getFullYear());
-  const backYear = () => {
-    setYear(year - 1);
-  };
-  const nextYear = () => {
-    setYear(year + 1);
-  };
+  const dispatch = useReduxDispatch();
+  const { year } = useReduxSelector(selectYear);
 
   return (
     <div className={`flex flex-col mx-0 mt-4 sm:m-4 h-full `}>
@@ -28,8 +28,8 @@ const SummaryContent = () => {
           header="Your Finances"
           icon={<IoWalletOutline />}
           year={year}
-          next={nextYear}
-          prev={backYear}
+          next={() => dispatch(incrementYear())}
+          prev={() => dispatch(decrementYear())}
           content={<div></div>}
         />
 

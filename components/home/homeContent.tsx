@@ -1,8 +1,5 @@
 import { FC } from "react";
-import { RootState } from "../../store/store";
-import { useTypedSelector } from "../../store/hooks";
 import Intro from "./intro/intro";
-import Hero from "./hero/_hero";
 import Login from "./login/_login";
 import Swiper from "./swiper/swiper";
 
@@ -14,8 +11,7 @@ const HomeContent: FC = () => {
       <main
         className={`flex flex-col items-center justify-center bg-gradient-to-r
         from-black to-gray-900 sm:col-span-3 p-2 ml-2 sm:ml-0 mr-2 sm:mr-16 
-        lg:mr-0 mb-4 lg:mb-0 mt-4 lg:mt-0
-        overflow-hidden lg:rounded-none rounded-xl`}
+        lg:mr-0 mb-4 lg:mb-0 mt-4 lg:mt-0 overflow-hidden lg:rounded-none rounded-xl`}
       >
         <div className={`flex flex-row`}>
           <Intro />

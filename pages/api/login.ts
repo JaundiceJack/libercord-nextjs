@@ -4,7 +4,7 @@ import passport from "passport";
 import nextConnect from "next-connect";
 import { localStrategy } from "../../lib/password-local";
 import { setLoginSession } from "../../lib/auth";
-import { errString } from "../../utils/helpers";
+import { errString } from "../../tools/helperFunctions";
 
 const authenticate = (
   method: string,
