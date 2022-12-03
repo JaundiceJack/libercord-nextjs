@@ -1,12 +1,12 @@
-import { TextInput } from "@mantine/core";
 import React, { FC } from "react";
+import { TextInput } from "@mantine/core";
 
 interface TextEntryProps {
   label: string;
   labelColor?: string;
   value: string;
   name: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.FormEvent<HTMLInputElement>) => void;
   type?: string;
   required?: boolean;
   className?: string;
@@ -20,7 +20,7 @@ const TextEntry: FC<TextEntryProps> = ({
   onChange,
   type = "text",
   required = true,
-  className,
+  className = "mb-2",
 }) => {
   // Extra input styling for Mantine components
   const inputStyles = {
@@ -29,11 +29,10 @@ const TextEntry: FC<TextEntryProps> = ({
       fontSize: 16 + "px",
       marginRight: 8 + "px",
       marginBottom: 0,
-      lineHeight: 1.0,
       textAlign: "right",
       fontWeight: 600,
-      fontFamily: "Josefin Sans",
     },
+    input: { fontSize: 14 + "px" },
     required: { display: "none" },
     root: {
       display: "grid",

@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
-import UserType from "../types/UserType";
+import { UserType } from "../models/User";
 
-const fetcher = (url: string) =>
-  fetch(url)
-    .then((r) => r.json())
-    .then((data) => {
-      return { user: data?.user || null };
-    });
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  const data = await res.json();
+  return { user: data?.user || null };
+};
 
 interface UseUserProps {
   redirectTo?: string;
@@ -32,6 +31,10 @@ const useUser = ({ redirectTo, redirectIfFound = false }: UseUserProps) => {
       Router.push(redirectTo);
     }
   }, [redirectTo, redirectIfFound, finished, hasUser]);
+
+  useEffect(() => {
+    if (error) Router.push("/");
+  }, [error]);
 
   return error
     ? { user: null, loading: !finished }

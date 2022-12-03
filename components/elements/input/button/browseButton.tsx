@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Spinner from "../misc/spinner";
+import Spinner from "../../misc/spinner";
 import { FcPrevious, FcNext } from "react-icons/fc";
 
 interface BrowseButtonProps {

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { errString } from "../../tools/helperFunctions";
-import { createUser } from "../../lib/user";
-import { setLoginSession } from "../../lib/auth";
+import { errString } from "../../helpers/errors";
+import { createUser } from "../../handlers/userHandler";
+import { setLoginSession } from "../../passport/session";
 
 const signup = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

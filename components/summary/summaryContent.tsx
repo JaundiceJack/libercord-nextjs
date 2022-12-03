@@ -4,10 +4,10 @@ import { useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useReduxDispatch, useReduxSelector } from "../../hooks/useRedux";
 import {
-  selectYear,
+  selectDate,
   incrementYear,
   decrementYear,
-} from "../../store/yearSlice";
+} from "../../redux/dateSlice";
 // Import components
 //import SavingsChart from './savings/chart/savingsChart.js';
 //import SavingsInfo  from './savings/info/savingsInfo.js';
@@ -16,7 +16,7 @@ import DetailWindow from "../elements/containers/detailWindow";
 
 const SummaryContent = () => {
   const dispatch = useReduxDispatch();
-  const { year } = useReduxSelector(selectYear);
+  const { date } = useReduxSelector(selectDate);
 
   return (
     <div className={`flex flex-col mx-0 mt-4 sm:m-4 h-full `}>
@@ -27,11 +27,16 @@ const SummaryContent = () => {
         <DetailWindow
           header="Your Finances"
           icon={<IoWalletOutline />}
-          year={year}
+          year={date.getFullYear()}
           next={() => dispatch(incrementYear())}
           prev={() => dispatch(decrementYear())}
-          content={<div></div>}
-        />
+          toggle={() => {
+            return;
+          }}
+          current={false}
+        >
+          <div></div>
+        </DetailWindow>
 
         <div className="lg:col-span-2"></div>
       </div>

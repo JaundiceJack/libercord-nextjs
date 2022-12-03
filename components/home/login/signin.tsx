@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Router from "next/router";
 import React, { useState, FC } from "react";
-import BasicButton from "../../elements/input/basicButton";
-import TextEntry from "../../elements/input/textEntry";
-import { errString } from "../../../tools/helperFunctions";
+import BasicButton from "../../elements/input/button/basicButton";
+import TextEntry from "../../elements/input/form/textEntry";
+import { errString } from "../../../helpers/errors";
 import ErrorMessages from "../../elements/misc/errorMessages";
 import Spinner from "../../elements/misc/spinner";
 import useErrMsgs from "../../../hooks/useErrMsgs";
@@ -11,9 +11,9 @@ import useErrMsgs from "../../../hooks/useErrMsgs";
 interface SignInProps {
   toggle: () => void;
   email: string;
-  setEmail: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setEmail: (e: React.FormEvent<HTMLInputElement>) => void;
   password: string;
-  setPassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setPassword: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 const SignIn: FC<SignInProps> = ({

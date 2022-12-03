@@ -1,4 +1,4 @@
-import type UserType from "./UserType";
+import type { UserType } from "../models/User";
 
 type SessionType = {
   createdAt: number;

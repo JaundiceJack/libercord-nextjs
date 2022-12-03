@@ -1,20 +1,20 @@
 import Router from "next/router";
 import React, { useState, FC } from "react";
 import useErrMsgs from "../../../hooks/useErrMsgs";
-import { errString } from "../../../tools/helperFunctions";
-import BasicButton from "../../elements/input/basicButton";
-import TextEntry from "../../elements/input/textEntry";
+import { errString } from "../../../helpers/errors";
+import BasicButton from "../../elements/input/button/basicButton";
+import TextEntry from "../../elements/input/form/textEntry";
 import ErrorMessages from "../../elements/misc/errorMessages";
 import Spinner from "../../elements/misc/spinner";
 
 interface SignUpProps {
   toggle: () => void;
   email: string;
-  setEmail: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setEmail: (e: React.FormEvent<HTMLInputElement>) => void;
   password: string;
-  setPassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setPassword: (e: React.FormEvent<HTMLInputElement>) => void;
   confirm: string;
-  setConfirm: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setConfirm: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 const SignUp: FC<SignUpProps> = ({
@@ -26,13 +26,13 @@ const SignUp: FC<SignUpProps> = ({
   confirm,
   setConfirm,
 }) => {
-  const { errMsgs, setErrMsgs } = useErrMsgs();
+  const { errMsgs, setErrMsgs, clearErrors } = useErrMsgs();
   const [loading, setLoading] = useState<boolean>(false);
 
   // Try to create a new user
   const onSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (errMsgs) setErrMsgs([]);
+    clearErrors();
     if (password !== confirm) {
       setErrMsgs([`The passwords don't match`]);
       return;

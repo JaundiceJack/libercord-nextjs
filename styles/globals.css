@@ -103,22 +103,35 @@ a {
   box-shadow: 0 0 10px 10px #444;
 }
 .bg-tab-left {
-  background: radial-gradient(at bottom left, #49494f, #202029);
-}
-.bg-tab-left-active {
-  background: radial-gradient(at bottom left, #59595f, #202029);
-}
-.bg-tab-left:hover {
-  background: radial-gradient(at bottom left, #505059, #303039, #202029);
-}
-.bg-tab-right {
   background: radial-gradient(at bottom right, #49494f, #202029);
 }
-.bg-tab-right-active {
+.bg-tab-left-active {
   background: radial-gradient(at bottom right, #59595f, #202029);
 }
-.bg-tab-right:hover {
+.bg-tab-left:hover {
   background: radial-gradient(at bottom right, #505059, #303039, #202029);
+}
+.bg-tab-right {
+  background: radial-gradient(at bottom left, #49494f, #202029);
+}
+.bg-tab-right-active {
+  background: radial-gradient(at bottom left, #59595f, #202029);
+}
+.bg-tab-right:hover {
+  background: radial-gradient(at bottom left, #505059, #303039, #202029);
+}
+.bg-tab-middle {
+  background: linear-gradient(0deg, #49494f, #303039);
+  border-color: rgb(75 85 99);
+  border-width: 0 1px 0 1px;
+}
+.bg-tab-middle-active {
+  background: linear-gradient(0deg, #59595f, #303039);
+  border-color: rgb(234 179 8) rgb(75 85 99) transparent rgb(75 85 99);
+  border-width: 1px 1px 0 1px;
+}
+.bg-tab-middle:hover {
+  background: linear-gradient(0deg, #505059, #303039, #202029);
 }
 .bg-tab {
   background: radial-gradient(at top, #494959, #292939);
@@ -150,7 +163,7 @@ a {
     rgba(200, 200, 220, 0.95),
     rgba(200, 200, 220, 0.65)
   );
-  box-shadow: 0 2px 3px 1px #252532;
+  box-shadow: 0 1px 3px 1px #353542;
   border-color: rgba(100, 100, 110, 0.95);
 }
 .bg-button-gray:hover {
@@ -180,7 +193,7 @@ a {
     rgba(59, 130, 246, 0.95),
     rgba(59, 130, 246, 0.65)
   );
-  box-shadow: 0 2px 3px 1px #252532;
+  box-shadow: 0 1px 3px 1px #353542;
   border-color: rgba(29, 65, 123, 0.95);
 }
 .bg-button-blue:hover {
@@ -195,7 +208,7 @@ a {
     rgba(250, 204, 21, 0.95),
     rgba(250, 204, 21, 0.65)
   );
-  box-shadow: 0 2px 3px 1px #252532;
+  box-shadow: 0 1px 3px 1px #353542;
   border-color: rgba(125, 102, 10, 0.95);
 }
 .bg-button-yellow:hover {
@@ -210,7 +223,7 @@ a {
     rgba(248, 113, 113, 0.95),
     rgba(248, 113, 113, 0.65)
   );
-  box-shadow: 0 2px 3px 1px #252532;
+  box-shadow: 0 1px 3px 1px #353542;
   border-color: rgba(124, 56, 56, 0.95);
 }
 .bg-button-red:hover {
@@ -225,7 +238,7 @@ a {
     rgba(129, 140, 248, 0.95),
     rgba(129, 140, 248, 0.65)
   );
-  box-shadow: 0 2px 3px 1px #252532;
+  box-shadow: 0 1px 3px 1px #353542;
   border-color: rgba(65, 70, 124, 0.95);
 }
 .bg-button-indigo:hover {

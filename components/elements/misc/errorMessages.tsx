@@ -2,7 +2,7 @@ import { FC } from "react";
 import Message from "./message";
 
 interface ErrorMessagesProps {
-  errors: string[];
+  errors: (string | undefined)[];
 }
 
 const ErrorMessages: FC<ErrorMessagesProps> = ({ errors }) => {

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { removeTokenCookie } from "../../lib/auth-cookies";
+import { removeTokenCookie } from "../../passport/auth-cookies";
 
 const logout = async (req: NextApiRequest, res: NextApiResponse) => {
   removeTokenCookie(res);

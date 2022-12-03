@@ -1,8 +1,8 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import Header, { HeaderProps } from "./header";
 
 type DetailWindowProps = HeaderProps & {
-  content: any;
+  children: React.ReactNode;
   className?: string;
 };
 
@@ -12,18 +12,28 @@ const DetailWindow: FC<DetailWindowProps> = ({
   year,
   prev,
   next,
-  content,
+  toggle,
+  current,
+  children,
   className,
 }) => {
   return (
-    <div className={`flex flex-col h-full ${className}`}>
-      <Header header={header} icon={icon} year={year} next={next} prev={prev} />
+    <div className={`flex flex-col h-full lg:col-span-2 ${className}`}>
+      <Header
+        header={header}
+        icon={icon}
+        year={year}
+        next={next}
+        prev={prev}
+        toggle={toggle}
+        current={current}
+      />
 
       <div
         style={{ minHeight: 500 + "px" }}
-        className="grow h-full flex mb-8 p-2 rounded-b-lg bg-content "
+        className="flex grow h-full mb-8 rounded-b-lg bg-content "
       >
-        {content}
+        {children}
       </div>
     </div>
   );

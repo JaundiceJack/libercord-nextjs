@@ -1,8 +1,6 @@
-import crypto from "crypto";
-import { v4 as uuidv4 } from "uuid";
-import dbConnect from "../tools/dbConnect";
-import UserType from "../types/UserType";
-import User from "../models/User";
+import dbConnect from "../mongo/dbConnect";
+import User, { UserType } from "../models/User";
+import { createDefaultCatalog } from "./catalogHandler";
 
 // Make a new user and return them with private info filtered out
 export const createUser = async (
@@ -21,6 +19,8 @@ export const createUser = async (
     if (!existingUser) {
       const newUser = await User.create({ email, password });
       if (newUser) {
+        // Create a default option catalog for the new user
+        await createDefaultCatalog(newUser._id);
         return {
           _id: newUser._id,
           email: newUser.email,
