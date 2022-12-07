@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Header, { HeaderProps } from "./header";
+import Header, { HeaderProps } from "./detailWindowHeader";
 
 type DetailWindowProps = HeaderProps & {
   children: React.ReactNode;
@@ -7,26 +7,20 @@ type DetailWindowProps = HeaderProps & {
 };
 
 const DetailWindow: FC<DetailWindowProps> = ({
-  header,
-  icon,
-  year,
-  prev,
-  next,
-  toggle,
-  current,
+  setWindow,
+  currentWindow,
+  openColumnModal,
+  exportData,
   children,
   className,
 }) => {
   return (
     <div className={`flex flex-col h-full lg:col-span-2 ${className}`}>
       <Header
-        header={header}
-        icon={icon}
-        year={year}
-        next={next}
-        prev={prev}
-        toggle={toggle}
-        current={current}
+        setWindow={setWindow}
+        currentWindow={currentWindow}
+        openColumnModal={openColumnModal}
+        exportData={exportData}
       />
 
       <div

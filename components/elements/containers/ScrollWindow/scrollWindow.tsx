@@ -3,10 +3,10 @@ import { CSSProperties, FC, useEffect, useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 // Import functions
-import { formatDateMMDD } from "../../../helpers/dates";
-import { useReduxDispatch } from "../../../hooks/useRedux";
+import { formatDateMMDD } from "../../../../helpers/dates";
+import { useReduxDispatch } from "../../../../hooks/useRedux";
 import { Types } from "mongoose";
-import { IncomeType } from "../../../models/Income";
+import { IncomeType } from "../../../../models/Income";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 
@@ -70,6 +70,8 @@ const ScrollWindow: FC<ScrollWindowProps> = ({
                 ? item.source
                 : col.name === "amount"
                 ? "$" + item.amount.toFixed(2)
+                : col.name === "category"
+                ? item.category
                 : ""}
             </p>
           );
@@ -79,7 +81,7 @@ const ScrollWindow: FC<ScrollWindowProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full overflow-x-scroll sm:overflow-auto">
       {/* Column Labels */}
       <div
         className={`grid grid-cols-12 border-b border-gray-800 bg-header shadow-xl `}

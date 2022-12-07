@@ -1,20 +1,20 @@
-// Import basics
 import { FC, useEffect, useState } from "react";
-// Import components
 import ScrollWindow, {
   ScrollWindowColumn,
-} from "../elements/containers/scrollWindow";
+} from "../elements/containers/ScrollWindow/scrollWindow";
 import Spinner from "../elements/misc/spinner";
 import Message from "../elements/misc/message";
 import EmptyListMessage from "../elements/misc/emptyListMessage";
-// Import icons
 import { useReduxDispatch, useReduxSelector } from "../../hooks/useRedux";
 import {
   pickIncome,
   selectIncome,
   setIncomeSortBy,
+  incomeSortOption,
 } from "../../redux/incomeSlice";
 import { IncomeType } from "../../models/Income";
+import { isSameYear, isSameMonth } from "date-fns";
+import { selectDate } from "../../redux/dateSlice";
 
 const IncomeTable: FC = () => {
   // Get redux stuff for incomes
@@ -26,7 +26,9 @@ const IncomeTable: FC = () => {
     incomeLoading,
     incomeSortBy,
     incomeSortDir,
+    incomeColumns,
   } = useReduxSelector(selectIncome);
+  const { date, dataTimeframe } = useReduxSelector(selectDate);
 
   // Set up the columns to be displayed
   const columns: ScrollWindowColumn[] = [
@@ -39,13 +41,19 @@ const IncomeTable: FC = () => {
     {
       name: "source",
       label: "Source",
-      gridColSpan: "col-span-6",
+      gridColSpan: `col-span-4`,
       setSort: () => dispatch(setIncomeSortBy("source")),
+    },
+    {
+      name: "category",
+      label: "Category",
+      gridColSpan: `col-span-4`,
+      setSort: () => dispatch(setIncomeSortBy("category")),
     },
     {
       name: "amount",
       label: "Amount",
-      gridColSpan: "col-span-4",
+      gridColSpan: "col-span-2",
       setSort: () => dispatch(setIncomeSortBy("amount")),
     },
   ];
@@ -81,14 +89,24 @@ const IncomeTable: FC = () => {
     }
   };
 
-  // Set a state to hold the incomes in a sorted array
-  const [sortedIncomes, setSortedIncomes] = useState(
-    [...incomes].sort(incomeSorter)
-  );
-  // Re-sort when sortby, sortdir, or the income list changes
+  // Filter the incomes by year
+  const incomeFilter = (inc: IncomeType, index: number) => {
+    const incDate = new Date(inc.date);
+    if (dataTimeframe === "year") {
+      return isSameYear(incDate, date);
+    } else if (dataTimeframe === "month") {
+      return isSameMonth(incDate, date);
+    } else return true;
+  };
+
+  // Display a sorted and filtered list of incomes
+  const arrangeIncomes = () => {
+    return [...incomes].sort(incomeSorter).filter(incomeFilter);
+  };
+  const [processedIncomes, setProcessedIncomes] = useState(arrangeIncomes());
   useEffect(() => {
-    setSortedIncomes([...incomes].sort(incomeSorter));
-  }, [incomeSortBy, incomeSortDir, incomes]);
+    setProcessedIncomes(arrangeIncomes());
+  }, [incomeSortBy, incomeSortDir, incomes, date, dataTimeframe]);
 
   return (
     <div className="rounded-md flex w-full h-full items-center justify-center">
@@ -100,10 +118,13 @@ const IncomeTable: FC = () => {
         <EmptyListMessage listName="income" />
       ) : (
         <ScrollWindow
-          items={sortedIncomes}
+          items={processedIncomes}
           selectedId={incomeId}
           onItemClick={pickIncome}
-          columns={columns}
+          columns={columns.filter((col) => {
+            const name = col.name as incomeSortOption;
+            return incomeColumns.includes(name);
+          })}
           currentSort={incomeSortBy}
           sortDirection={incomeSortDir}
         />

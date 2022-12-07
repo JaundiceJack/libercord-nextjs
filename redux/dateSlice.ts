@@ -2,12 +2,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { ReduxState } from "./store";
 import { add, sub, isSameMonth, getMonth } from "date-fns";
 
+type timeframe = "year" | "month" | "all";
+
 export interface DateState {
   date: Date;
+  dataTimeframe: timeframe;
 }
 
 const initialState: DateState = {
   date: new Date(),
+  dataTimeframe: "year",
 };
 
 export const dateSlice = createSlice({
@@ -29,6 +33,9 @@ export const dateSlice = createSlice({
     resetDate: (state: DateState) => {
       state.date = new Date();
     },
+    setTimeframe: (state: DateState, action: PayloadAction<timeframe>) => {
+      state.dataTimeframe = action.payload;
+    },
   },
 });
 
@@ -38,6 +45,7 @@ export const {
   incrementMonth,
   decrementMonth,
   resetDate,
+  setTimeframe,
 } = dateSlice.actions;
 export const selectDate = (state: ReduxState) => state.date;
 export default dateSlice.reducer;

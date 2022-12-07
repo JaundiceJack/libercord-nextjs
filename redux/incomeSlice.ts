@@ -3,26 +3,31 @@ import { Types } from "mongoose";
 import { IncomeType } from "../models/Income";
 import type { ReduxState, ReduxThunk } from "./store";
 
-type incomeSortOption = "date" | "source" | "category" | "amount";
+export type incomeSortOption = "date" | "source" | "category" | "amount";
+type incomeWindowOption = "list" | "graph";
 
 export interface IncomeState {
   incomes: IncomeType[];
   incomeId: Types.ObjectId | null;
   incomeMode: "adding" | "editing" | "deleting";
+  incomeWindow: incomeWindowOption;
   incomeError: string | undefined;
   incomeLoading: boolean;
   incomeSortBy: incomeSortOption;
   incomeSortDir: "asc" | "desc";
+  incomeColumns: incomeSortOption[];
 }
 
 const initialState: IncomeState = {
   incomes: [],
   incomeId: null,
   incomeMode: "adding",
+  incomeWindow: "list",
   incomeError: undefined,
   incomeLoading: false,
   incomeSortBy: "date",
   incomeSortDir: "desc",
+  incomeColumns: ["date", "source", "category", "amount"],
 };
 
 // Get a user's incomes (to run upon page-load)
@@ -121,6 +126,23 @@ export const incomeSlice = createSlice({
         state.incomeSortDir = state.incomeSortDir === "asc" ? "desc" : "asc";
       } else state.incomeSortBy = action.payload;
     },
+    setIncomeWindow: (
+      state: IncomeState,
+      action: PayloadAction<incomeWindowOption>
+    ) => {
+      state.incomeWindow = action.payload;
+    },
+    toggleIncomeColumn: (
+      state: IncomeState,
+      action: PayloadAction<incomeSortOption>
+    ) => {
+      // if the option is not in the list, add it, otherwise remove it
+      if (state.incomeColumns.includes(action.payload))
+        state.incomeColumns = state.incomeColumns.filter(
+          (col) => col !== action.payload
+        );
+      else state.incomeColumns = [...state.incomeColumns, action.payload];
+    },
   },
   // These reducers handle loading/success/errors on web-server responses
   extraReducers: (builder) => {
@@ -186,6 +208,8 @@ export const {
   toggleDeletingIncome,
   clearIncomeError,
   setIncomeSortBy,
+  setIncomeWindow,
+  toggleIncomeColumn,
 } = incomeSlice.actions;
 export const selectIncome = (state: ReduxState) => state.income;
 export default incomeSlice.reducer;
