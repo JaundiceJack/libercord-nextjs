@@ -1,7 +1,16 @@
-import mongoose from "mongoose";
+import { Schema, Types, model, models } from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = mongoose.Schema(
+export interface UserType {
+  _id: Types.ObjectId;
+  email: string;
+  password?: string;
+  isAdmin: boolean;
+  save?: () => Promise<UserType | Error>;
+  matchPassword?: (password: string) => Promise<boolean>;
+}
+
+const userSchema = new Schema<UserType>(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -10,9 +19,9 @@ const userSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
+userSchema.methods.matchPassword = async function (password: string) {
   // Compare the entered password to the encrypted password
-  return await bcrypt.compare(enteredPassword, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 userSchema.pre("save", async function (next) {
@@ -22,7 +31,7 @@ userSchema.pre("save", async function (next) {
   }
   // Encrypt the password before saving a new user/modifying password
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  if (this.password) this.password = await bcrypt.hash(this.password, salt);
 });
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+export default models.User || model("User", userSchema);

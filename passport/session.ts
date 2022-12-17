@@ -1,7 +1,7 @@
 import Iron from "@hapi/iron";
 import { MAX_AGE, setTokenCookie, getTokenCookie } from "./auth-cookies";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type UserType from "../types/UserType";
+import { UserType } from "../models/User";
 import SessionType from "../types/SessionType";
 
 const pass = { secret: process.env.TOKEN_SECRET || "" };

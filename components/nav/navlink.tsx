@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
-import { capitalize } from "../../functions/strings";
+import { capitalize } from "../../helpers/strings";
 
 interface NavLinkProps {
   path: string;

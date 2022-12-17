@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type UserType from "../../types/UserType";
+import type { UserType } from "../../models/User";
 import passport from "passport";
 import nextConnect from "next-connect";
-import { localStrategy } from "../../lib/password-local";
-import { setLoginSession } from "../../lib/auth";
-import { errString } from "../../tools/helperFunctions";
+import { localStrategy } from "../../passport/password-local";
+import { setLoginSession } from "../../passport/session";
+import { errString } from "../../helpers/errors";
 
 const authenticate = (
   method: string,

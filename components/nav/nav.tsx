@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { RootState } from "../../store/store";
 import NavLinks from "./navlinks";
 import Logout from "./logout";
 import Logo from "./logo";

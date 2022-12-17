@@ -1,6 +1,6 @@
 import Local from "passport-local";
-import UserType from "../types/UserType";
-import { findUserPrivateInfo, validatePassword } from "./user";
+import { UserType } from "../models//User";
+import { findUserPrivateInfo, validatePassword } from "../handlers/userHandler";
 
 export const localStrategy = new Local.Strategy(
   { usernameField: "email" },
