@@ -14,18 +14,18 @@ export const createDefaultCatalog = async (
       const catalog = await Catalog.create({
         user,
         income: {
-          categories: ["Paycheck", "Bonus"],
-          sources: ["Full-time Job", "Part-time Job"],
+          categories: ["paycheck", "bonus"],
+          sources: ["full-time job", "part-time job"],
         },
         expense: {
-          categories: ["Groceries", "Gas", "Rent"],
-          locations: ["Albertson's", "Walmart", "Amazon"],
+          categories: ["groceries", "gas", "rent"],
+          locations: ["albertson's", "walmart", "amazon"],
         },
         asset: {
-          categories: ["Gold", "Real-Estate", "Bitcoin", "Stock", "Bond"],
+          categories: ["gold", "real-estate", "bitcoin", "stock", "bond"],
         },
         debt: {
-          categories: ["Mortgage", "Student Loan", "Credit Card"],
+          categories: ["mortgage", "student loan", "credit card"],
         },
       });
       if (catalog) return catalog;
@@ -36,7 +36,7 @@ export const createDefaultCatalog = async (
   }
 };
 
-// Try to find a user's catalog of options for select elements
+// Try to find a user's catalog of options for select elements,
 export const getCatalogByUserId = async (
   user: Types.ObjectId | undefined
 ): Promise<CatalogType | Error> => {
@@ -45,7 +45,8 @@ export const getCatalogByUserId = async (
       await dbConnect();
       const catalog = await Catalog.findOne<CatalogType>({ user });
       if (catalog) return catalog;
-      else throw new Error("Could not find user catalog.");
+      // create one for them if none was found
+      else return createDefaultCatalog(user);
     } else throw new Error("No user provided for catalog search.");
   } catch (e) {
     throw e;
@@ -112,20 +113,26 @@ const _saveCatalogItem = async ({
   item: string;
 }): Promise<CatalogType> => {
   try {
-    // If the user has no array of the given, put the item in a new one
-    if (!catalog[section][field] && catalog.save) {
-      catalog[section][field] = [item];
-      return await catalog.save();
+    let optionArray = catalog[section][field];
+
+    if (!optionArray)
+      throw new Error(`Catalog field: ${field} does not exist.`);
+    else {
+      // If the user has no array of the given, put the item in a new one
+      if (optionArray.length === 0 && catalog.save) {
+        catalog[section][field] = [item.toLowerCase()];
+        return await catalog.save();
+      }
+      // If the item has already been added, don't modify anything
+      else if (optionArray.includes(item.toLowerCase())) {
+        return catalog;
+      }
+      // Otherwise add the item to the user's catalog
+      else if (catalog.save) {
+        catalog[section][field].push(item.toLowerCase());
+        return await catalog.save();
+      } else throw new Error("Catalog missing save function.");
     }
-    // If the item has already been added, don't modify anything
-    else if (catalog[section][field].includes(item)) {
-      return catalog;
-    }
-    // Otherwise add the item to the user's catalog
-    else if (catalog.save) {
-      catalog[section][field].push(item);
-      return await catalog.save();
-    } else throw new Error("Catalog missing save function.");
   } catch (e) {
     throw e;
   }
@@ -149,7 +156,7 @@ export const removeCatalogItem = async ({
       const catalog = await Catalog.findOne({ user });
       if (catalog) {
         catalog[section][field] = catalog[section][field].filter(
-          (option: string) => option !== item
+          (option: string) => option !== item.toLowerCase()
         );
         const saved = await catalog.save();
         if (saved) return saved;

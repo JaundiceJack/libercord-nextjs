@@ -40,13 +40,7 @@ const IncomeInput: FC = () => {
       </div>
 
       <div className="h-px w-full bg-gray-600" />
-      {incomeMode === "adding" ? (
-        <IncomeGen />
-      ) : incomeMode === "editing" ? (
-        <IncomeGen editing={true} />
-      ) : (
-        <IncomeDelete />
-      )}
+      {incomeMode === "deleting" ? <IncomeDelete /> : <IncomeGen />}
     </div>
   );
 };

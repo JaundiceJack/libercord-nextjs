@@ -7,6 +7,7 @@ import {
   getCatalogByUserId,
   removeCatalogItem,
 } from "../../handlers/catalogHandler";
+import { CatalogFields, CatalogSections } from "../../models/Catalog";
 
 const catalogRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -21,11 +22,12 @@ const catalogRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       // Make a new option
       else if (req.method === "POST") {
+        const body = JSON.parse(req.body);
         const catalog = await createCatalogItem({
           user: session._id,
-          section: req.body.section,
-          field: req.body.field,
-          item: req.body.item,
+          section: body.section as CatalogSections,
+          field: body.field as CatalogFields,
+          item: body.item,
         });
         if (catalog) res.status(200).json(catalog);
         else throw new Error("Unable to create a new option.");

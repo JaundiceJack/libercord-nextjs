@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { TextInput } from "@mantine/core";
+import { CSSObject, TextInput, TextInputStylesNames } from "@mantine/core";
 
 interface TextEntryProps {
   label: string;
@@ -23,7 +23,7 @@ const TextEntry: FC<TextEntryProps> = ({
   className = "mb-2",
 }) => {
   // Extra input styling for Mantine components
-  const inputStyles = {
+  const inputStyles: Partial<Record<TextInputStylesNames, CSSObject>> = {
     label: {
       color: labelColor,
       fontSize: 16 + "px",
@@ -49,8 +49,6 @@ const TextEntry: FC<TextEntryProps> = ({
       type={type}
       radius="md"
       size="xs"
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       styles={inputStyles}
       onChange={onChange}
       className={className}

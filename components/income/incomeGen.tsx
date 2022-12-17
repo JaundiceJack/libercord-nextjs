@@ -1,10 +1,9 @@
 // Import basics
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { AiOutlineSave } from "react-icons/ai";
 import { addIncome, editIncome, selectIncome } from "../../redux/incomeSlice";
 import { useReduxDispatch, useReduxSelector } from "../../hooks/useRedux";
-import { selectCatalog } from "../../redux/catalogSlice";
-import { formatDateForInput } from "../../helpers/dates";
+import { addItemToCatalog, selectCatalog } from "../../redux/catalogSlice";
 import { capitalize } from "../../helpers/strings";
 import { Currencies, IncomeType } from "../../models/Income";
 import ErrorMessages from "../elements/misc/errorMessages";
@@ -12,105 +11,160 @@ import useErrMsgs from "../../hooks/useErrMsgs";
 import SelectEntry from "../elements/input/form/selectEntry";
 import BasicButton from "../elements/input/button/basicButton";
 import TextEntry from "../elements/input/form/textEntry";
+import { errString } from "../../helpers/errors";
+import {
+  defaultName,
+  defaultAmount,
+  defaultDate,
+  defaultCurrency,
+  defaultIncomeOption,
+} from "../../helpers/forms";
+import Spinner from "../elements/misc/spinner";
 
-interface IncomeGenProps {
-  editing?: boolean;
-}
+/*
+oh, i just realized why selecting the incomes wasn't changing them in the edit window
+because i deleted those categories/sources,
+which means i need a way to handle that
 
-const IncomeGen: FC<IncomeGenProps> = ({ editing }) => {
-  // Get props from redux
+one way would be, whenever catalog entries are deleted, scan through their 
+associated documents for ones with those sources and set them to a default
+that way when one is deleted, clicking on the income that had it would 
+still change it in the edit window since theres a coresponding option
+same goes for editing, changing a source should update all relevant incomes with the new one
+
+means a lot of backend work,
+i guess another way to do it would be, if an income is ...
+oh, no
+that'd be dumb, if the user just deleted those, and clicking them just recreates them
+that'd be frustrating
+so solution 1 it is
+before doing that though i'll make a page to view and delete/edit catalog options
+
+*/
+
+const IncomeGen: FC = () => {
+  // Get component props and setup
   const dispatch = useReduxDispatch();
   const { incomeId, incomes, incomeMode, incomeLoading } =
     useReduxSelector(selectIncome);
   const { catalog, catalogLoading } = useReduxSelector(selectCatalog);
-
-  // Set up error messages
   const { errMsgs, setErrMsgs } = useErrMsgs();
-
-  // Set a state to hold the currently selected income for editing
-  const [incomeUpdates, setIncomeUpdates] = useState(
+  const [selectedIncome, setSelectedIncome] = useState<IncomeType | undefined>(
     incomes.find((inc) => inc._id === incomeId)
   );
 
-  // Provide defaults for each form value
-  const defaultName = (inc: IncomeType | undefined) => {
-    if (!inc) return "";
-    else return editing ? (inc?.name ? inc.name : "") : "";
+  // Handle option creation
+  const newCategoryOption = useRef<string>("");
+  const newSourceOption = useRef<string>("");
+  const defaultOption = (field: "source" | "category", income?: IncomeType) => {
+    return defaultIncomeOption({
+      income,
+      catalog,
+      field,
+      mode: incomeMode,
+    });
   };
-  const defaultCategory = (inc: IncomeType | undefined) => {
-    const fromCatalog = catalog?.income?.categories[0]
-      ? catalog.income.categories[0]
-      : "";
-    if (!inc) return fromCatalog;
-    else
-      return editing
-        ? inc?.category
-          ? inc.category
-          : fromCatalog
-        : fromCatalog;
+  const setNewOption = (field: string, value: string) => {
+    switch (field) {
+      case "sources":
+        newSourceOption.current = value;
+        break;
+      case "categories":
+        newCategoryOption.current = value;
+        break;
+      default:
+        break;
+    }
   };
-  const defaultSource = (inc: IncomeType | undefined) => {
-    const fromCatalog = catalog?.income?.sources[0]
-      ? catalog.income.sources[0]
-      : "";
-    if (!inc) return fromCatalog;
-    else
-      return editing ? (inc?.source ? inc.source : fromCatalog) : fromCatalog;
-  };
-  const defaultAmount = (inc: IncomeType | undefined) => {
-    if (!inc) return "";
-    else return editing ? (inc?.amount ? inc.amount.toString() : "") : "";
-  };
-  const defaultDate = (inc: IncomeType | undefined) => {
-    if (!inc) return formatDateForInput(new Date());
-    else
-      return editing
-        ? inc?.date
-          ? formatDateForInput(inc.date)
-          : formatDateForInput(new Date())
-        : formatDateForInput(new Date());
-  };
-  const defaultCurrency = (inc: IncomeType | undefined) => {
-    if (!inc) return "$";
-    else return editing ? (inc?.currency ? inc.currency : "$") : "$";
+  const createOption = (field: string) => (query: string) => {
+    setNewOption(field, query);
+    try {
+      dispatch(
+        addItemToCatalog({
+          section: "income",
+          field,
+          item: query,
+        })
+      );
+    } catch (e) {
+      setNewOption(field, "");
+      setErrMsgs([...errMsgs, errString(e)]);
+    }
+    return { value: query, label: query };
   };
 
-  // Set form value states
-  const [name, setName] = useState<string>(defaultName(incomeUpdates));
-  const [category, setCategory] = useState<string | null>(
-    defaultCategory(incomeUpdates)
+  // Set initial form values to their defaults
+  const [name, setName] = useState<string>(
+    defaultName(incomeMode, selectedIncome)
   );
-  const [source, setSource] = useState<string | null>(
-    defaultSource(incomeUpdates)
+  const [amount, setAmount] = useState<string>(
+    defaultAmount(incomeMode, selectedIncome)
   );
-  const [amount, setAmount] = useState<string>(defaultAmount(incomeUpdates));
-  const [date, setDate] = useState<string>(defaultDate(incomeUpdates));
   const [currency, setCurrency] = useState<Currencies>(
-    defaultCurrency(incomeUpdates)
+    defaultCurrency(incomeMode, selectedIncome)
+  );
+  const [date, setDate] = useState<string>(
+    defaultDate(incomeMode, selectedIncome)
+  );
+  const [source, setSource] = useState<string>(
+    defaultIncomeOption({
+      income: selectedIncome,
+      catalog,
+      field: "source",
+      mode: incomeMode,
+    })
+  );
+  const [category, setCategory] = useState<string>(
+    defaultIncomeOption({
+      income: selectedIncome,
+      catalog,
+      field: "category",
+      mode: incomeMode,
+    })
   );
 
   // Change input values when a new income is selected
   useEffect(() => {
-    let selectedIncome = undefined;
-    if (editing) {
-      selectedIncome = incomes.find((inc: IncomeType) => inc._id === incomeId);
+    if (incomeMode === "editing") {
+      const newSelection = incomes.find(
+        (inc: IncomeType) => inc._id === incomeId
+      );
+      console.log(newSelection);
+      setSelectedIncome(newSelection);
+      setName(defaultName(incomeMode, newSelection));
+      setAmount(defaultAmount(incomeMode, newSelection));
+      setCurrency(defaultCurrency(incomeMode, newSelection));
+      setDate(defaultDate(incomeMode, newSelection));
+      setSource(defaultOption("source", newSelection).toLowerCase());
+      setCategory(defaultOption("category", newSelection).toLowerCase());
     }
-    setIncomeUpdates(selectedIncome);
-    setName(defaultName(selectedIncome));
-    setCategory(defaultCategory(selectedIncome));
-    setSource(defaultSource(selectedIncome));
-    setAmount(defaultAmount(selectedIncome));
-    setDate(defaultDate(selectedIncome));
-    setCurrency(defaultCurrency(selectedIncome));
-  }, [incomeId, incomeMode]);
+  }, [incomes, incomeId, incomeMode]);
 
-  // Set options when they load
+  // Set options on initial load and creation
   useEffect(() => {
-    if (!editing) {
-      setSource(catalog ? catalog.income?.sources[0] : "");
-      setCategory(catalog ? catalog.income?.categories[0] : "");
-    }
+    // Set default if the field is empty or to the new option if there was one
+    newSourceOption.current === ""
+      ? !source && setSource(defaultOption("source"))
+      : setSource(newSourceOption.current);
+    newCategoryOption.current === ""
+      ? !category && setCategory(defaultOption("category"))
+      : setCategory(newCategoryOption.current);
+    // Reset all the creation options
+    newSourceOption.current = "";
+    newCategoryOption.current = "";
   }, [catalog]);
+
+  // Clear options when add is selected
+  useEffect(() => {
+    if (incomeMode === "adding") {
+      setName(defaultName(incomeMode));
+      setAmount(defaultAmount(incomeMode));
+      setCurrency(defaultCurrency(incomeMode));
+      setDate(defaultDate(incomeMode));
+      setSource(defaultOption("source"));
+      setCategory(defaultOption("category"));
+    }
+  }, [incomeMode]);
 
   // Validate entries
   const invalidEntries = () => {
@@ -147,7 +201,7 @@ const IncomeGen: FC<IncomeGenProps> = ({ editing }) => {
       date: new Date(timezoneDate),
       currency,
     };
-    editing
+    incomeMode === "editing"
       ? dispatch(editIncome({ incomeId, updates: income }))
       : dispatch(addIncome({ income }));
   };
@@ -187,14 +241,13 @@ const IncomeGen: FC<IncomeGenProps> = ({ editing }) => {
           name="source"
           value={source}
           onChange={setSource}
+          createOption={createOption("sources")}
           loading={catalogLoading}
           options={
-            catalog
-              ? catalog?.income?.sources.map((src) => ({
-                  label: capitalize(src),
-                  value: src,
-                }))
-              : []
+            catalog?.income?.sources.map((src) => ({
+              value: src,
+              label: capitalize(src),
+            })) ?? []
           }
           className="mb-2"
         />
@@ -204,26 +257,29 @@ const IncomeGen: FC<IncomeGenProps> = ({ editing }) => {
           name="category"
           value={category}
           onChange={setCategory}
+          createOption={createOption("categories")}
           loading={catalogLoading}
           options={
-            catalog
-              ? catalog?.income?.categories.map((cat) => ({
-                  label: capitalize(cat),
-                  value: cat,
-                }))
-              : []
+            catalog?.income?.categories.map((cat) => ({
+              value: cat,
+              label: capitalize(cat),
+            })) ?? []
           }
           className="mb-2"
         />
         <ErrorMessages errors={errMsgs} />
-        <BasicButton
-          type="submit"
-          disabled={catalogLoading || !amount}
-          label="Save"
-          className={`w-28 self-center ${errMsgs && "mt-2"}`}
-          icon={<AiOutlineSave />}
-          color={"green"}
-        />
+        {incomeLoading ? (
+          <Spinner />
+        ) : (
+          <BasicButton
+            type="submit"
+            disabled={catalogLoading || !amount}
+            label="Save"
+            className={`w-28 self-center ${errMsgs && "mt-2"}`}
+            icon={<AiOutlineSave />}
+            color={"green"}
+          />
+        )}
       </div>
     </form>
   );

@@ -26,6 +26,33 @@ export const getInitialCatalog = createAsyncThunk("catalog/load", async () => {
   }
 });
 
+// Add an item to the catalog
+export const addItemToCatalog = createAsyncThunk(
+  "catalog/add",
+  async ({
+    section,
+    field,
+    item,
+  }: {
+    section: string;
+    field: string;
+    item: string;
+  }) => {
+    try {
+      const body = JSON.stringify({ section, field, item });
+      const catalog = await (
+        await fetch("/api/catalog", {
+          method: "POST",
+          body,
+        })
+      ).json();
+      return catalog;
+    } catch (e) {
+      return `Catalog Error: ${e}`;
+    }
+  }
+);
+
 export const catalogSlice = createSlice({
   name: "catalog",
   initialState,
@@ -53,6 +80,18 @@ export const catalogSlice = createSlice({
         state.catalog = action.payload;
       })
       .addCase(getInitialCatalog.rejected, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        if (typeof action.payload === "string")
+          state.catalogError = action.payload;
+      })
+      .addCase(addItemToCatalog.pending, (state: CatalogState) => {
+        state.catalogLoading = true;
+      })
+      .addCase(addItemToCatalog.fulfilled, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        state.catalog = action.payload;
+      })
+      .addCase(addItemToCatalog.rejected, (state: CatalogState, action) => {
         state.catalogLoading = false;
         if (typeof action.payload === "string")
           state.catalogError = action.payload;

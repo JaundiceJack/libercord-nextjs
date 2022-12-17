@@ -1,22 +1,21 @@
-import React, { FC, useEffect } from "react";
-import { Select } from "@mantine/core";
+import { ChangeEvent, FC, ReactNode } from "react";
+import { CSSObject, Select, SelectItem } from "@mantine/core";
 import Spinner from "../../misc/spinner";
-
-type Option = {
-  label: string;
-  value: string;
-};
+import { capitalize } from "@material-ui/core";
+import { BaseSelectStylesNames } from "@mantine/core/lib/Select/types";
+//import { capitalize } from "../../../../helpers/strings";
 
 interface SelectEntryProps {
   label: string;
   labelColor?: string;
-  value: string | null;
+  value: string;
   name: string;
   loading?: boolean;
   required?: boolean;
   className?: string;
-  options?: Option[];
-  onChange: (value: string | null) => void;
+  options?: (string | SelectItem)[];
+  onChange: (value: string) => void;
+  createOption: (query: string) => string | SelectItem | null | undefined;
 }
 
 const SelectEntry: FC<SelectEntryProps> = ({
@@ -29,9 +28,10 @@ const SelectEntry: FC<SelectEntryProps> = ({
   options = [],
   className,
   onChange,
+  createOption,
 }) => {
   // Extra input styling for Mantine components
-  const inputStyles = {
+  const inputStyles: Partial<Record<BaseSelectStylesNames, CSSObject>> = {
     label: {
       color: labelColor,
       fontSize: 16 + "px",
@@ -49,7 +49,12 @@ const SelectEntry: FC<SelectEntryProps> = ({
     },
   };
 
-  const testing = true;
+  /*
+  i observed the same transition flicker in mantine's own display page
+  so i think the solution here is to just disable it and use value instead
+  of searchvalue, makes it less pretty but it's what works
+  and i can finally move past it
+  */
 
   return loading ? (
     <div className="grid grid-cols-3 items-center">
@@ -60,20 +65,19 @@ const SelectEntry: FC<SelectEntryProps> = ({
     <Select
       label={label}
       name={name}
-      value={value}
-      load
+      searchable
+      placeholder={`Select or create a ${name}`}
+      creatable
+      getCreateLabel={(query: string) => `+ Create ${query}`}
+      onCreate={createOption}
       radius="md"
       size="xs"
       data={options}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       styles={inputStyles}
       className={className}
       required={required}
+      value={value}
       onChange={onChange}
-      transition="scale-y"
-      transitionDuration={180}
-      transitionTimingFunction="ease-in-out"
     />
   );
 };

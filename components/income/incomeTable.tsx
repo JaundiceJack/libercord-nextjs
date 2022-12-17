@@ -10,7 +10,7 @@ import {
   pickIncome,
   selectIncome,
   setIncomeSortBy,
-  incomeSortOption,
+  IncomeSortOption,
 } from "../../redux/incomeSlice";
 import { IncomeType } from "../../models/Income";
 import { isSameYear, isSameMonth } from "date-fns";
@@ -122,7 +122,7 @@ const IncomeTable: FC = () => {
           selectedId={incomeId}
           onItemClick={pickIncome}
           columns={columns.filter((col) => {
-            const name = col.name as incomeSortOption;
+            const name = col.name as IncomeSortOption;
             return incomeColumns.includes(name);
           })}
           currentSort={incomeSortBy}

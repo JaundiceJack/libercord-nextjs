@@ -5,6 +5,7 @@ import { deleteIncome, selectIncome } from "../../redux/incomeSlice";
 import ErrorMessages from "../elements/misc/errorMessages";
 import useErrMsgs from "../../hooks/useErrMsgs";
 import BasicButton from "../elements/input/button/basicButton";
+import Spinner from "../elements/misc/spinner";
 
 const IncomeDelete: FC = () => {
   // Get props from redux
@@ -40,13 +41,17 @@ const IncomeDelete: FC = () => {
             payment from {formatDateMMDDYYYY(incomeToDelete.date)}?
           </h3>
 
-          <BasicButton
-            label="Delete It"
-            color="red"
-            title="Delete Selected Income"
-            onClick={onDelete}
-            className="w-36 mx-auto"
-          />
+          {incomeLoading ? (
+            <Spinner />
+          ) : (
+            <BasicButton
+              label="Delete It"
+              color="red"
+              title="Delete Selected Income"
+              onClick={onDelete}
+              className="w-36 mx-auto"
+            />
+          )}
 
           <ErrorMessages errors={errMsgs} />
         </>

@@ -63,7 +63,7 @@ const ScrollWindow: FC<ScrollWindowProps> = ({
       >
         {columns.map((col, i) => {
           return (
-            <p className={col.gridColSpan}>
+            <p key={i} className={col.gridColSpan}>
               {col.name === "date"
                 ? formatDateMMDD(item.date)
                 : col.name === "source"
@@ -89,6 +89,7 @@ const ScrollWindow: FC<ScrollWindowProps> = ({
         {columns.map((col, i) => {
           return (
             <button
+              key={i}
               onClick={col.setSort}
               className={`${col.gridColSpan} text-left pt-1 pl-1.5 text-blue-100 font-semibold flex`}
             >

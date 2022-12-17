@@ -3,19 +3,21 @@ import { Types } from "mongoose";
 import { IncomeType } from "../models/Income";
 import type { ReduxState, ReduxThunk } from "./store";
 
-export type incomeSortOption = "date" | "source" | "category" | "amount";
-type incomeWindowOption = "list" | "graph";
+export type IncomeSortOption = "date" | "source" | "category" | "amount";
+export type IncomeMode = "adding" | "editing" | "deleting";
+export type IncomeWindowOption = "list" | "graph";
+export type IncomeSortDir = "asc" | "desc";
 
 export interface IncomeState {
   incomes: IncomeType[];
   incomeId: Types.ObjectId | null;
-  incomeMode: "adding" | "editing" | "deleting";
-  incomeWindow: incomeWindowOption;
+  incomeMode: IncomeMode;
+  incomeWindow: IncomeWindowOption;
   incomeError: string | undefined;
   incomeLoading: boolean;
-  incomeSortBy: incomeSortOption;
-  incomeSortDir: "asc" | "desc";
-  incomeColumns: incomeSortOption[];
+  incomeSortBy: IncomeSortOption;
+  incomeSortDir: IncomeSortDir;
+  incomeColumns: IncomeSortOption[];
 }
 
 const initialState: IncomeState = {
@@ -120,7 +122,7 @@ export const incomeSlice = createSlice({
     },
     setIncomeSortBy: (
       state: IncomeState,
-      action: PayloadAction<incomeSortOption>
+      action: PayloadAction<IncomeSortOption>
     ) => {
       if (state.incomeSortBy === action.payload) {
         state.incomeSortDir = state.incomeSortDir === "asc" ? "desc" : "asc";
@@ -128,13 +130,13 @@ export const incomeSlice = createSlice({
     },
     setIncomeWindow: (
       state: IncomeState,
-      action: PayloadAction<incomeWindowOption>
+      action: PayloadAction<IncomeWindowOption>
     ) => {
       state.incomeWindow = action.payload;
     },
     toggleIncomeColumn: (
       state: IncomeState,
-      action: PayloadAction<incomeSortOption>
+      action: PayloadAction<IncomeSortOption>
     ) => {
       // if the option is not in the list, add it, otherwise remove it
       if (state.incomeColumns.includes(action.payload))
