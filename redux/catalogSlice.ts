@@ -53,6 +53,62 @@ export const addItemToCatalog = createAsyncThunk(
   }
 );
 
+// Edit an existing catalog item
+export const editCatalogItem = createAsyncThunk(
+  "catalog/edit",
+  async ({
+    section,
+    field,
+    oldItem,
+    newItem,
+  }: {
+    section: string;
+    field: string;
+    oldItem: string;
+    newItem: string;
+  }) => {
+    try {
+      const body = JSON.stringify({ section, field, oldItem, newItem });
+      const catalog = await (
+        await fetch("/api/catalog", {
+          method: "PUT",
+          body,
+        })
+      ).json();
+      return catalog;
+    } catch (e) {
+      return `Catalog Error: ${e}`;
+    }
+  }
+);
+
+// Remove an item from the catalog
+export const deleteCatalogItem = createAsyncThunk(
+  "catalog/delete",
+  async ({
+    section,
+    field,
+    item,
+  }: {
+    section: string;
+    field: string;
+    item: string;
+  }) => {
+    try {
+      const body = JSON.stringify({ section, field, item });
+      const catalog = await (
+        await fetch("/api/catalog", {
+          method: "DELETE",
+          body,
+        })
+      ).json();
+      return catalog;
+    } catch (e) {
+      return `Catalog Error: ${e}`;
+    }
+  }
+);
+
 export const catalogSlice = createSlice({
   name: "catalog",
   initialState,
@@ -92,6 +148,30 @@ export const catalogSlice = createSlice({
         state.catalog = action.payload;
       })
       .addCase(addItemToCatalog.rejected, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        if (typeof action.payload === "string")
+          state.catalogError = action.payload;
+      })
+      .addCase(editCatalogItem.pending, (state: CatalogState) => {
+        state.catalogLoading = true;
+      })
+      .addCase(editCatalogItem.fulfilled, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        state.catalog = action.payload;
+      })
+      .addCase(editCatalogItem.rejected, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        if (typeof action.payload === "string")
+          state.catalogError = action.payload;
+      })
+      .addCase(deleteCatalogItem.pending, (state: CatalogState) => {
+        state.catalogLoading = true;
+      })
+      .addCase(deleteCatalogItem.fulfilled, (state: CatalogState, action) => {
+        state.catalogLoading = false;
+        state.catalog = action.payload;
+      })
+      .addCase(deleteCatalogItem.rejected, (state: CatalogState, action) => {
         state.catalogLoading = false;
         if (typeof action.payload === "string")
           state.catalogError = action.payload;

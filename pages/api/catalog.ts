@@ -4,6 +4,7 @@ import { getLoginSession } from "../../passport/session";
 import { errString } from "../../helpers/errors";
 import {
   createCatalogItem,
+  editCatalogItem,
   getCatalogByUserId,
   removeCatalogItem,
 } from "../../handlers/catalogHandler";
@@ -32,13 +33,27 @@ const catalogRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         if (catalog) res.status(200).json(catalog);
         else throw new Error("Unable to create a new option.");
       }
+      // Edit an option
+      else if (req.method === "PUT") {
+        const body = JSON.parse(req.body);
+        const catalog = await editCatalogItem({
+          user: session._id,
+          section: body.section as CatalogSections,
+          field: body.field as CatalogFields,
+          oldItem: body.oldItem,
+          newItem: body.newItem,
+        });
+        if (catalog) res.status(200).json(catalog);
+        else throw new Error("Unable to edit option.");
+      }
       // Remove an option
       else if (req.method === "DELETE") {
+        const body = JSON.parse(req.body);
         const catalog = await removeCatalogItem({
           user: session._id,
-          section: req.body.section,
-          field: req.body.field,
-          item: req.body.item,
+          section: body.section,
+          field: body.field,
+          item: body.item,
         });
         if (catalog) res.status(200).json(catalog);
         else throw new Error("Unable to remove option.");

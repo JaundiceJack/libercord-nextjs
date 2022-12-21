@@ -141,6 +141,9 @@ a {
   opacity: 5;
   background-color: rgb(17 24 39);
 }
+.row-button-shadow {
+  box-shadow: 0 -2px 5px -3px #050512;
+}
 
 /* Button colors */
 .button-next {
@@ -171,7 +174,6 @@ a {
     rgba(200, 200, 220, 0.95),
     rgba(200, 200, 220, 0.85)
   );
-  box-shadow: 0 2px 6px 2px #393949;
 }
 .bg-button-green {
   background: radial-gradient(
@@ -186,7 +188,6 @@ a {
     rgba(74, 222, 128, 0.95),
     rgba(74, 222, 128, 0.85)
   );
-  box-shadow: 0 0px 4px 0px #39493a;
 }
 .bg-button-blue {
   background: radial-gradient(
@@ -201,7 +202,6 @@ a {
     rgba(59, 130, 246, 0.95),
     rgba(59, 130, 246, 0.85)
   );
-  box-shadow: 0 2px 6px 2px #393949;
 }
 .bg-button-yellow {
   background: radial-gradient(
@@ -216,7 +216,6 @@ a {
     rgba(250, 204, 21, 0.95),
     rgba(250, 204, 21, 0.85)
   );
-  box-shadow: 0 2px 6px 2px #393949;
 }
 .bg-button-red {
   background: radial-gradient(
@@ -231,7 +230,6 @@ a {
     rgba(248, 113, 113, 0.95),
     rgba(248, 113, 113, 0.85)
   );
-  box-shadow: 0 2px 6px 2px #393949;
 }
 .bg-button-indigo {
   background: radial-gradient(
@@ -246,7 +244,6 @@ a {
     rgba(129, 140, 248, 0.95),
     rgba(129, 140, 248, 0.85)
   );
-  box-shadow: 0 2px 6px 2px #393949;
 }
 
 /* Error fade effect */
