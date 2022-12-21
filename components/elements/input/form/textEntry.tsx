@@ -2,25 +2,29 @@ import React, { FC } from "react";
 import { CSSObject, TextInput, TextInputStylesNames } from "@mantine/core";
 
 interface TextEntryProps {
-  label: string;
+  label?: string;
   labelColor?: string;
   value: string;
   name: string;
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
+  placeholder?: string;
   type?: string;
   required?: boolean;
   className?: string;
+  noLabel?: boolean;
 }
 
 const TextEntry: FC<TextEntryProps> = ({
-  label,
+  label = "",
   labelColor = "#EEE",
   value,
   name,
   onChange,
+  placeholder,
   type = "text",
   required = true,
   className = "mb-2",
+  noLabel = false,
 }) => {
   // Extra input styling for Mantine components
   const inputStyles: Partial<Record<TextInputStylesNames, CSSObject>> = {
@@ -36,7 +40,7 @@ const TextEntry: FC<TextEntryProps> = ({
     required: { display: "none" },
     root: {
       display: "grid",
-      gridTemplateColumns: "2fr 4fr",
+      gridTemplateColumns: noLabel ? "1fr" : "2fr 4fr",
       alignItems: "center",
     },
   };
@@ -47,6 +51,7 @@ const TextEntry: FC<TextEntryProps> = ({
       name={name}
       value={value}
       type={type}
+      placeholder={placeholder}
       radius="md"
       size="xs"
       styles={inputStyles}

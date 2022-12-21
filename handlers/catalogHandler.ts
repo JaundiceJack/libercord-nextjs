@@ -29,8 +29,14 @@ export const createDefaultCatalog = async (
         },
       });
       if (catalog) return catalog;
-      else throw new Error("Unable to create a default option catalog.");
-    } else throw new Error("No user id given for default option catalog.");
+      else
+        throw new Error(
+          "Catalog Error: Unable to create a default option catalog."
+        );
+    } else
+      throw new Error(
+        "Catalog Error: No user id given for default option catalog."
+      );
   } catch (e) {
     throw e;
   }
@@ -47,7 +53,10 @@ export const getCatalogByUserId = async (
       if (catalog) return catalog;
       // create one for them if none was found
       else return createDefaultCatalog(user);
-    } else throw new Error("No user provided for catalog search.");
+    } else
+      throw new Error(
+        "Catalog Retrieval Error: No user provided for catalog search."
+      );
   } catch (e) {
     throw e;
   }
@@ -91,10 +100,16 @@ export const createCatalogItem = async ({
             item,
           });
           if (saved) return saved;
-          else throw new Error("Unable to save new option to user catalog.");
-        } else throw new Error("Unable to create user catalog.");
+          else
+            throw new Error(
+              "Catalog Create Error: Unable to save new option to user catalog."
+            );
+        } else
+          throw new Error(
+            "Catalog Create Error: Unable to create user catalog."
+          );
       }
-    } else throw new Error("No user provided when creating catalog item.");
+    } else throw new Error("Catalog Create Error: No user provided.");
   } catch (e) {
     throw e;
   }
@@ -114,9 +129,10 @@ const _saveCatalogItem = async ({
 }): Promise<CatalogType> => {
   try {
     let optionArray = catalog[section][field];
-
     if (!optionArray)
-      throw new Error(`Catalog field: ${field} does not exist.`);
+      throw new Error(
+        `Catalog Save Error: Catalog field: ${field} does not exist.`
+      );
     else {
       // If the user has no array of the given, put the item in a new one
       if (optionArray.length === 0 && catalog.save) {
@@ -131,8 +147,51 @@ const _saveCatalogItem = async ({
       else if (catalog.save) {
         catalog[section][field].push(item.toLowerCase());
         return await catalog.save();
-      } else throw new Error("Catalog missing save function.");
+      } else
+        throw new Error("Catalog Save Error: Catalog missing save function.");
     }
+  } catch (e) {
+    throw e;
+  }
+};
+
+// Edit a given catalog item to the newItem
+export const editCatalogItem = async ({
+  user,
+  section,
+  field,
+  oldItem,
+  newItem,
+}: {
+  user: Types.ObjectId | undefined;
+  section: CatalogSections;
+  field: CatalogFields;
+  oldItem: string;
+  newItem: string;
+}): Promise<CatalogType> => {
+  try {
+    if (user) {
+      await dbConnect();
+      // Find the user's catalog of options
+      const catalog = await Catalog.findOne<CatalogType>({ user });
+      if (catalog) {
+        // Try to edit the item from the old one to the new
+        const editIndex = catalog[section][field].findIndex(
+          (item) => item === oldItem
+        );
+        if (editIndex !== -1) {
+          catalog[section][field][editIndex] = newItem;
+          const saved = catalog.save && (await catalog.save());
+          if (saved) return saved;
+          else
+            throw new Error("Catalog Edit Error: Unable to save edited item.");
+        } else
+          throw new Error(
+            "Catalog Edit Error: Unable to find old item to edit."
+          );
+      } else
+        throw new Error("Catalog Edit Error: Unable to find user's catalog.");
+    } else throw new Error("Catalog Edit Error: No user provided.");
   } catch (e) {
     throw e;
   }
@@ -160,9 +219,12 @@ export const removeCatalogItem = async ({
         );
         const saved = await catalog.save();
         if (saved) return saved;
-        else throw new Error("Unable to remove option.");
-      } else throw new Error("Unable to find user option catalog.");
-    } else throw new Error("No user provided when removing catalog item.");
+        else throw new Error("Catalog Delete Error: Unable to remove option.");
+      } else
+        throw new Error(
+          "Catalog Delete Error: Unable to find user option catalog."
+        );
+    } else throw new Error("Catalog Delete Error: No user provided.");
   } catch (e) {
     throw e;
   }
