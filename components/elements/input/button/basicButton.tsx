@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+// import { ImBlocked } from 'react-icons/im' // Idea is to replace the disabled visual with this icon
 
 interface BasicButtonProps {
   label?: string;

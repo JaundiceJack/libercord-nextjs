@@ -4,6 +4,7 @@ import NavLink from "./navlink";
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
 import { IoWalletOutline } from "react-icons/io5";
 import { AiOutlineLineChart } from "react-icons/ai";
+import { BsGearFill } from "react-icons/bs";
 
 const NavLinks = () => {
   interface LinkFace {
@@ -31,6 +32,12 @@ const NavLinks = () => {
       label: "expenses",
       icon: <GiPayMoney size="30" color="rgb(39, 39, 42)" />,
       color: "indigo",
+    },
+    {
+      path: "settings",
+      label: "settings",
+      icon: <BsGearFill size="30" color="rgb(39, 39, 42)" />,
+      color: "yellow",
     },
     //{
     //path: '/records/assets',
