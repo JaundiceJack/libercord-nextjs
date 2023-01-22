@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, ReactNode } from "react";
 import { CSSObject, Select, SelectItem } from "@mantine/core";
 import Spinner from "../../misc/spinner";
-import { capitalize } from "@material-ui/core";
 import { BaseSelectStylesNames } from "@mantine/core/lib/Select/types";
 //import { capitalize } from "../../../../helpers/strings";
 
@@ -34,9 +33,9 @@ const SelectEntry: FC<SelectEntryProps> = ({
   const inputStyles: Partial<Record<BaseSelectStylesNames, CSSObject>> = {
     label: {
       color: labelColor,
-      fontSize: 16 + "px",
-      marginRight: 8 + "px",
-      marginBottom: 0,
+      fontSize: "18px",
+      fontFamily: "Josefin Sans",
+      marginRight: "8px",
       textAlign: "right",
       fontWeight: 600,
     },
@@ -45,7 +44,7 @@ const SelectEntry: FC<SelectEntryProps> = ({
     root: {
       display: "grid",
       gridTemplateColumns: "2fr 4fr",
-      alignItems: "center",
+      alignItems: "end",
     },
   };
 

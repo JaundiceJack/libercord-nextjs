@@ -15,7 +15,9 @@ const DetailWindow: FC<DetailWindowProps> = ({
   className,
 }) => {
   return (
-    <div className={`flex flex-col h-full lg:col-span-2 ${className}`}>
+    <div
+      className={`flex flex-col h-full md:max-h-screen lg:col-span-2 ${className}`}
+    >
       <Header
         setWindow={setWindow}
         currentWindow={currentWindow}

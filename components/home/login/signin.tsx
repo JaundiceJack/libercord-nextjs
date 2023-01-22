@@ -63,6 +63,7 @@ const SignIn: FC<SignInProps> = ({
         value={email}
         onChange={setEmail}
         className="mb-2"
+        autoFocus={true}
       />
       <TextEntry
         label="Password:"

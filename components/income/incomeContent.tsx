@@ -5,22 +5,15 @@ import DetailWindow from "../elements/containers/DetailWindow/detailWindow";
 import IncomeInput from "./incomeInput";
 import IncomeGraph from "./incomeGraph";
 import IncomeTable from "./incomeTable";
-import {
-  selectIncome,
-  setIncomeWindow,
-  toggleIncomeColumn,
-} from "../../redux/incomeSlice";
-import Modal from "../elements/containers/modal";
-import CheckboxEntry from "../elements/input/form/checkboxEntry";
+import { selectIncome, setIncomeWindow } from "../../redux/incomeSlice";
 import tocsv from "papaparse";
 import { saveAs } from "file-saver";
 import { formatDateMMDDYYYY } from "../../helpers/dates";
-import { pipeline } from "stream/promises";
+import EditIncomeColumns from "./modals/EditIncomeColumns";
 
 const IncomeContent: FC = () => {
   const dispatch = useReduxDispatch();
-  const { incomes, incomeWindow, incomeColumns } =
-    useReduxSelector(selectIncome);
+  const { incomes, incomeWindow } = useReduxSelector(selectIncome);
   const [columnModalOpen, setColumnModalOpen] = useState(false);
 
   // Export data to a .csv file for the user to do w/e with it
@@ -57,46 +50,10 @@ const IncomeContent: FC = () => {
       >
         {incomeWindow === "list" ? <IncomeTable /> : <IncomeGraph />}
       </DetailWindow>
-      <Modal
-        title="Toggle visible income columns:"
+      <EditIncomeColumns
         opened={columnModalOpen}
         toggle={() => setColumnModalOpen(!columnModalOpen)}
-      >
-        <div className="flex sm:flex-row flex-col">
-          <CheckboxEntry
-            label="Date"
-            onClick={() => {
-              dispatch(toggleIncomeColumn("date"));
-            }}
-            defaultChecked={incomeColumns.includes("date")}
-            className="ml-4"
-          />
-          <CheckboxEntry
-            label="Source"
-            onClick={() => {
-              dispatch(toggleIncomeColumn("source"));
-            }}
-            defaultChecked={incomeColumns.includes("source")}
-            className="ml-4"
-          />
-          <CheckboxEntry
-            label="Category"
-            onClick={() => {
-              dispatch(toggleIncomeColumn("category"));
-            }}
-            defaultChecked={incomeColumns.includes("category")}
-            className="ml-4"
-          />
-          <CheckboxEntry
-            label="Amount"
-            onClick={() => {
-              dispatch(toggleIncomeColumn("amount"));
-            }}
-            defaultChecked={incomeColumns.includes("amount")}
-            className="ml-4"
-          />
-        </div>
-      </Modal>
+      />
     </WindowContainer>
   );
 };

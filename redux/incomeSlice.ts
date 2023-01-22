@@ -24,7 +24,7 @@ const initialState: IncomeState = {
   incomes: [],
   incomeId: null,
   incomeMode: "adding",
-  incomeWindow: "list",
+  incomeWindow: "graph",
   incomeError: undefined,
   incomeLoading: false,
   incomeSortBy: "date",

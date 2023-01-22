@@ -18,15 +18,6 @@ import HeaderButton from "../../input/button/HeaderButton";
 import { BiColumns } from "react-icons/bi";
 import { TbFileExport } from "react-icons/tb";
 
-// i'm gonna make this one more specific to the income/expense/asset/debt pages
-// and use a different one for summaries
-// i want to get rid of the title in the middle
-// to make more room for buttons/interaction
-// i think using the nav button style for all buttons looks a bit goofy
-// could i design a similar but more subtle button for page interactions?
-// oh, for the toggle button could i make it like a coin that flips when hovered?
-// then when clicked it keeps on that side instead of flipping back
-
 export interface HeaderProps {
   setWindow: () => void;
   currentWindow: string;
@@ -57,11 +48,6 @@ const Header: FC<HeaderProps> = ({
     "December",
   ];
 
-  // i want to be able to turn columns on/off,
-  // i'd like to open a modal when columns is clicked
-  // in the modal i'll have checkboxes for each income key
-  // the cbs will toggle columns fed to the scrollwindow
-
   return (
     <div
       className={`relative w-full sm:h-14 p-2 flex sm:flex-row flex-col 
@@ -69,17 +55,18 @@ const Header: FC<HeaderProps> = ({
     >
       <div className="flex items-center sm:order-1 order-3">
         <HeaderButton
-          name="list"
-          onClick={setWindow}
-          current={currentWindow}
-          showArrow={true}
-        />
-        <HeaderButton
           name="graph"
           onClick={setWindow}
           current={currentWindow}
           showArrow={true}
         />
+        <HeaderButton
+          name="list"
+          onClick={setWindow}
+          current={currentWindow}
+          showArrow={true}
+        />
+
         {currentWindow === "list" && (
           <HeaderButton
             name="columns"
@@ -107,7 +94,7 @@ const Header: FC<HeaderProps> = ({
             }
             title={""}
           />
-          <h4 className="self-center text-blue-200 text-md font-semibold mt-1">
+          <h4 className="self-center text-blue-200 text-md font-semibold font-jose mt-1">
             {dataTimeframe === "year"
               ? date.getFullYear()
               : `${date.getFullYear()} - ${months[getMonth(date)]}`}
