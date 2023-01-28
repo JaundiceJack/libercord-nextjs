@@ -1,5 +1,5 @@
 import { FC, MutableRefObject, RefObject } from "react";
-import { Datum } from "../Pie";
+import { Datum } from "../types";
 import LegendInfo from "./LegendInfo";
 import LegendPercentage from "./LegendPercentage";
 

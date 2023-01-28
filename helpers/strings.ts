@@ -20,3 +20,18 @@ export const truncateString = (text: string, length: number): string => {
     return text;
   }
 };
+
+export const months = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];

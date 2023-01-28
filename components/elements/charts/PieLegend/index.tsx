@@ -1,5 +1,5 @@
 import { createRef, FC, RefObject, useEffect, useRef, useState } from "react";
-import type { Datum } from "../Pie";
+import { Datum } from "../types";
 import LegendItem from "./LegendItem";
 import LegendTitle from "./LegendTitle";
 

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Datum } from "../Pie";
+import { Datum } from "../types";
 
 interface LegendInfoProps {
   entry: Datum;

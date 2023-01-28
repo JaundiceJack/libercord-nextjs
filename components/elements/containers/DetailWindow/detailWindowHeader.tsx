@@ -117,6 +117,11 @@ const Header: FC<HeaderProps> = ({
         }`}
       >
         <HeaderButton
+          name="all"
+          onClick={() => dispatch(setTimeframe("all"))}
+          current={dataTimeframe}
+        />
+        <HeaderButton
           name="year"
           onClick={() => dispatch(setTimeframe("year"))}
           current={dataTimeframe}
@@ -124,11 +129,6 @@ const Header: FC<HeaderProps> = ({
         <HeaderButton
           name="month"
           onClick={() => dispatch(setTimeframe("month"))}
-          current={dataTimeframe}
-        />
-        <HeaderButton
-          name="all"
-          onClick={() => dispatch(setTimeframe("all"))}
           current={dataTimeframe}
         />
       </div>
