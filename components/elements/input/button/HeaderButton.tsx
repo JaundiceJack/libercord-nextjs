@@ -22,11 +22,12 @@ const HeaderButton: FC<HeaderButtonProps> = ({
     <div className="relative">
       <button
         onClick={onClick}
-        className={`py-1 px-2 ml-1 h-8 rounded-md transform duration-150 hover:scale-105 ${
-          current === name
-            ? `bg-gray-300 text-black ${showArrow && "activeArrow"}`
-            : "bg-gray-500 text-gray-100"
-        } ${className}`}
+        className={`py-1 px-2 ml-1 h-8 rounded-md font-jose 
+          transform duration-150 hover:scale-105 ${
+            current === name
+              ? `bg-gray-300 text-black ${showArrow && "activeArrow"}`
+              : "bg-gray-500 text-gray-100"
+          } ${className}`}
       >
         {icon ? icon : capitalize(name)}
       </button>

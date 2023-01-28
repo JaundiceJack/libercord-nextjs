@@ -12,6 +12,7 @@ interface TextEntryProps {
   required?: boolean;
   className?: string;
   noLabel?: boolean;
+  autoFocus?: boolean;
 }
 
 const TextEntry: FC<TextEntryProps> = ({
@@ -25,23 +26,24 @@ const TextEntry: FC<TextEntryProps> = ({
   required = true,
   className = "mb-2",
   noLabel = false,
+  autoFocus = false,
 }) => {
   // Extra input styling for Mantine components
   const inputStyles: Partial<Record<TextInputStylesNames, CSSObject>> = {
     label: {
       color: labelColor,
-      fontSize: 16 + "px",
-      marginRight: 8 + "px",
-      marginBottom: 0,
+      fontSize: "18px",
+      fontFamily: "Josefin Sans",
+      marginRight: "8px",
       textAlign: "right",
       fontWeight: 600,
     },
-    input: { fontSize: 14 + "px" },
+    input: { fontSize: "14px" },
     required: { display: "none" },
     root: {
       display: "grid",
       gridTemplateColumns: noLabel ? "1fr" : "2fr 4fr",
-      alignItems: "center",
+      alignItems: "end",
     },
   };
 
@@ -58,6 +60,7 @@ const TextEntry: FC<TextEntryProps> = ({
       onChange={onChange}
       className={className}
       required={required}
+      autoFocus={autoFocus}
     />
   );
 };
