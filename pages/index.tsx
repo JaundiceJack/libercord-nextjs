@@ -1,7 +1,7 @@
 import type { InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head";
-import PageLayout from "../components/pageLayout";
-import HomeContent from "../components/home/homeContent";
+import PageLayout from "../components/PageLayout";
+import HomeContent from "../components/pages/Home";
 
 const Home: NextPage = () => {
   return (

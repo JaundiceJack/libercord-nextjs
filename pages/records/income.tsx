@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import PageLayout from "../../components/pageLayout";
-import IncomeContent from "../../components/income/incomeContent";
+import PageLayout from "../../components/PageLayout";
+import IncomePage from "../../components/pages/Incomes";
 import useUser from "../../hooks/useUser";
 import { useEffect } from "react";
 import { useReduxDispatch } from "../../hooks/useRedux";
@@ -23,7 +23,7 @@ const Income: NextPage = () => {
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {user && <IncomeContent />}
+      {user && <IncomePage />}
     </PageLayout>
   );
 };

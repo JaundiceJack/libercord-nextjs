@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import PageLayout from "../components/pageLayout";
-import SettingsContent from "../components/settings/settingsContent";
+import PageLayout from "../components/PageLayout";
+import SettingsContent from "../components/pages/Settings";
 import useUser from "../hooks/useUser";
 import { useEffect } from "react";
 import { useReduxDispatch } from "../hooks/useRedux";

@@ -6,7 +6,7 @@ import {
   createIncome,
   editIncome,
   getIncomesByUserId,
-} from "../../../handlers/incomeHandler";
+} from "../../../handlers/income";
 
 const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -15,7 +15,7 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     if (session) {
       // Get the user's incomes
       if (req.method === "GET") {
-        const incomes = await getIncomesByUserId(session._id);
+        const incomes = await getIncomesByUserId({ user: session._id });
         if (incomes) res.status(200).json(incomes);
         else if (incomes === []) res.status(200).json([]);
         else throw new Error("Unable to retrieve user incomes.");
@@ -24,7 +24,7 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       else if (req.method === "POST") {
         const body = JSON.parse(req.body);
         const incomes = await createIncome({
-          userId: session._id,
+          user: session._id,
           income: body.income,
         });
         if (incomes) res.status(200).json(incomes);
@@ -34,7 +34,7 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       else if (req.method === "PUT") {
         const body = JSON.parse(req.body);
         const incomes = await editIncome({
-          userId: session._id,
+          user: session._id,
           incomeId: body.incomeId,
           updates: body.updates,
         });

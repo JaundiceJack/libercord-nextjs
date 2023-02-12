@@ -1,6 +1,5 @@
 import { Schema, Types, model, models } from "mongoose";
-
-export type Currencies = "$" | "₿" | "€" | "₱" | "¥";
+import type { Currencies } from "./types";
 
 export interface IncomeType {
   _id?: Types.ObjectId;

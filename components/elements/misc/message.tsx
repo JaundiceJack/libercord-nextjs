@@ -1,4 +1,5 @@
 import { FC } from "react";
+import MsgCSS from "../../../styles/Message.module.css";
 
 interface MessageProps {
   error?: string;
@@ -18,7 +19,10 @@ const Message: FC<MessageProps> = ({
   return (
     <div
       className={`flex items-center justify-center px-2 py-2 rounded-lg
-      border-l border-gray-500 font-semibold text-black fadeError ${className} ${
+      border-l border-gray-500 font-semibold text-black 
+      ${MsgCSS.fadeMessage} 
+      ${className} 
+      ${
         error
           ? "bg-red-400"
           : warning

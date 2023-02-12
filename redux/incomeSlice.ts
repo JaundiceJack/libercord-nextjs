@@ -2,28 +2,26 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Types } from "mongoose";
 import { IncomeType } from "../models/Income";
 import type { ReduxState, ReduxThunk } from "./store";
+import type { SortDirection, WindowOption, Mode } from "./types";
 
 export type IncomeSortOption = "date" | "source" | "category" | "amount";
-export type IncomeMode = "adding" | "editing" | "deleting";
-export type IncomeWindowOption = "list" | "graph";
-export type IncomeSortDir = "asc" | "desc";
 
 export interface IncomeState {
   incomes: IncomeType[];
   incomeId: Types.ObjectId | null;
-  incomeMode: IncomeMode;
-  incomeWindow: IncomeWindowOption;
+  incomeMode: Mode;
+  incomeWindow: WindowOption;
   incomeError: string | undefined;
   incomeLoading: boolean;
   incomeSortBy: IncomeSortOption;
-  incomeSortDir: IncomeSortDir;
+  incomeSortDir: SortDirection;
   incomeColumns: IncomeSortOption[];
 }
 
 const initialState: IncomeState = {
   incomes: [],
   incomeId: null,
-  incomeMode: "adding",
+  incomeMode: "idle",
   incomeWindow: "graph",
   incomeError: undefined,
   incomeLoading: false,
@@ -102,6 +100,9 @@ export const incomeSlice = createSlice({
   name: "income",
   initialState,
   reducers: {
+    resetIncome: (state: IncomeState) => {
+      state = initialState;
+    },
     pickIncome: (state: IncomeState, action: PayloadAction<Types.ObjectId>) => {
       state.incomeId = action.payload;
     },
@@ -130,7 +131,7 @@ export const incomeSlice = createSlice({
     },
     setIncomeWindow: (
       state: IncomeState,
-      action: PayloadAction<IncomeWindowOption>
+      action: PayloadAction<WindowOption>
     ) => {
       state.incomeWindow = action.payload;
     },
@@ -203,6 +204,7 @@ export const incomeSlice = createSlice({
 });
 
 export const {
+  resetIncome,
   pickIncome,
   unpickIncome,
   toggleAddingIncome,

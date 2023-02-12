@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type SessionType from "../../../types/SessionType";
 import { getLoginSession } from "../../../passport/session";
 import { errString } from "../../../helpers/errors";
-import { removeIncome } from "../../../handlers/incomeHandler";
+import { removeIncome } from "../../../handlers/income";
 
 const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -11,10 +11,10 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     if (session) {
       // Remove an income
       if (req.method === "DELETE") {
-        const { incomeId } = req.query;
-        if (incomeId && typeof incomeId === "string") {
+        const incomeId = req?.query?.incomeId as string | undefined;
+        if (incomeId) {
           const incomes = await removeIncome({
-            userId: session._id,
+            user: session._id,
             incomeId,
           });
           if (incomes) res.status(200).json(incomes);

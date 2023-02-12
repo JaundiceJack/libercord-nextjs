@@ -6,7 +6,7 @@ interface SpinnerProps {
   className?: string;
 }
 
-const Spinner: FC<SpinnerProps> = ({ color = "gray", className }) => {
+const Spinner: FC<SpinnerProps> = ({ color = "gray-200", className }) => {
   return (
     <div
       className={`w-full h-full flex items-center justify-center ${className}`}
@@ -17,7 +17,7 @@ const Spinner: FC<SpinnerProps> = ({ color = "gray", className }) => {
             ? "text-black"
             : color === "white"
             ? "text-white"
-            : "text-" + color + "-400"
+            : "text-" + color
         } text-center`}
         size="30"
       />
