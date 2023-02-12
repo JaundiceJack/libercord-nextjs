@@ -1,0 +1,31 @@
+.header {
+  background: radial-gradient(
+    at bottom,
+    rgb(var(--gray_7)),
+    rgb(var(--gray_5))
+  );
+  box-shadow: 0 1px 3px -2px rgb(var(--gray_1));
+  z-index: 10;
+}
+
+.content {
+  background: radial-gradient(
+    at top,
+    rgba(var(--gray_7), 0.95),
+    rgba(var(--gray_7), 0.85),
+    rgba(var(--gray_7), 0.5)
+  );
+  z-index: 5;
+}
+
+.container {
+  background: radial-gradient(rgb(var(--gray_7)), rgb(var(--gray_5)));
+}
+
+.sidebar {
+  background: radial-gradient(
+    at bottom,
+    rgb(var(--gray_5)),
+    rgb(var(--gray_2))
+  );
+}

@@ -5,5 +5,8 @@ export type Datum = {
   type?: "source" | "category" | "location";
 };
 
-export const sortByPercent = (a: Datum, b: Datum) =>
-  a.percent! > b.percent! ? -1 : 1;
+export type ChartProps = {
+  data: Datum[];
+  activeIndex: number;
+  onHover: (data: Datum | null, index: number) => void;
+};

@@ -7,7 +7,7 @@ import {
   editCatalogItem,
   getCatalogByUserId,
   removeCatalogItem,
-} from "../../handlers/catalogHandler";
+} from "../../handlers/catalog";
 import { CatalogFields, CatalogSections } from "../../models/Catalog";
 
 const catalogRoute = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,7 +17,7 @@ const catalogRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     if (session) {
       // Get the option catalog
       if (req.method === "GET") {
-        const catalog = await getCatalogByUserId(session._id);
+        const catalog = await getCatalogByUserId({ user: session._id });
         if (catalog) res.status(200).json(catalog);
         else throw new Error("Unable to retrieve user options.");
       }

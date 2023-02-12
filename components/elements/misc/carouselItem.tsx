@@ -23,7 +23,16 @@ const CarouselItem: FC<CarouselItemProps> = ({
       ${className}`}
     >
       {image && (
-        <div className="bg-image-wrap">
+        <div
+          style={{
+            position: "fixed",
+            height: "100vh",
+            width: "100vh",
+            overflow: "hidden",
+            zIndex: "-1",
+            filter: "blur(3px)",
+          }}
+        >
           <Image
             src={image}
             layout="fill"
@@ -35,7 +44,20 @@ const CarouselItem: FC<CarouselItemProps> = ({
       )}
       <div className="p-12 h-full flex flex-col items-center justify-center">
         <div className="relative">
-          <div className="bg-swiper-item w-full h-full" />
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              background: "#444",
+              opacity: "85%",
+              zIndex: "-1",
+              borderRadius: "20px",
+              borderWidth: "6px",
+              borderColor: "transparent",
+              boxShadow: "0 0 10px 10px #444",
+            }}
+          />
           <div className="px-8 py-14 rounded-xl">
             <div className={`flex flex-row justify-center mb-2`}>
               <p className={`text-yellow-400 mr-2 shadow-lg`}>{icon}</p>

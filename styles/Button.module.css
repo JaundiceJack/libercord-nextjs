@@ -1,0 +1,146 @@
+/****************/
+/* Button Types */
+/****************/
+.itemOptionButton {
+  border-radius: 0.4rem;
+  transition: all ease 0.2s;
+}
+
+.bareButton {
+  border-radius: 0.6rem;
+  transition: all linear 0.2s;
+}
+
+.header-button {
+  transition: box-shadow 1s;
+  box-shadow: inset 0 0 2px 1px rgba(var(--gray_5), 0.8),
+    inset 0 0 2px 1px rgba(var(--gray_5), 0.533);
+}
+.header-button:hover {
+  box-shadow: inset 0 0 2px 1px rgb(var(--gray_5)),
+    inset 0 0 2px 1px rgba(var(--gray_5), 0.8);
+}
+
+/*****************/
+/* Button Colors */
+/*****************/
+.button-green {
+  background: radial-gradient(
+    rgba(var(--green_base), 0.949),
+    rgba(var(--green_base), 0.651)
+  );
+  box-shadow: inset 0px 0px 2px 3px rgba(var(--green_dark), 0.635);
+  border: rgba(var(--green_dark), 0.635) solid 1px;
+}
+.button-green:hover {
+  box-shadow: inset 0px 0px 3px 3px rgba(var(--green_dark), 0.949);
+  border: rgba(var(--green_dark), 0.502) solid 1px;
+}
+
+.button-yellow {
+  background: radial-gradient(
+    rgba(var(--yellow_base), 0.949),
+    rgba(var(--yellow_base), 0.651)
+  );
+  box-shadow: inset 0px 0px 2px 3px rgba(var(--yellow_dark), 0.635);
+  border: rgba(var(--yellow_dark), 0.635) solid 1px;
+}
+.button-yellow:hover {
+  box-shadow: inset 0px 0px 3px 3px rgba(var(--yellow_dark), 0.949);
+  border: rgba(var(--yellow_dark), 0.502) solid 1px;
+}
+
+.button-red {
+  background: radial-gradient(
+    rgba(var(--red_base), 0.949),
+    rgba(var(--red_base), 0.651)
+  );
+  box-shadow: inset 0px 0px 2px 3px rgba(var(--red_dark), 0.635);
+  border: rgba(var(--red_dark), 0.635) solid 1px;
+}
+.button-red:hover {
+  box-shadow: inset 0px 0px 3px 3px rgba(var(--red_dark), 0.949);
+  border: rgba(var(--red_dark), 0.502) solid 1px;
+}
+
+.button-gray {
+  background: radial-gradient(
+    rgba(var(--gray_7), 0.949),
+    rgba(var(--gray_7), 0.651)
+  );
+  box-shadow: inset 0px 0px 2px 3px rgba(var(--gray_5), 0.635);
+  border: rgba(var(--gray_5), 0.635) solid 1px;
+}
+.button-gray:hover {
+  box-shadow: inset 0px 0px 3px 3px rgba(var(--gray_5), 0.949);
+  border: rgba(var(--gray_5), 0.502) solid 1px;
+}
+
+.button-blue {
+  background: radial-gradient(
+    rgba(var(--blue_base), 0.949),
+    rgba(var(--blue_base), 0.651)
+  );
+  box-shadow: inset 0px 0px 2px 3px rgba(var(--blue_dark), 0.635);
+  border: rgba(var(--blue_dark), 0.627) solid 1px;
+}
+.button-blue:hover {
+  box-shadow: inset 0px 0px 3px 3px rgba(var(--blue_dark), 0.949);
+  border: rgba(var(--blue_dark), 0.502) solid 1px;
+}
+
+/****************/
+/* Button Hints */
+/****************/
+/* Tooltip Arrow */
+.tooltip {
+  background: rgb(var(--gray_5));
+  box-shadow: 0 0 10px 3px rgb(var(--gray_1));
+}
+/* Arrow to the left of the tooltip */
+.arrow-left::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+}
+.arrow-left-dark::after {
+  border-color: transparent rgb(var(--gray_5)) transparent transparent;
+}
+.arrow-left-light::after {
+  border-color: transparent rgb(var(--gray_10)) transparent transparent;
+}
+/* Arrow on top of the tooltip */
+.arrow-top::after {
+  content: " ";
+  position: absolute;
+  top: 0%;
+  left: 13px;
+  margin-top: -10px;
+  border-width: 5px;
+  border-style: solid;
+}
+.arrow-top-dark::after {
+  border-color: transparent transparent rgb(var(--gray_5)) transparent;
+}
+.arrow-top-light::after {
+  border-color: transparent transparent rgb(var(--gray_10)) transparent;
+}
+/* Arrow on the bottom of the tooltip */
+.arrow-bottom::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  right: 41%;
+  border-width: 5px;
+  border-style: solid;
+}
+.arrow-bottom-dark::after {
+  border-color: rgb(var(--gray_5)) transparent transparent transparent;
+}
+.arrow-bottom-light::after {
+  border-color: rgb(var(--gray_10)) transparent transparent transparent;
+}

@@ -113,6 +113,9 @@ export const catalogSlice = createSlice({
   name: "catalog",
   initialState,
   reducers: {
+    resetCatalog: (state: CatalogState) => {
+      state = initialState;
+    },
     toggleAddingCatalog: (state: CatalogState) => {
       state.catalogMode = "adding";
     },
@@ -180,6 +183,7 @@ export const catalogSlice = createSlice({
 });
 
 export const {
+  resetCatalog,
   toggleAddingCatalog,
   toggleEditingCatalog,
   toggleDeletingCatalog,

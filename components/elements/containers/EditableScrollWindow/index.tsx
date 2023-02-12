@@ -4,6 +4,8 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { FaMinus } from "react-icons/fa";
+import BgCSS from "../../../../styles/Background.module.css";
+import LiCSS from "../../../../styles/List.module.css";
 
 export interface EditableScrollWindowColumn {
   name: string;
@@ -52,7 +54,7 @@ const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
             style={{ background: "radial-gradient(at right, #223, #334)" }}
             className={`p-2.5 rounded-l-xl text-white 
             border-l border-b-2 border-slate-900 transform duration-150 
-            hover:scale-103 row-button-shadow`}
+            hover:scale-103 ${LiCSS.row}`}
           >
             <MdEdit color="#fb0" />
           </button>
@@ -63,7 +65,7 @@ const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
             style={{ background: "radial-gradient(at left, #223, #334)" }}
             className={`p-2.5 rounded-r-xl text-white 
             border-r border-b-2 border-slate-900 transform duration-150 
-            hover:scale-103 row-button-shadow`}
+            hover:scale-103 ${LiCSS.row}`}
           >
             <FaMinus color="#e22" />
           </button>
@@ -75,7 +77,7 @@ const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
   return (
     <div className="flex flex-col w-full h-full overflow-x-scroll sm:overflow-auto">
       {/* Column Labels */}
-      <div className={`border-b border-gray-800 bg-header shadow-xl `}>
+      <div className={`border-b border-gray-800 ${BgCSS.header} shadow-xl `}>
         <button
           onClick={column.setSort}
           className={`p-2 text-neutral-100 font-semibold flex items-center justify-center w-full`}

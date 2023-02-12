@@ -1,0 +1,13 @@
+/* Error fade effect */
+.fadeError {
+  animation: fade 1s linear 4s 1 forwards;
+}
+
+@keyframes fade {
+  from {
+    opacity: 100;
+  }
+  to {
+    opacity: 0;
+  }
+}
