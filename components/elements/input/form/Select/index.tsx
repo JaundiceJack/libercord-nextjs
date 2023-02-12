@@ -31,6 +31,12 @@ const SelectEntry: FC<SelectProps> = ({
     labelWidth,
   });
 
+  const sortedData = options.sort((a, b) => {
+    const first = typeof a === "string" ? a : a.label || "";
+    const second = typeof b === "string" ? b : b.label || "";
+    return first > second ? 1 : -1;
+  });
+
   return loading ? (
     <div className="grid grid-cols-3 items-center">
       <p className="text-right text-gray-500 font-bold">{label}</p>
@@ -47,7 +53,7 @@ const SelectEntry: FC<SelectProps> = ({
       onCreate={createOption}
       radius="md"
       size="xs"
-      data={options}
+      data={sortedData}
       styles={inputStyles}
       className={className}
       required={required}
