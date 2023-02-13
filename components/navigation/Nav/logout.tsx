@@ -5,6 +5,7 @@ import { useReduxDispatch } from "../../../hooks/useRedux";
 import { resetIncome } from "../../../redux/incomeSlice";
 import { resetCatalog } from "../../../redux/catalogSlice";
 import { resetDate } from "../../../redux/dateSlice";
+import { resetExpense } from "../../../redux/expenseSlice";
 
 const Logout: FC = () => {
   const dispatch = useReduxDispatch();
@@ -16,6 +17,7 @@ const Logout: FC = () => {
       color="red"
       onClick={() => {
         dispatch(resetIncome());
+        dispatch(resetExpense());
         dispatch(resetCatalog());
         dispatch(resetDate());
       }}

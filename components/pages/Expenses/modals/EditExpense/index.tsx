@@ -23,9 +23,11 @@ import {
   defaultAmount,
   defaultDate,
   defaultCurrency,
+  defaultOption,
 } from "../../../../../helpers/defaults/fields";
-import { useCreateOptions } from "../../../../../helpers/defaults/selects";
 import { invalidEntries } from "../../../../../helpers/validation/expense";
+import { useLocation } from "../../../../../hooks/selections/useLocation";
+import { useExpenseCategory } from "../../../../../hooks/selections/useExpenseCategory";
 
 const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
   const dispatch = useReduxDispatch();
@@ -36,25 +38,23 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
 
   const { errMsgs, setErrMsgs } = useErrMsgs();
   const { width: screenWidth, height } = useWindowSize();
-  const {
-    newCategoryOption,
-    newLocationOption,
-    defaultOption,
-    createExpenseOption,
-  } = useCreateOptions();
 
   const [selected, setSelected] = useState<ExpenseType | undefined>();
 
   const [name, setName] = useState(defaultName(selected));
   const [amount, setAmount] = useState(defaultAmount(selected));
   const [date, setDate] = useState(defaultDate(selected));
-  const [location, setLocation] = useState(defaultOption("location", selected));
-  const [category, setCategory] = useState(
-    defaultOption("expenseCategory", selected)
-  );
   const [currency, setCurrency] = useState<Currencies>(
     defaultCurrency(selected)
   );
+  const { location, setLocation, createLocation } = useLocation({
+    catalog,
+    selected,
+  });
+  const { category, setCategory, createCategory } = useExpenseCategory({
+    catalog,
+    selected,
+  });
 
   // Update the selected expense if the data or selected id change
   useEffect(() => {
@@ -71,23 +71,11 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
     setAmount(defaultAmount(newSelection));
     setCurrency(defaultCurrency(newSelection));
     setDate(defaultDate(newSelection));
-    setLocation(defaultOption("location", newSelection).toLowerCase());
-    setCategory(defaultOption("expenseCategory", newSelection).toLowerCase());
+    setLocation(defaultOption("location", catalog, newSelection).toLowerCase());
+    setCategory(
+      defaultOption("expenseCategory", catalog, newSelection).toLowerCase()
+    );
   }, [expenses, expenseId]);
-
-  // Set options when the catalog is updated
-  useEffect(() => {
-    // Set default if the field is empty or to the new option if there was one
-    newLocationOption.current === ""
-      ? !location && setLocation(defaultOption("location"))
-      : setLocation(newLocationOption.current);
-    newCategoryOption.current === ""
-      ? !category && setCategory(defaultOption("expenseCategory"))
-      : setCategory(newCategoryOption.current);
-    // Reset all the creation options
-    newLocationOption.current = "";
-    newCategoryOption.current = "";
-  }, [catalog]);
 
   const submitEntries = () => {
     // SIDENOTE: an input date requires this to add hours from GMT for the
@@ -104,7 +92,7 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
     dispatch(
       editExpense({ expenseId: selected?._id ?? null, updates: expense })
     );
-    toggle();
+    errMsgs.length === 0 && toggle();
   };
 
   // Validate and submit new or edited expense
@@ -142,7 +130,7 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
           name="location"
           value={location}
           onChange={setLocation}
-          createOption={createExpenseOption("locations")}
+          createOption={createLocation}
           loading={catalogLoading}
           className="col-span-2"
           labelWidth="6rem"
@@ -160,7 +148,7 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
           name="category"
           value={category}
           onChange={setCategory}
-          createOption={createExpenseOption("categories")}
+          createOption={createCategory}
           loading={catalogLoading}
           className="col-span-2 mb-4"
           labelWidth="6rem"

@@ -22,8 +22,9 @@ const NavLink: FC<NavLinkProps> = ({
   className,
 }) => {
   return (
-    <Link onClick={onClick} href={path} className={` ${className}`}>
+    <Link href={path} className={` ${className}`}>
       <div
+        onClick={onClick}
         className={`relative group flex flex-row items-center h-12 w-12 
         rounded-lg cursor-pointer sm:px-3 px-2 py-2 sm:mr-0 mx-1 sm:mb-3 `}
       >

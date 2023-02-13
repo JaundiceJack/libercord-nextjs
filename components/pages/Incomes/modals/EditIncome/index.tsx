@@ -23,9 +23,11 @@ import {
   defaultAmount,
   defaultDate,
   defaultCurrency,
+  defaultOption,
 } from "../../../../../helpers/defaults/fields";
-import { useCreateOptions } from "../../../../../helpers/defaults/selects";
 import { invalidEntries } from "../../../../../helpers/validation/income";
+import { useSource } from "../../../../../hooks/selections/useSource";
+import { useIncomeCategory } from "../../../../../hooks/selections/useIncomeCategory";
 
 const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
   const dispatch = useReduxDispatch();
@@ -34,25 +36,20 @@ const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
 
   const { errMsgs, setErrMsgs } = useErrMsgs();
   const { width: screenWidth } = useWindowSize();
-  const {
-    newCategoryOption,
-    newSourceOption,
-    defaultOption,
-    createIncomeOption,
-  } = useCreateOptions();
 
   const [selected, setSelected] = useState<IncomeType | undefined>();
 
   const [name, setName] = useState(defaultName(selected));
   const [amount, setAmount] = useState(defaultAmount(selected));
   const [date, setDate] = useState(defaultDate(selected));
-  const [source, setSource] = useState(defaultOption("source", selected));
-  const [category, setCategory] = useState(
-    defaultOption("incomeCategory", selected)
-  );
   const [currency, setCurrency] = useState<Currencies>(
     defaultCurrency(selected)
   );
+  const { source, setSource, createSource } = useSource({ catalog, selected });
+  const { category, setCategory, createCategory } = useIncomeCategory({
+    catalog,
+    selected,
+  });
 
   // Update the selected income if the data or selected id change
   useEffect(() => {
@@ -69,23 +66,11 @@ const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
     setAmount(defaultAmount(newSelection));
     setCurrency(defaultCurrency(newSelection));
     setDate(defaultDate(newSelection));
-    setSource(defaultOption("source", newSelection).toLowerCase());
-    setCategory(defaultOption("incomeCategory", newSelection).toLowerCase());
+    setSource(defaultOption("source", catalog, newSelection).toLowerCase());
+    setCategory(
+      defaultOption("incomeCategory", catalog, newSelection).toLowerCase()
+    );
   }, [incomes, incomeId]);
-
-  // Set options when the catalog is updated
-  useEffect(() => {
-    // Set default if the field is empty or to the new option if there was one
-    newSourceOption.current === ""
-      ? !source && setSource(defaultOption("source"))
-      : setSource(newSourceOption.current);
-    newCategoryOption.current === ""
-      ? !category && setCategory(defaultOption("incomeCategory"))
-      : setCategory(newCategoryOption.current);
-    // Reset all the creation options
-    newSourceOption.current = "";
-    newCategoryOption.current = "";
-  }, [catalog]);
 
   const submitEntries = () => {
     // SIDENOTE: an input date requires this to add hours from GMT for the
@@ -100,7 +85,7 @@ const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
       currency,
     };
     dispatch(editIncome({ incomeId: selected?._id ?? null, updates: income }));
-    toggle();
+    errMsgs.length === 0 && toggle();
   };
 
   // Validate and submit new or edited income
@@ -138,7 +123,7 @@ const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
           name="source"
           value={source}
           onChange={setSource}
-          createOption={createIncomeOption("sources")}
+          createOption={createSource}
           loading={catalogLoading}
           className="col-span-2"
           labelWidth="6rem"
@@ -156,7 +141,7 @@ const EditIncome: FC<ToggleProps> = ({ opened, toggle }) => {
           name="category"
           value={category}
           onChange={setCategory}
-          createOption={createIncomeOption("categories")}
+          createOption={createCategory}
           loading={catalogLoading}
           className="col-span-2 mb-4"
           labelWidth="6rem"

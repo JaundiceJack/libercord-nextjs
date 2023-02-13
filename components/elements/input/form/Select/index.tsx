@@ -3,6 +3,7 @@ import { Select } from "@mantine/core";
 import Spinner from "../../../misc/spinner";
 import { mantineStyles } from "../mantineStyles";
 import type { SelectProps } from "../types";
+import { CSSObject, SelectStylesNames } from "@mantine/core";
 
 /*
   mantine bug:
@@ -24,12 +25,23 @@ const SelectEntry: FC<SelectProps> = ({
   labelWidth = "max-content",
 }) => {
   // Extra input styling for Mantine components
-  const inputStyles = mantineStyles({
-    labelColor,
-    hasLabel: label !== "",
-    inputWidth,
-    labelWidth,
-  });
+  const dropdownStyle: Partial<Record<SelectStylesNames, CSSObject>> = {
+    dropdown: {
+      transform: "translate(0px, -6px)",
+      borderRadius: "8px",
+      borderTopLeftRadius: 0,
+    },
+  };
+
+  const inputStyles = {
+    ...mantineStyles({
+      labelColor,
+      hasLabel: label !== "",
+      inputWidth,
+      labelWidth,
+    }),
+    ...dropdownStyle,
+  };
 
   const sortedData = options.sort((a, b) => {
     const first = typeof a === "string" ? a : a.label || "";

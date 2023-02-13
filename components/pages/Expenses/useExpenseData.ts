@@ -137,7 +137,7 @@ const useFilters = () => {
     setSortedExpenses(
       [...expenses].sort(sortExpensesByType).filter(filterExpensesByTimeframe)
     );
-  }, [expenseSortBy, expenseSortDir]);
+  }, [expenses, dataTimeframe, date, expenseSortBy, expenseSortDir]);
 
   // Re-filter the expenses when the date or timeframe change (graph)
   useEffect(() => {

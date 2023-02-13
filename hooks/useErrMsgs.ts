@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { clearCatalogError, selectCatalog } from "../redux/catalogSlice";
+import { clearExpenseError, selectExpense } from "../redux/expenseSlice";
 import { clearIncomeError, selectIncome } from "../redux/incomeSlice";
 import { useReduxDispatch, useReduxSelector } from "./useRedux";
 
@@ -7,6 +8,7 @@ const useErrMsgs = () => {
   // Set up error messages
   const [errMsgs, setErrMsgs] = useState<string[]>([]);
   const { incomeError } = useReduxSelector(selectIncome);
+  const { expenseError } = useReduxSelector(selectExpense);
   const { catalogError } = useReduxSelector(selectCatalog);
   const timer = useRef<null | NodeJS.Timeout>(null);
   const dispatch = useReduxDispatch();
@@ -14,6 +16,7 @@ const useErrMsgs = () => {
   // Add redux errors to the errmsgs list
   useEffect(() => {
     if (catalogError) setErrMsgs([...errMsgs, catalogError]);
+    if (expenseError) setErrMsgs([...errMsgs, expenseError]);
     if (incomeError) setErrMsgs([...errMsgs, incomeError]);
   }, [catalogError, incomeError]);
 
@@ -27,10 +30,10 @@ const useErrMsgs = () => {
     }
   });
 
-  // Separate error-clearing to export
   const clearErrors = () => {
     setErrMsgs([]);
     dispatch(clearIncomeError());
+    dispatch(clearExpenseError());
     dispatch(clearCatalogError());
   };
 
