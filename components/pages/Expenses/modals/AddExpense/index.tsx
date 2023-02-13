@@ -23,45 +23,39 @@ import {
   defaultAmount,
   defaultDate,
   defaultCurrency,
+  defaultOption,
 } from "../../../../../helpers/defaults/fields";
-import { useCreateOptions } from "../../../../../helpers/defaults/selects";
 import { invalidEntries } from "../../../../../helpers/validation/expense";
+import { useLocation } from "../../../../../hooks/selections/useLocation";
+import { useExpenseCategory } from "../../../../../hooks/selections/useExpenseCategory";
 
 const AddExpense: FC<ToggleProps> = ({ opened, toggle }) => {
   const dispatch = useReduxDispatch();
 
-  const { expenseLoading } = useReduxSelector(selectExpense);
+  const { expenses, expenseLoading } = useReduxSelector(selectExpense);
   const { catalog, catalogLoading } = useReduxSelector(selectCatalog);
 
   const { errMsgs, setErrMsgs } = useErrMsgs();
   const { width: screenWidth, height } = useWindowSize();
-  const {
-    newCategoryOption,
-    newLocationOption,
-    defaultOption,
-    createExpenseOption,
-  } = useCreateOptions();
 
   const [name, setName] = useState(defaultName());
   const [amount, setAmount] = useState(defaultAmount());
   const [date, setDate] = useState(defaultDate());
   const [currency, setCurrency] = useState<Currencies>(defaultCurrency());
-  const [location, setLocation] = useState(defaultOption("location"));
-  const [category, setCategory] = useState(defaultOption("expenseCategory"));
+  const { location, setLocation, createLocation } = useLocation({ catalog });
+  const { category, setCategory, createCategory } = useExpenseCategory({
+    catalog,
+  });
 
-  // Set options on initial load and creation
+  // Clear entries afer submission
   useEffect(() => {
-    // Set default if the field is empty or to the new option if there was one
-    newLocationOption.current === ""
-      ? !location && setLocation(defaultOption("location"))
-      : setLocation(newLocationOption.current);
-    newCategoryOption.current === ""
-      ? !category && setCategory(defaultOption("expenseCategory"))
-      : setCategory(newCategoryOption.current);
-    // Reset all the creation options
-    newLocationOption.current = "";
-    newCategoryOption.current = "";
-  }, [catalog]);
+    setName(defaultName());
+    setAmount(defaultAmount());
+    setCurrency(defaultCurrency());
+    //setDate(defaultDate()); don't reset date, annoying to set it each time
+    setLocation(defaultOption("location", catalog).toLowerCase());
+    setCategory(defaultOption("expenseCategory", catalog).toLowerCase());
+  }, [expenses]);
 
   // Submit entries
   const submitEntries = () => {
@@ -77,7 +71,7 @@ const AddExpense: FC<ToggleProps> = ({ opened, toggle }) => {
       currency,
     };
     dispatch(addExpense({ expense }));
-    toggle();
+    errMsgs.length === 0 && toggle();
   };
 
   // Validate and submit new or edited expense
@@ -98,6 +92,7 @@ const AddExpense: FC<ToggleProps> = ({ opened, toggle }) => {
           className="col-span-2 lg:col-span-1"
           labelWidth="6rem"
           inputWidth="auto"
+          autoFocus={true}
         />
 
         <DateEntry
@@ -115,7 +110,7 @@ const AddExpense: FC<ToggleProps> = ({ opened, toggle }) => {
           name="location"
           value={location}
           onChange={setLocation}
-          createOption={createExpenseOption("locations")}
+          createOption={createLocation}
           loading={catalogLoading}
           className="col-span-2"
           labelWidth="6rem"
@@ -133,7 +128,7 @@ const AddExpense: FC<ToggleProps> = ({ opened, toggle }) => {
           name="category"
           value={category}
           onChange={setCategory}
-          createOption={createExpenseOption("categories")}
+          createOption={createCategory}
           loading={catalogLoading}
           className="col-span-2 mb-4"
           labelWidth="6rem"

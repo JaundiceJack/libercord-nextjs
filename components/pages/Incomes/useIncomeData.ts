@@ -134,7 +134,7 @@ const useFilters = () => {
     setSortedIncomes(
       [...incomes].sort(sortIncomesByType).filter(filterIncomesByTimeframe)
     );
-  }, [incomeSortBy, incomeSortDir]);
+  }, [incomes, dataTimeframe, date, incomeSortBy, incomeSortDir]);
 
   // Re-filter the incomes when the date or timeframe change (graph)
   useEffect(() => {

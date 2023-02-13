@@ -49,7 +49,7 @@ const DeleteExpense: FC<ToggleProps> = ({ opened, toggle }) => {
             color="red"
             onClick={() => {
               onDelete();
-              toggle();
+              errMsgs.length === 0 && toggle();
             }}
             className="mt-8"
           />

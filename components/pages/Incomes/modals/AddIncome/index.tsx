@@ -23,45 +23,39 @@ import {
   defaultAmount,
   defaultDate,
   defaultCurrency,
+  defaultOption,
 } from "../../../../../helpers/defaults/fields";
-import { useCreateOptions } from "../../../../../helpers/defaults/selects";
 import { invalidEntries } from "../../../../../helpers/validation/income";
+import { useSource } from "../../../../../hooks/selections/useSource";
+import { useIncomeCategory } from "../../../../../hooks/selections/useIncomeCategory";
 
 const AddIncome: FC<ToggleProps> = ({ opened, toggle }) => {
   const dispatch = useReduxDispatch();
 
-  const { incomeLoading } = useReduxSelector(selectIncome);
+  const { incomes, incomeLoading } = useReduxSelector(selectIncome);
   const { catalog, catalogLoading } = useReduxSelector(selectCatalog);
 
   const { errMsgs, setErrMsgs } = useErrMsgs();
   const { width: screenWidth, height } = useWindowSize();
-  const {
-    newCategoryOption,
-    newSourceOption,
-    defaultOption,
-    createIncomeOption,
-  } = useCreateOptions();
 
   const [name, setName] = useState(defaultName());
   const [amount, setAmount] = useState(defaultAmount());
   const [date, setDate] = useState(defaultDate());
   const [currency, setCurrency] = useState<Currencies>(defaultCurrency());
-  const [source, setSource] = useState(defaultOption("source"));
-  const [category, setCategory] = useState(defaultOption("incomeCategory"));
+  const { source, setSource, createSource } = useSource({ catalog });
+  const { category, setCategory, createCategory } = useIncomeCategory({
+    catalog,
+  });
 
-  // Set options on initial load and creation
+  // Clear entries afer submission
   useEffect(() => {
-    // Set default if the field is empty or to the new option if there was one
-    newSourceOption.current === ""
-      ? !source && setSource(defaultOption("source"))
-      : setSource(newSourceOption.current);
-    newCategoryOption.current === ""
-      ? !category && setCategory(defaultOption("incomeCategory"))
-      : setCategory(newCategoryOption.current);
-    // Reset all the creation options
-    newSourceOption.current = "";
-    newCategoryOption.current = "";
-  }, [catalog]);
+    setName(defaultName());
+    setAmount(defaultAmount());
+    setCurrency(defaultCurrency());
+    //setDate(defaultDate()); don't reset date, annoying to set it each time
+    setSource(defaultOption("source", catalog).toLowerCase());
+    setCategory(defaultOption("expenseCategory", catalog).toLowerCase());
+  }, [incomes]);
 
   // Submit entries
   const submitEntries = () => {
@@ -70,14 +64,14 @@ const AddIncome: FC<ToggleProps> = ({ opened, toggle }) => {
     const timezoneDate = date.replace(/-/g, "/").replace(/T.+/, "");
     const income: IncomeType = {
       name,
-      category: category ? category : "",
-      source: source ? source : "",
+      category: category || "",
+      source: source || "",
       amount: Number(amount),
       date: new Date(timezoneDate),
       currency,
     };
     dispatch(addIncome({ income }));
-    toggle();
+    errMsgs.length === 0 && toggle();
   };
 
   // Validate and submit new or edited income
@@ -115,7 +109,7 @@ const AddIncome: FC<ToggleProps> = ({ opened, toggle }) => {
           name="source"
           value={source}
           onChange={setSource}
-          createOption={createIncomeOption("sources")}
+          createOption={createSource}
           loading={catalogLoading}
           className="col-span-2"
           labelWidth="6rem"
@@ -133,7 +127,7 @@ const AddIncome: FC<ToggleProps> = ({ opened, toggle }) => {
           name="category"
           value={category}
           onChange={setCategory}
-          createOption={createIncomeOption("categories")}
+          createOption={createCategory}
           loading={catalogLoading}
           className="col-span-2 mb-4"
           labelWidth="6rem"
