@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { useReduxDispatch, useReduxSelector } from "../../../hooks/useRedux";
-import { selectExpense } from "../../../redux/expenseSlice";
-import { selectIncome } from "../../../redux/incomeSlice";
 import {
   selectSummary,
   toggleSummaryLineModal,
@@ -13,13 +11,13 @@ import SummaryGraph from "./SummaryGraph";
 
 const SummaryPage: FC = () => {
   const dispatch = useReduxDispatch();
-  const { incomes } = useReduxSelector(selectIncome);
-  const { expenses } = useReduxSelector(selectExpense);
   const { summaryLineModalOpen } = useReduxSelector(selectSummary);
 
   return (
     <PageWindow>
-      <DataWindow dataType="summary">{<SummaryGraph />}</DataWindow>
+      <DataWindow>
+        <SummaryGraph />
+      </DataWindow>
 
       <ToggleLines
         opened={summaryLineModalOpen}

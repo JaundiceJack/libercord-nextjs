@@ -6,8 +6,10 @@ import { selectDate } from "../../../../redux/dateSlice";
 import { selectExpense } from "../../../../redux/expenseSlice";
 import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
+import LineChart from "../../../elements/charts/Line";
 import Options from "../../../elements/charts/Options";
 import PieChart from "../../../elements/charts/Pie";
+import RadarChart from "../../../elements/charts/Radar";
 import type { Datum } from "../../../elements/charts/types";
 import ContentWindow from "../../../elements/containers/ContentWindow";
 import GraphBox from "../../../elements/containers/GraphBox";
@@ -17,8 +19,13 @@ import GraphOptionsBox from "../../../elements/containers/GraphOptionsBox";
 import EmptyListMessage from "../../../elements/misc/emptyListMessage";
 
 const ExpenseGraph: FC = () => {
-  const { expenses, expenseViewBy, expenseGraph } =
-    useReduxSelector(selectExpense);
+  const {
+    expenses,
+    expenseViewBy,
+    expenseChartMode,
+    expenseDistributionChartType,
+    expenseSequentialChartType,
+  } = useReduxSelector(selectExpense);
   const { date, dataTimeframe } = useReduxSelector(selectDate);
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
@@ -44,7 +51,7 @@ const ExpenseGraph: FC = () => {
   const pieData = expenseViewBy === "category" ? categoryData : locationData;
 
   const legendData =
-    expenseGraph === "pie"
+    expenseChartMode === "distribution"
       ? expenseViewBy === "category"
         ? categoryData
         : locationData
@@ -57,7 +64,7 @@ const ExpenseGraph: FC = () => {
       : locationData;
 
   const legendTitle =
-    expenseGraph === "pie"
+    expenseChartMode === "distribution"
       ? expenseViewBy === "category"
         ? "Categories"
         : "Sources"
@@ -74,12 +81,26 @@ const ExpenseGraph: FC = () => {
       ) : (
         <GraphContainer>
           <GraphOptionsBox>
-            <Options dataType="expense" />
+            <Options />
           </GraphOptionsBox>
           <GraphBox>
-            {expenseGraph === "pie" ? (
-              <PieChart
-                data={pieData}
+            {expenseChartMode === "distribution" ? (
+              expenseDistributionChartType === "pie" ? (
+                <PieChart
+                  data={pieData}
+                  activeIndex={activeIndex}
+                  onHover={onHover}
+                />
+              ) : (
+                <RadarChart
+                  data={pieData}
+                  activeIndex={activeIndex}
+                  onHover={onHover}
+                />
+              )
+            ) : expenseSequentialChartType === "line" ? (
+              <LineChart
+                data={barData}
                 activeIndex={activeIndex}
                 onHover={onHover}
               />

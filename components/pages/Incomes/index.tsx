@@ -28,7 +28,7 @@ const IncomePage: FC = () => {
 
   return (
     <PageWindow>
-      <DataWindow dataType="income">
+      <DataWindow>
         {incomeWindow === "list" ? <IncomeTable /> : <IncomeGraph />}
       </DataWindow>
 

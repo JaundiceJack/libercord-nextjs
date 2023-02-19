@@ -10,6 +10,9 @@ import type {
   SortDirection,
   WindowOption,
   ExpenseViewByOption,
+  DistributionChartOption,
+  ModeOption,
+  SequentialChartOption,
 } from "./types";
 import tocsv from "papaparse";
 
@@ -17,7 +20,9 @@ export interface ExpenseState {
   expenses: ExpenseType[];
   expenseId: Types.ObjectId | null;
   expenseWindow: WindowOption;
-  expenseGraph: ExpenseGraphOption;
+  expenseDistributionChartType: DistributionChartOption;
+  expenseSequentialChartType: SequentialChartOption;
+  expenseChartMode: ModeOption;
   expenseError: string | undefined;
   expenseLoading: boolean;
   expenseSortBy: ExpenseSortOption;
@@ -34,7 +39,9 @@ const initialState: ExpenseState = {
   expenses: [],
   expenseId: null,
   expenseWindow: "graph",
-  expenseGraph: "pie",
+  expenseDistributionChartType: "pie",
+  expenseSequentialChartType: "line",
+  expenseChartMode: "sequential",
   expenseError: undefined,
   expenseLoading: false,
   expenseSortBy: "date",
@@ -164,11 +171,23 @@ export const expenseSlice = createSlice({
     ) => {
       state.expenseWindow = action.payload;
     },
-    setExpenseGraph: (
+    setExpenseChartMode: (
       state: ExpenseState,
-      action: PayloadAction<ExpenseGraphOption>
+      action: PayloadAction<ModeOption>
     ) => {
-      state.expenseGraph = action.payload;
+      state.expenseChartMode = action.payload;
+    },
+    setExpenseDistributionChartType: (
+      state: ExpenseState,
+      action: PayloadAction<DistributionChartOption>
+    ) => {
+      state.expenseDistributionChartType = action.payload;
+    },
+    setExpenseSequentialChartType: (
+      state: ExpenseState,
+      action: PayloadAction<SequentialChartOption>
+    ) => {
+      state.expenseSequentialChartType = action.payload;
     },
     toggleExpenseColumn: (
       state: ExpenseState,
@@ -271,7 +290,9 @@ export const {
   setExpenseWindow,
   toggleExpenseColumn,
   exportExpenseData,
-  setExpenseGraph,
+  setExpenseChartMode,
+  setExpenseDistributionChartType,
+  setExpenseSequentialChartType,
   setExpenseViewBy,
 } = expenseSlice.actions;
 export const selectExpense = (state: ReduxState) => state.expense;

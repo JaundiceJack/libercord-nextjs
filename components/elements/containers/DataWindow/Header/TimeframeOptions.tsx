@@ -1,15 +1,17 @@
 import { FC } from "react";
-import { selectDate, setTimeframe } from "../../../../../redux/dateSlice";
-import HeaderButton from "../../../input/button/HeaderButton";
+import usePath from "../../../../../hooks/usePath";
 import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import { TimeframeOptionsProps } from "../types";
+import { selectDate, setTimeframe } from "../../../../../redux/dateSlice";
+import HeaderButton from "../../../input/button/HeaderButton";
 
-const TimeframeOptions: FC<TimeframeOptionsProps> = ({ dataType }) => {
+const TimeframeOptions: FC = () => {
   const dispatch = useReduxDispatch();
   const { dataTimeframe } = useReduxSelector(selectDate);
+
+  const { recordPath: dataType } = usePath();
 
   return (
     <div

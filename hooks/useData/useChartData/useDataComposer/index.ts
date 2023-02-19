@@ -7,7 +7,6 @@ import { selectIncome } from "../../../../redux/incomeSlice";
 import { useReduxSelector } from "../../../useRedux";
 import useUniqueData from "./useUniqueData";
 import { sortDataAlphabetically, sortDataByValue } from "../../sorters";
-import useMakeDatum from "../useMakeDatum";
 import {
   totalValueAllExpenses,
   totalValueAllIncomes,
@@ -25,11 +24,7 @@ const useDataComposer = ({
   incomes: IncomeType[];
   expenses: ExpenseType[];
 }) => {
-  const { incomes: allIncomes } = useReduxSelector(selectIncome);
-  const { expenses: allExpenses } = useReduxSelector(selectExpense);
   const { summaryLines } = useReduxSelector(selectSummary);
-
-  const makeDatum = useMakeDatum();
 
   // Arrays of the unique fields and years found in the data
   const {
@@ -72,6 +67,26 @@ const useDataComposer = ({
   }) => {
     return field ? totalValueByExpenseField(expenses, field, entry) : 0;
   };
+
+  const makeDatum = ({
+    type,
+    name,
+    total,
+  }: {
+    type: "income" | "expense" | "savings";
+    name: string;
+    total: number;
+  }) => ({
+    name: capitalize(name),
+    value: total,
+    percent:
+      total /
+      (type === "income"
+        ? totalValueAllIncomes(incomes)
+        : type === "expense"
+        ? totalValueAllExpenses(expenses)
+        : totalValueAllIncomes(incomes) - totalValueAllExpenses(expenses)),
+  });
 
   // By Field
   const dataByField = ({
@@ -176,7 +191,7 @@ const useDataComposer = ({
       income: summaryLines.includes("income")
         ? incomeMonthlyData[index]?.value
         : undefined,
-      expenses: summaryLines.includes("expenses")
+      expense: summaryLines.includes("expense")
         ? expenseMonthlyData[index]?.value
         : undefined,
       savings: summaryLines.includes("savings")
@@ -199,7 +214,7 @@ const useDataComposer = ({
       income: summaryLines.includes("income")
         ? incomeYearlyData[index]?.value
         : undefined,
-      expenses: summaryLines.includes("expenses")
+      expense: summaryLines.includes("expense")
         ? expenseYearlyData[index]?.value
         : undefined,
       savings: summaryLines.includes("savings")

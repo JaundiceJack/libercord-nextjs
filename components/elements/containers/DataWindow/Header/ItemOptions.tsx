@@ -1,10 +1,9 @@
 import { FC } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
-import { TbFilePlus } from "react-icons/tb";
-import ItemOptionButton from "../../../input/button/ItemOptionButton";
-import { ItemOptionProps } from "../types";
 import { HiOutlineTrash } from "react-icons/hi";
+import { TbFilePlus } from "react-icons/tb";
 import { capitalize } from "../../../../../helpers/strings";
+import usePath from "../../../../../hooks/usePath";
 import {
   useReduxDispatch,
   useReduxSelector,
@@ -21,12 +20,15 @@ import {
   toggleDeleteIncomeModal,
   toggleEditIncomeModal,
 } from "../../../../../redux/incomeSlice";
+import ItemOptionButton from "../../../input/button/ItemOptionButton";
 
-const ItemOptions: FC<ItemOptionProps> = ({ dataType }) => {
+const ItemOptions: FC = () => {
   const dispatch = useReduxDispatch();
   const { incomes, incomeId, incomeWindow } = useReduxSelector(selectIncome);
   const { expenses, expenseId, expenseWindow } =
     useReduxSelector(selectExpense);
+
+  const { recordPath: dataType } = usePath();
 
   return (
     <div className={`flex flew-row items-center`}>

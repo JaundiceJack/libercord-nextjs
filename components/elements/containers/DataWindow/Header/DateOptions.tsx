@@ -1,23 +1,25 @@
+import { getMonth } from "date-fns";
 import { FC } from "react";
-import BrowseButton from "../../../input/button/BrowseButton";
+import { capitalize, months } from "../../../../../helpers/strings";
+import usePath from "../../../../../hooks/usePath";
 import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import { getMonth } from "date-fns";
-import { capitalize, months } from "../../../../../helpers/strings";
 import {
-  selectDate,
-  incrementMonth,
-  incrementYear,
   decrementMonth,
   decrementYear,
+  incrementMonth,
+  incrementYear,
+  selectDate,
 } from "../../../../../redux/dateSlice";
-import { DateOptionsProps } from "../types";
+import BrowseButton from "../../../input/button/BrowseButton";
 
-const DateOptions: FC<DateOptionsProps> = ({ dataType }) => {
+const DateOptions: FC = () => {
   const dispatch = useReduxDispatch();
   const { date, dataTimeframe } = useReduxSelector(selectDate);
+
+  const { recordPath: dataType } = usePath();
 
   return (
     <>

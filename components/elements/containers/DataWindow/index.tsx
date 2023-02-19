@@ -3,14 +3,10 @@ import Header from "./Header";
 import Content from "./Content";
 import { DataWindowProps } from "./types";
 
-const DataWindow: FC<DataWindowProps> = ({
-  dataType = "income",
-  children,
-  className = "",
-}) => {
+const DataWindow: FC<DataWindowProps> = ({ children, className = "" }) => {
   return (
     <div className={`flex flex-col lg:h-screen lg:max-h-screen ${className}`}>
-      <Header dataType={dataType} />
+      <Header />
       <Content>{children}</Content>
     </div>
   );

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import usePath from "../../../../../hooks/usePath";
 import {
   useReduxDispatch,
   useReduxSelector,
@@ -12,12 +13,13 @@ import {
   setIncomeWindow,
 } from "../../../../../redux/incomeSlice";
 import HeaderButton from "../../../input/button/HeaderButton";
-import type { WindowOptionsProps } from "../types";
 
-const WindowOptions: FC<WindowOptionsProps> = ({ dataType }) => {
+const WindowOptions: FC = () => {
   const dispatch = useReduxDispatch();
   const { incomeWindow } = useReduxSelector(selectIncome);
   const { expenseWindow } = useReduxSelector(selectExpense);
+
+  const { recordPath: dataType } = usePath();
 
   return (
     <div className="flex flex-row items-center">
