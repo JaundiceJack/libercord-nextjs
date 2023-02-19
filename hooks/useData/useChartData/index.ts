@@ -82,7 +82,6 @@ const useChartData = () => {
     incomes: timeframedIncomes,
     expenses: timeframedExpenses,
   });
-  const makeDatum = useMakeDatum();
 
   // Recalculate the data when it gets refiltered
   useEffect(() => {

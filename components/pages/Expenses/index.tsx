@@ -28,7 +28,7 @@ const ExpensePage: FC = () => {
 
   return (
     <PageWindow>
-      <DataWindow dataType="expense">
+      <DataWindow>
         {expenseWindow === "list" ? <ExpenseTable /> : <ExpenseGraph />}
       </DataWindow>
 

@@ -6,9 +6,11 @@ import { formatDateMMDDYYYY } from "../helpers/dates";
 import { IncomeType } from "../models/Income";
 import type { ReduxState } from "./store";
 import type {
-  IncomeGraphOption,
+  DistributionChartOption,
   IncomeSortOption,
   IncomeViewByOption,
+  ModeOption,
+  SequentialChartOption,
   SortDirection,
   WindowOption,
 } from "./types";
@@ -19,7 +21,9 @@ export interface IncomeState {
   incomeWindow: WindowOption;
   incomeSortBy: IncomeSortOption;
   incomeViewBy: IncomeViewByOption;
-  incomeGraph: IncomeGraphOption;
+  incomeDistributionChartType: DistributionChartOption;
+  incomeSequentialChartType: SequentialChartOption;
+  incomeChartMode: ModeOption;
   incomeSortDir: SortDirection;
   incomeId: Types.ObjectId | null;
   incomeError: string | undefined;
@@ -32,19 +36,21 @@ export interface IncomeState {
 
 const initialState: IncomeState = {
   incomes: [],
+  incomeColumns: ["date", "source", "category", "amount"],
+  incomeWindow: "graph",
+  incomeSortBy: "date",
+  incomeViewBy: "source",
+  incomeDistributionChartType: "pie",
+  incomeSequentialChartType: "line",
+  incomeChartMode: "sequential",
+  incomeSortDir: "desc",
   incomeId: null,
+  incomeError: undefined,
+  incomeLoading: false,
   incomeAddModalOpen: false,
   incomeEditModalOpen: false,
   incomeDeleteModalOpen: false,
   incomeColumnModalOpen: false,
-  incomeWindow: "graph",
-  incomeGraph: "pie",
-  incomeError: undefined,
-  incomeLoading: false,
-  incomeSortBy: "date",
-  incomeViewBy: "source",
-  incomeSortDir: "desc",
-  incomeColumns: ["date", "source", "category", "amount"],
 };
 
 // Get a user's incomes (to run upon page-load)
@@ -161,11 +167,23 @@ export const incomeSlice = createSlice({
     ) => {
       state.incomeWindow = action.payload;
     },
-    setIncomeGraph: (
+    setIncomeChartMode: (
       state: IncomeState,
-      action: PayloadAction<IncomeGraphOption>
+      action: PayloadAction<ModeOption>
     ) => {
-      state.incomeGraph = action.payload;
+      state.incomeChartMode = action.payload;
+    },
+    setIncomeDistributionChartType: (
+      state: IncomeState,
+      action: PayloadAction<DistributionChartOption>
+    ) => {
+      state.incomeDistributionChartType = action.payload;
+    },
+    setIncomeSequentialChartType: (
+      state: IncomeState,
+      action: PayloadAction<SequentialChartOption>
+    ) => {
+      state.incomeSequentialChartType = action.payload;
     },
     toggleIncomeColumn: (
       state: IncomeState,
@@ -268,7 +286,9 @@ export const {
   setIncomeWindow,
   toggleIncomeColumn,
   exportIncomeData,
-  setIncomeGraph,
+  setIncomeChartMode,
+  setIncomeDistributionChartType,
+  setIncomeSequentialChartType,
   setIncomeViewBy,
 } = incomeSlice.actions;
 export const selectIncome = (state: ReduxState) => state.income;

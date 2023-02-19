@@ -30,14 +30,14 @@ const ToggleLines: FC<ToggleProps> = ({ opened, toggle }) => {
           className="ml-4"
         />
         <Checkbox
-          value="expenses"
-          name="expenses"
+          value="expense"
+          name="expense"
           label="Expenses"
           labelColor="white"
           onClick={() => {
-            dispatch(toggleSummaryLine("expenses"));
+            dispatch(toggleSummaryLine("expense"));
           }}
-          defaultChecked={summaryLines.includes("expenses")}
+          defaultChecked={summaryLines.includes("expense")}
           className="ml-4"
         />
         <Checkbox

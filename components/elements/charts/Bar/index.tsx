@@ -9,38 +9,46 @@ import {
   XAxis,
   YAxis,
   Cell,
-  TooltipProps,
+  ReferenceLine,
 } from "recharts";
 import COLORS from "../colors";
-import type {
-  ValueType,
-  NameType,
-} from "recharts/types/component/DefaultTooltipContent";
-import type { BarInnerProps } from "./types";
+import type { BarInnerProps, TooltipInnerProps } from "./types";
 import type { ChartProps } from "../types";
+import { DataKeys } from "../Line/types";
+import { xAxisTick, yAxisTick } from "../ticks";
+import { capitalize } from "../../../../helpers/strings";
+import { useReduxSelector } from "../../../../hooks/useRedux";
+import { selectSummary, SummaryLines } from "../../../../redux/summarySlice";
+import usePath from "../../../../hooks/usePath";
 
-const CustomBar: FC<ChartProps> = ({ data, activeIndex, onHover }) => {
+const CustomBar: FC<ChartProps & DataKeys> = ({
+  data,
+  dataKeys,
+  activeIndex,
+  onHover,
+}) => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
-  const xAxisTick = (value: string, index: number) => {
-    const isYear = !isNaN(Number(value));
-    return value?.substring(0, isYear ? 4 : 3);
-  };
-  const yAxisTick = (value: string, index: number) => {
-    const asNum = Number(value);
-    if (isNaN(asNum)) return "$" + value;
-    if (asNum < 1000) return "$" + value;
-    if (asNum < 1000000) return "$" + asNum / 1000 + "K";
-    if (asNum < 1000000000) return "$" + asNum / 1000000 + "M";
-    return "$" + asNum / 1000000000 + "B";
-  };
+  const { recordPath } = usePath();
 
-  const renderTooltip = (props: TooltipProps<ValueType, NameType>) => {
-    const { active, payload, label } = props;
-    if (hoverIndex !== null && active && payload && payload.length) {
+  const { summaryExpensesNegative, summaryLines } =
+    useReduxSelector(selectSummary);
+
+  const CustomTooltip = ({ active, payload, label }: TooltipInnerProps) => {
+    if (active && payload && payload.length) {
       return (
-        <div className={`bg-white rounded-lg border-2 border-stone-600 p-2`}>
-          <p className="font-jose">{`${label} : $${payload[0].value}`}</p>
+        <div className="rounded-md bg-slate-400 p-2">
+          <p className="w-full text-center">{`${label}`}</p>
+          {payload.map((pl, i) => (
+            <div className="grid grid-cols-2 gap-1" key={i}>
+              <p className="text-right">{`${capitalize(
+                dataKeys ? pl?.name : recordPath
+              )}:`}</p>
+              <p className="">{`${
+                pl?.value && pl.value < 0 ? "-" : ""
+              }$${Math.abs(pl?.value || 0)}`}</p>
+            </div>
+          ))}
         </div>
       );
     } else return null;
@@ -50,7 +58,12 @@ const CustomBar: FC<ChartProps> = ({ data, activeIndex, onHover }) => {
     const { fill, x, y, width: w, height: h, index } = props;
     const r = h < 5 ? h : 5; // radius of the arc (5px for heights over 5px)
     const l = w * 0.75; // length of bar's base
-    return (
+    const value = data[index]?.value;
+    const income = data[index]?.income;
+    const expense = -(data[index]?.expense || 0);
+    const savings = data[index]?.savings;
+
+    return dataKeys ? (
       <path
         d={`
           M${x + w / 8},${y} 
@@ -63,6 +76,21 @@ const CustomBar: FC<ChartProps> = ({ data, activeIndex, onHover }) => {
         `}
         stroke={index === hoverIndex ? "#FFF" : "none"}
         fill={fill}
+      />
+    ) : (
+      <path
+        d={`
+          M${x + w / 8},${y} 
+          h${l - r} 
+          a${r},${r} 0 0 1 ${r},${r} 
+          v${h - r} 
+          h-${l + r} 
+          v-${h - r} 
+          a${r},${r} 0 0 1 ${r},-${r}
+        `}
+        stroke={index === hoverIndex ? "#FFF" : "none"}
+        fill={fill}
+        opacity="85%"
       />
     );
   };
@@ -79,6 +107,7 @@ const CustomBar: FC<ChartProps> = ({ data, activeIndex, onHover }) => {
           <ResponsiveContainer>
             <BarChart
               data={data}
+              stackOffset="sign"
               margin={{
                 top: 20,
                 right: 20,
@@ -88,29 +117,65 @@ const CustomBar: FC<ChartProps> = ({ data, activeIndex, onHover }) => {
             >
               <CartesianGrid strokeDasharray="5 5" vertical={false} />
               <XAxis tickFormatter={xAxisTick} dataKey="name" />
-              <YAxis tickFormatter={yAxisTick} dataKey="value" />
+              <YAxis tickFormatter={yAxisTick} />
+              <ReferenceLine y={0} stroke="#000" />
               <Tooltip
                 cursor={{ fill: "transparent" }}
                 wrapperStyle={{ outline: "none" }}
-                content={renderTooltip}
+                content={<CustomTooltip />}
               />
-              <Bar
-                dataKey="value"
-                shape={renderRoundedBar}
-                onMouseOut={() => setHoverIndex(null)}
-                onMouseOver={(_, index) => {
-                  onHover(null, index);
-                  setHoverIndex(index);
-                }}
-                onClick={(_, index) => setHoverIndex(index)}
-              >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Bar>
+              {dataKeys ? (
+                dataKeys.map(
+                  (key, i) =>
+                    summaryLines.includes(key as SummaryLines) && (
+                      <Bar
+                        key={i}
+                        dataKey={key}
+                        opacity="80%"
+                        stackId={summaryExpensesNegative ? "a" : key}
+                        onMouseOut={() => setHoverIndex(null)}
+                        onMouseOver={(_, index) => {
+                          onHover(null, index);
+                          setHoverIndex(index);
+                        }}
+                        onClick={(_, index) => setHoverIndex(index)}
+                      >
+                        {data.map((_, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={
+                              key === "income"
+                                ? "rgba(74, 222, 128, 0.75)"
+                                : key === "expense"
+                                ? "rgba(248, 113, 113, 0.75)"
+                                : key === "savings"
+                                ? "rgba(250, 204, 21, 0.75)"
+                                : COLORS[i % COLORS.length]
+                            }
+                          />
+                        ))}
+                      </Bar>
+                    )
+                )
+              ) : (
+                <Bar
+                  dataKey="value"
+                  opacity="80%"
+                  onMouseOut={() => setHoverIndex(null)}
+                  onMouseOver={(_, index) => {
+                    onHover(null, index);
+                    setHoverIndex(index);
+                  }}
+                  onClick={(_, index) => setHoverIndex(index)}
+                >
+                  {data.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Bar>
+              )}
             </BarChart>
           </ResponsiveContainer>
         </div>

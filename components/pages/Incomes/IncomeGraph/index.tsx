@@ -1,10 +1,6 @@
 import { FC, useState } from "react";
 import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
-import {
-  selectIncome,
-  setIncomeGraph,
-  setIncomeViewBy,
-} from "../../../../redux/incomeSlice";
+import { selectIncome } from "../../../../redux/incomeSlice";
 import EmptyListMessage from "../../../elements/misc/emptyListMessage";
 import PieChart from "../../../elements/charts/Pie";
 import BarChart from "../../../elements/charts/Bar";
@@ -19,9 +15,17 @@ import GraphOptionsBox from "../../../elements/containers/GraphOptionsBox";
 import GraphContainer from "../../../elements/containers/GraphContainer";
 import GraphLegendBox from "../../../elements/containers/GraphLegendBox";
 import GraphBox from "../../../elements/containers/GraphBox";
+import LineChart from "../../../elements/charts/Line";
+import RadarChart from "../../../elements/charts/Radar";
 
 const IncomeGraph: FC = () => {
-  const { incomes, incomeGraph, incomeViewBy } = useReduxSelector(selectIncome);
+  const {
+    incomes,
+    incomeChartMode,
+    incomeDistributionChartType,
+    incomeSequentialChartType,
+    incomeViewBy,
+  } = useReduxSelector(selectIncome);
   const { date, dataTimeframe } = useReduxSelector(selectDate);
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
@@ -47,7 +51,7 @@ const IncomeGraph: FC = () => {
   const pieData = incomeViewBy === "category" ? categoryData : sourceData;
 
   const legendData =
-    incomeGraph === "pie"
+    incomeChartMode === "distribution"
       ? incomeViewBy === "category"
         ? categoryData
         : sourceData
@@ -60,7 +64,7 @@ const IncomeGraph: FC = () => {
       : sourceData;
 
   const legendTitle =
-    incomeGraph === "pie"
+    incomeChartMode === "distribution"
       ? incomeViewBy === "category"
         ? "Categories"
         : "Sources"
@@ -77,12 +81,26 @@ const IncomeGraph: FC = () => {
       ) : (
         <GraphContainer>
           <GraphOptionsBox>
-            <Options dataType="income" />
+            <Options />
           </GraphOptionsBox>
           <GraphBox>
-            {incomeGraph === "pie" ? (
-              <PieChart
-                data={pieData}
+            {incomeChartMode === "distribution" ? (
+              incomeDistributionChartType === "pie" ? (
+                <PieChart
+                  data={pieData}
+                  activeIndex={activeIndex}
+                  onHover={onHover}
+                />
+              ) : (
+                <RadarChart
+                  data={pieData}
+                  activeIndex={activeIndex}
+                  onHover={onHover}
+                />
+              )
+            ) : incomeSequentialChartType === "line" ? (
+              <LineChart
+                data={barData}
                 activeIndex={activeIndex}
                 onHover={onHover}
               />

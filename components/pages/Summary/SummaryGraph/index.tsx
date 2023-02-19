@@ -4,6 +4,8 @@ import { useReduxSelector } from "../../../../hooks/useRedux";
 import { selectDate } from "../../../../redux/dateSlice";
 import { selectExpense } from "../../../../redux/expenseSlice";
 import { selectIncome } from "../../../../redux/incomeSlice";
+import { selectSummary } from "../../../../redux/summarySlice";
+import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
 import LineChart from "../../../elements/charts/Line";
 import Options from "../../../elements/charts/Options";
@@ -19,12 +21,22 @@ const SummaryGraph: FC = () => {
   const { incomes } = useReduxSelector(selectIncome);
   const { expenses } = useReduxSelector(selectExpense);
   const { dataTimeframe } = useReduxSelector(selectDate);
+  const { summarySequentialChartType, summaryExpensesNegative } =
+    useReduxSelector(selectSummary);
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
     setActiveIndex(index);
   };
 
   const { summaryMonthlyData, summaryYearlyData } = useChartData();
+
+  const negateExpenses = (d: Datum, i: number) =>
+    summaryExpensesNegative
+      ? {
+          ...d,
+          expense: -(d?.expense || 0),
+        }
+      : { ...d };
 
   return (
     <ContentWindow>
@@ -33,17 +45,32 @@ const SummaryGraph: FC = () => {
       ) : (
         <GraphContainer>
           <GraphOptionsBox>
-            <Options dataType="summary" />
+            <Options />
           </GraphOptionsBox>
           <GraphBox>
-            <LineChart
-              data={
-                dataTimeframe === "all" ? summaryYearlyData : summaryMonthlyData
-              }
-              dataKeys={["income", "expenses", "savings"]}
-              activeIndex={activeIndex}
-              onHover={onHover}
-            />
+            {summarySequentialChartType === "bar" ? (
+              <BarChart
+                data={
+                  dataTimeframe === "all"
+                    ? summaryYearlyData.map(negateExpenses)
+                    : summaryMonthlyData.map(negateExpenses)
+                }
+                dataKeys={["income", "expense", "savings"]}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            ) : (
+              <LineChart
+                data={
+                  dataTimeframe === "all"
+                    ? summaryYearlyData.map(negateExpenses)
+                    : summaryMonthlyData.map(negateExpenses)
+                }
+                dataKeys={["income", "expense", "savings"]}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            )}
           </GraphBox>
           <GraphLegendBox>
             <Legend

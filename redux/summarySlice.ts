@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import saveAs from "file-saver";
-import { formatDateMMDDYYYY } from "../helpers/dates";
 import type { ReduxState } from "./store";
-import store from "./store";
-import type { WindowOption } from "./types";
-import tocsv from "papaparse";
+import type { SequentialChartOption, WindowOption } from "./types";
 
-export type SummaryLines = "income" | "expenses" | "savings";
+export type SummaryLines = "income" | "expense" | "savings";
 
 export interface SummaryState {
   summaryWindow: WindowOption;
   summaryLines: SummaryLines[];
   summaryLineModalOpen: boolean;
+  summarySequentialChartType: SequentialChartOption;
+  summaryExpensesNegative: boolean;
 }
 
 const initialState: SummaryState = {
   summaryWindow: "graph",
-  summaryLines: ["income", "expenses", "savings"],
+  summaryLines: ["income", "expense", "savings"],
   summaryLineModalOpen: false,
+  summarySequentialChartType: "line",
+  summaryExpensesNegative: true,
 };
 
 export const summarySlice = createSlice({
@@ -33,6 +33,18 @@ export const summarySlice = createSlice({
     ) => {
       state.summaryWindow = action.payload;
     },
+    setSummarySequentialChartType: (
+      state: SummaryState,
+      action: PayloadAction<SequentialChartOption>
+    ) => {
+      state.summarySequentialChartType = action.payload;
+    },
+    setSummaryExpensesNegative: (
+      state: SummaryState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.summaryExpensesNegative = action.payload;
+    },
     toggleSummaryLineModal: (state: SummaryState) => {
       state.summaryLineModalOpen = !state.summaryLineModalOpen;
     },
@@ -47,29 +59,6 @@ export const summarySlice = createSlice({
         );
       else state.summaryLines = [...state.summaryLines, action.payload];
     },
-    exportSummaryData: () => {
-      saveAs(
-        new Blob([
-          tocsv.unparse([
-            ...store.getState().income.incomes.map((i) => ({
-              category: i.category,
-              source: i.source,
-              currency: i.currency,
-              amount: i.amount,
-              date: i.date,
-            })),
-            ...store.getState().expense.expenses.map((e) => ({
-              category: e.category,
-              location: e.location,
-              currency: e.currency,
-              amount: e.amount,
-              date: e.date,
-            })),
-          ]),
-        ]),
-        `Libercord_Data-${formatDateMMDDYYYY(new Date())}.csv`
-      );
-    },
   },
 });
 
@@ -78,7 +67,8 @@ export const {
   setSummaryWindow,
   toggleSummaryLineModal,
   toggleSummaryLine,
-  exportSummaryData,
+  setSummarySequentialChartType,
+  setSummaryExpensesNegative,
 } = summarySlice.actions;
 export const selectSummary = (state: ReduxState) => state.summary;
 export default summarySlice.reducer;

@@ -11,3 +11,7 @@ export type IncomeGraphOption = GraphOption;
 export type ExpenseSortOption = "date" | "location" | "category" | "amount";
 export type ExpenseViewByOption = "location" | "category";
 export type ExpenseGraphOption = GraphOption;
+
+export type DistributionChartOption = "pie" | "radar" | "tree";
+export type SequentialChartOption = "line" | "bar" | "area";
+export type ModeOption = "sequential" | "distribution"; // Or Time and Quantity for short
