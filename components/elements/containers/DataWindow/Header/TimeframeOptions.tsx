@@ -5,8 +5,9 @@ import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
+import { TimeframeOptionsProps } from "../types";
 
-const TimeframeOptions: FC = () => {
+const TimeframeOptions: FC<TimeframeOptionsProps> = ({ dataType }) => {
   const dispatch = useReduxDispatch();
   const { dataTimeframe } = useReduxSelector(selectDate);
 
@@ -27,12 +28,14 @@ const TimeframeOptions: FC = () => {
         current={dataTimeframe}
         className="ml-1"
       />
-      <HeaderButton
-        label="month"
-        onClick={() => dispatch(setTimeframe("month"))}
-        current={dataTimeframe}
-        className="ml-1"
-      />
+      {dataType !== "summary" && (
+        <HeaderButton
+          label="month"
+          onClick={() => dispatch(setTimeframe("month"))}
+          current={dataTimeframe}
+          className="ml-1"
+        />
+      )}
     </div>
   );
 };

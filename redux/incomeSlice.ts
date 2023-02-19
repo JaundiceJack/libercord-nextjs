@@ -1,31 +1,48 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import saveAs from "file-saver";
 import { Types } from "mongoose";
+import tocsv from "papaparse";
+import { formatDateMMDDYYYY } from "../helpers/dates";
 import { IncomeType } from "../models/Income";
-import type { ReduxState, ReduxThunk } from "./store";
-import type { SortDirection, WindowOption, Mode } from "./types";
-
-export type IncomeSortOption = "date" | "source" | "category" | "amount";
+import type { ReduxState } from "./store";
+import type {
+  IncomeGraphOption,
+  IncomeSortOption,
+  IncomeViewByOption,
+  SortDirection,
+  WindowOption,
+} from "./types";
 
 export interface IncomeState {
   incomes: IncomeType[];
-  incomeId: Types.ObjectId | null;
-  incomeMode: Mode;
+  incomeColumns: IncomeSortOption[];
   incomeWindow: WindowOption;
+  incomeSortBy: IncomeSortOption;
+  incomeViewBy: IncomeViewByOption;
+  incomeGraph: IncomeGraphOption;
+  incomeSortDir: SortDirection;
+  incomeId: Types.ObjectId | null;
   incomeError: string | undefined;
   incomeLoading: boolean;
-  incomeSortBy: IncomeSortOption;
-  incomeSortDir: SortDirection;
-  incomeColumns: IncomeSortOption[];
+  incomeAddModalOpen: boolean;
+  incomeEditModalOpen: boolean;
+  incomeDeleteModalOpen: boolean;
+  incomeColumnModalOpen: boolean;
 }
 
 const initialState: IncomeState = {
   incomes: [],
   incomeId: null,
-  incomeMode: "idle",
+  incomeAddModalOpen: false,
+  incomeEditModalOpen: false,
+  incomeDeleteModalOpen: false,
+  incomeColumnModalOpen: false,
   incomeWindow: "graph",
+  incomeGraph: "pie",
   incomeError: undefined,
   incomeLoading: false,
   incomeSortBy: "date",
+  incomeViewBy: "source",
   incomeSortDir: "desc",
   incomeColumns: ["date", "source", "category", "amount"],
 };
@@ -109,14 +126,17 @@ export const incomeSlice = createSlice({
     unpickIncome: (state: IncomeState) => {
       state.incomeId = null;
     },
-    toggleAddingIncome: (state: IncomeState) => {
-      state.incomeMode = "adding";
+    toggleAddIncomeModal: (state: IncomeState) => {
+      state.incomeAddModalOpen = !state.incomeAddModalOpen;
     },
-    toggleEditingIncome: (state: IncomeState) => {
-      state.incomeMode = "editing";
+    toggleEditIncomeModal: (state: IncomeState) => {
+      state.incomeEditModalOpen = !state.incomeEditModalOpen;
     },
-    toggleDeletingIncome: (state: IncomeState) => {
-      state.incomeMode = "deleting";
+    toggleDeleteIncomeModal: (state: IncomeState) => {
+      state.incomeDeleteModalOpen = !state.incomeDeleteModalOpen;
+    },
+    toggleIncomeColumnModal: (state: IncomeState) => {
+      state.incomeColumnModalOpen = !state.incomeColumnModalOpen;
     },
     clearIncomeError: (state: IncomeState) => {
       state.incomeError = undefined;
@@ -129,11 +149,23 @@ export const incomeSlice = createSlice({
         state.incomeSortDir = state.incomeSortDir === "asc" ? "desc" : "asc";
       } else state.incomeSortBy = action.payload;
     },
+    setIncomeViewBy: (
+      state: IncomeState,
+      action: PayloadAction<IncomeViewByOption>
+    ) => {
+      state.incomeViewBy = action.payload;
+    },
     setIncomeWindow: (
       state: IncomeState,
       action: PayloadAction<WindowOption>
     ) => {
       state.incomeWindow = action.payload;
+    },
+    setIncomeGraph: (
+      state: IncomeState,
+      action: PayloadAction<IncomeGraphOption>
+    ) => {
+      state.incomeGraph = action.payload;
     },
     toggleIncomeColumn: (
       state: IncomeState,
@@ -145,6 +177,24 @@ export const incomeSlice = createSlice({
           (col) => col !== action.payload
         );
       else state.incomeColumns = [...state.incomeColumns, action.payload];
+    },
+    exportIncomeData: (state: IncomeState) => {
+      saveAs(
+        new Blob([
+          tocsv.unparse(
+            state.incomes.map((inc) => {
+              return {
+                category: inc.category,
+                source: inc.source,
+                currency: inc.currency,
+                amount: inc.amount,
+                date: inc.date,
+              };
+            })
+          ),
+        ]),
+        `Income_Data-${formatDateMMDDYYYY(new Date())}.csv`
+      );
     },
   },
   // These reducers handle loading/success/errors on web-server responses
@@ -169,6 +219,7 @@ export const incomeSlice = createSlice({
       .addCase(editIncome.fulfilled, (state: IncomeState, action) => {
         state.incomeLoading = false;
         state.incomes = action.payload;
+        state.incomeEditModalOpen = false;
       })
       .addCase(editIncome.rejected, (state: IncomeState, action) => {
         state.incomeLoading = false;
@@ -181,6 +232,7 @@ export const incomeSlice = createSlice({
       .addCase(addIncome.fulfilled, (state: IncomeState, action) => {
         state.incomeLoading = false;
         state.incomes = action.payload;
+        state.incomeAddModalOpen = false;
       })
       .addCase(addIncome.rejected, (state: IncomeState, action) => {
         state.incomeLoading = false;
@@ -193,7 +245,7 @@ export const incomeSlice = createSlice({
       .addCase(deleteIncome.fulfilled, (state: IncomeState, action) => {
         state.incomeLoading = false;
         state.incomes = action.payload;
-        state.incomeMode = "adding";
+        state.incomeDeleteModalOpen = false;
         state.incomeId = null;
       })
       .addCase(deleteIncome.rejected, (state: IncomeState, action) => {
@@ -207,13 +259,17 @@ export const {
   resetIncome,
   pickIncome,
   unpickIncome,
-  toggleAddingIncome,
-  toggleEditingIncome,
-  toggleDeletingIncome,
+  toggleAddIncomeModal,
+  toggleEditIncomeModal,
+  toggleDeleteIncomeModal,
+  toggleIncomeColumnModal,
   clearIncomeError,
   setIncomeSortBy,
   setIncomeWindow,
   toggleIncomeColumn,
+  exportIncomeData,
+  setIncomeGraph,
+  setIncomeViewBy,
 } = incomeSlice.actions;
 export const selectIncome = (state: ReduxState) => state.income;
 export default incomeSlice.reducer;

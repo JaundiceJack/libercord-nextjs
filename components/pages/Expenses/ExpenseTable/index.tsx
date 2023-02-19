@@ -1,21 +1,19 @@
-import { FC, useEffect, useState } from "react";
-import ListWindow from "../../../elements/containers/ListWindow";
-import type { ListWindowColumn } from "../../../elements/containers/ListWindow/types";
-import Spinner from "../../../elements/misc/spinner";
-import Message from "../../../elements/misc/message";
-import EmptyListMessage from "../../../elements/misc/emptyListMessage";
+import { FC } from "react";
+import useListData from "../../../../hooks/useData/useListData";
 import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
+import { selectDate } from "../../../../redux/dateSlice";
 import {
+  ExpenseSortOption,
   pickExpense,
   selectExpense,
   setExpenseSortBy,
-  ExpenseSortOption,
 } from "../../../../redux/expenseSlice";
-import type { ExpenseType } from "../../../../models/Expense";
-import { isSameYear, isSameMonth } from "date-fns";
-import { selectDate } from "../../../../redux/dateSlice";
-import useExpenseData from "../useExpenseData";
 import ContentWindow from "../../../elements/containers/ContentWindow";
+import ListWindow from "../../../elements/containers/ListWindow";
+import type { ListWindowColumn } from "../../../elements/containers/ListWindow/types";
+import EmptyListMessage from "../../../elements/misc/emptyListMessage";
+import Message from "../../../elements/misc/message";
+import Spinner from "../../../elements/misc/spinner";
 
 const ExpenseTable: FC = () => {
   // Get redux stuff for expenses
@@ -31,7 +29,7 @@ const ExpenseTable: FC = () => {
     expenseColumns,
   } = useReduxSelector(selectExpense);
 
-  const { sortedExpenses } = useExpenseData();
+  const { sortedExpenses } = useListData();
 
   // Set up the columns to be displayed
   const columns: ListWindowColumn[] = [

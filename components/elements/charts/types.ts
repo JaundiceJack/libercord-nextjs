@@ -3,6 +3,9 @@ export type Datum = {
   value: number;
   percent?: number;
   type?: "source" | "category" | "location";
+  income?: number;
+  expense?: number;
+  savings?: number;
 };
 
 export type ChartProps = {

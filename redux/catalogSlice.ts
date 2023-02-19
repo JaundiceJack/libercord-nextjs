@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { CatalogType } from "../models/Catalog";
-import type { ReduxState, ReduxThunk } from "./store";
+import type { ReduxState } from "./store";
 
 export interface CatalogState {
   catalog: CatalogType | null;

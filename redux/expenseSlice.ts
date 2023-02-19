@@ -1,33 +1,50 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import saveAs from "file-saver";
 import { Types } from "mongoose";
+import { formatDateMMDDYYYY } from "../helpers/dates";
 import { ExpenseType } from "../models/Expense";
-import type { ReduxState, ReduxThunk } from "./store";
-import type { SortDirection, WindowOption, Mode } from "./types";
-
-export type ExpenseSortOption = "date" | "location" | "category" | "amount";
+import type { ReduxState } from "./store";
+import type {
+  ExpenseSortOption,
+  ExpenseGraphOption,
+  SortDirection,
+  WindowOption,
+  ExpenseViewByOption,
+} from "./types";
+import tocsv from "papaparse";
 
 export interface ExpenseState {
   expenses: ExpenseType[];
   expenseId: Types.ObjectId | null;
-  expenseMode: Mode;
   expenseWindow: WindowOption;
+  expenseGraph: ExpenseGraphOption;
   expenseError: string | undefined;
   expenseLoading: boolean;
   expenseSortBy: ExpenseSortOption;
+  expenseViewBy: ExpenseViewByOption;
   expenseSortDir: SortDirection;
   expenseColumns: ExpenseSortOption[];
+  expenseColumnModalOpen: boolean;
+  expenseAddModalOpen: boolean;
+  expenseEditModalOpen: boolean;
+  expenseDeleteModalOpen: boolean;
 }
 
 const initialState: ExpenseState = {
   expenses: [],
   expenseId: null,
-  expenseMode: "idle",
   expenseWindow: "graph",
+  expenseGraph: "pie",
   expenseError: undefined,
   expenseLoading: false,
   expenseSortBy: "date",
+  expenseViewBy: "category",
   expenseSortDir: "desc",
   expenseColumns: ["date", "location", "category", "amount"],
+  expenseColumnModalOpen: false,
+  expenseAddModalOpen: false,
+  expenseEditModalOpen: false,
+  expenseDeleteModalOpen: false,
 };
 
 // Get a user's expenses (to run upon page-load)
@@ -112,14 +129,17 @@ export const expenseSlice = createSlice({
     unpickExpense: (state: ExpenseState) => {
       state.expenseId = null;
     },
-    toggleAddingExpense: (state: ExpenseState) => {
-      state.expenseMode = "adding";
+    toggleAddExpenseModal: (state: ExpenseState) => {
+      state.expenseAddModalOpen = !state.expenseAddModalOpen;
     },
-    toggleEditingExpense: (state: ExpenseState) => {
-      state.expenseMode = "editing";
+    toggleEditExpenseModal: (state: ExpenseState) => {
+      state.expenseEditModalOpen = !state.expenseEditModalOpen;
     },
-    toggleDeletingExpense: (state: ExpenseState) => {
-      state.expenseMode = "deleting";
+    toggleDeleteExpenseModal: (state: ExpenseState) => {
+      state.expenseDeleteModalOpen = !state.expenseDeleteModalOpen;
+    },
+    toggleExpenseColumnModal: (state: ExpenseState) => {
+      state.expenseColumnModalOpen = !state.expenseColumnModalOpen;
     },
     clearExpenseError: (state: ExpenseState) => {
       state.expenseError = undefined;
@@ -132,11 +152,23 @@ export const expenseSlice = createSlice({
         state.expenseSortDir = state.expenseSortDir === "asc" ? "desc" : "asc";
       } else state.expenseSortBy = action.payload;
     },
+    setExpenseViewBy: (
+      state: ExpenseState,
+      action: PayloadAction<ExpenseViewByOption>
+    ) => {
+      state.expenseViewBy = action.payload;
+    },
     setExpenseWindow: (
       state: ExpenseState,
       action: PayloadAction<WindowOption>
     ) => {
       state.expenseWindow = action.payload;
+    },
+    setExpenseGraph: (
+      state: ExpenseState,
+      action: PayloadAction<ExpenseGraphOption>
+    ) => {
+      state.expenseGraph = action.payload;
     },
     toggleExpenseColumn: (
       state: ExpenseState,
@@ -148,6 +180,24 @@ export const expenseSlice = createSlice({
           (col) => col !== action.payload
         );
       else state.expenseColumns = [...state.expenseColumns, action.payload];
+    },
+    exportExpenseData: (state: ExpenseState) => {
+      saveAs(
+        new Blob([
+          tocsv.unparse(
+            state.expenses.map((exp) => {
+              return {
+                category: exp.category,
+                location: exp.location,
+                currency: exp.currency,
+                amount: exp.amount,
+                date: exp.date,
+              };
+            })
+          ),
+        ]),
+        `Expense_Data-${formatDateMMDDYYYY(new Date())}.csv`
+      );
     },
   },
   // These reducers handle loading/success/errors on web-server responses
@@ -172,6 +222,7 @@ export const expenseSlice = createSlice({
       .addCase(editExpense.fulfilled, (state: ExpenseState, action) => {
         state.expenseLoading = false;
         state.expenses = action.payload;
+        state.expenseEditModalOpen = false;
       })
       .addCase(editExpense.rejected, (state: ExpenseState, action) => {
         state.expenseLoading = false;
@@ -184,6 +235,7 @@ export const expenseSlice = createSlice({
       .addCase(addExpense.fulfilled, (state: ExpenseState, action) => {
         state.expenseLoading = false;
         state.expenses = action.payload;
+        state.expenseAddModalOpen = false;
       })
       .addCase(addExpense.rejected, (state: ExpenseState, action) => {
         state.expenseLoading = false;
@@ -196,7 +248,7 @@ export const expenseSlice = createSlice({
       .addCase(deleteExpense.fulfilled, (state: ExpenseState, action) => {
         state.expenseLoading = false;
         state.expenses = action.payload;
-        state.expenseMode = "adding";
+        state.expenseDeleteModalOpen = false;
         state.expenseId = null;
       })
       .addCase(deleteExpense.rejected, (state: ExpenseState, action) => {
@@ -210,13 +262,17 @@ export const {
   resetExpense,
   pickExpense,
   unpickExpense,
-  toggleAddingExpense,
-  toggleEditingExpense,
-  toggleDeletingExpense,
+  toggleAddExpenseModal,
+  toggleEditExpenseModal,
+  toggleDeleteExpenseModal,
+  toggleExpenseColumnModal,
   clearExpenseError,
   setExpenseSortBy,
   setExpenseWindow,
   toggleExpenseColumn,
+  exportExpenseData,
+  setExpenseGraph,
+  setExpenseViewBy,
 } = expenseSlice.actions;
 export const selectExpense = (state: ReduxState) => state.expense;
 export default expenseSlice.reducer;

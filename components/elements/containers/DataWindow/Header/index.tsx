@@ -7,40 +7,19 @@ import DateOptions from "./DateOptions";
 import WindowActions from "./WindowActions";
 import BgCSS from "../../../../../styles/Background.module.css";
 
-const Header: FC<HeaderProps> = ({
-  dataType,
-  isSelected,
-  openAddModal,
-  openEditModal,
-  openDeleteModal,
-  setWindow,
-  currentWindow,
-  openColumnModal,
-  exportData,
-}) => {
+const Header: FC<HeaderProps> = ({ dataType }) => {
   return (
     <div
       className={`relative w-full px-2 py-1.5 flex md:flex-row flex-col 
       justify-between items-center rounded-t-lg ${BgCSS.header}`}
     >
       <div className="flex items-center md:order-1 order-3">
-        <WindowOptions setWindow={setWindow} currentWindow={currentWindow} />
-        <ItemOptions
-          isSelected={isSelected}
-          currentWindow={currentWindow}
-          dataType={dataType}
-          openAddModal={openAddModal}
-          openEditModal={openEditModal}
-          openDeleteModal={openDeleteModal}
-        />
-        <WindowActions
-          currentWindow={currentWindow}
-          openColumnModal={openColumnModal}
-          exportData={exportData}
-        />
+        <WindowOptions dataType={dataType} />
+        <ItemOptions dataType={dataType} />
+        <WindowActions dataType={dataType} />
       </div>
-      <DateOptions />
-      <TimeframeOptions />
+      <DateOptions dataType={dataType} />
+      <TimeframeOptions dataType={dataType} />
     </div>
   );
 };

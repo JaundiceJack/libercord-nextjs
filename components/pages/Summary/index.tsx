@@ -1,13 +1,31 @@
-const SummaryPage = () => {
+import { FC } from "react";
+import { useReduxDispatch, useReduxSelector } from "../../../hooks/useRedux";
+import { selectExpense } from "../../../redux/expenseSlice";
+import { selectIncome } from "../../../redux/incomeSlice";
+import {
+  selectSummary,
+  toggleSummaryLineModal,
+} from "../../../redux/summarySlice";
+import DataWindow from "../../elements/containers/DataWindow";
+import PageWindow from "../../elements/containers/PageWindow";
+import ToggleLines from "./modals/ToggleLines";
+import SummaryGraph from "./SummaryGraph";
+
+const SummaryPage: FC = () => {
+  const dispatch = useReduxDispatch();
+  const { incomes } = useReduxSelector(selectIncome);
+  const { expenses } = useReduxSelector(selectExpense);
+  const { summaryLineModalOpen } = useReduxSelector(selectSummary);
+
   return (
-    <div className={`flex flex-col mx-0 mt-4 sm:m-4 h-full `}>
-      <div
-        className={`grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4
-        min-h-screen p-4 sm:p-0`}
-      >
-        <div className="lg:col-span-2"></div>
-      </div>
-    </div>
+    <PageWindow>
+      <DataWindow dataType="summary">{<SummaryGraph />}</DataWindow>
+
+      <ToggleLines
+        opened={summaryLineModalOpen}
+        toggle={() => dispatch(toggleSummaryLineModal())}
+      />
+    </PageWindow>
   );
 };
 
