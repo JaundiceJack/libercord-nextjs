@@ -13,8 +13,9 @@ import {
   decrementMonth,
   decrementYear,
 } from "../../../../../redux/dateSlice";
+import { DateOptionsProps } from "../types";
 
-const Header: FC = () => {
+const DateOptions: FC<DateOptionsProps> = ({ dataType }) => {
   const dispatch = useReduxDispatch();
   const { date, dataTimeframe } = useReduxSelector(selectDate);
 
@@ -25,7 +26,7 @@ const Header: FC = () => {
           className={`md:absolute left-0 right-0 flex justify-center md:mb-0 mb-4 mx-auto
           font-semibold font-jose text-white`}
         >
-          All Incomes
+          All {dataType === "summary" ? "Data" : `${capitalize(dataType)}s`}
         </p>
       ) : (
         <div
@@ -62,4 +63,4 @@ const Header: FC = () => {
   );
 };
 
-export default Header;
+export default DateOptions;

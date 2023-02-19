@@ -1,41 +1,26 @@
 import { IncomeType } from "../../../../models/Income";
 
-interface CurrentWindowType {
-  currentWindow: string;
+interface DataType {
+  dataType: "summary" | "income" | "expense" | "asset" | "debt";
 }
 
-interface ItemOptionsTypes {
-  dataType: "income" | "expense" | "asset" | "debt";
-  isSelected: boolean;
-  openAddModal: () => void;
-  openEditModal?: () => void;
-  openDeleteModal?: () => void;
-}
+export type DateOptionsProps = DataType;
 
-interface WindowOptionsType {
-  setWindow: () => void;
-}
+export type WindowActionsProps = DataType;
 
-interface WindowActionTypes {
-  openColumnModal: () => void;
-  exportData: () => void;
-}
+export type WindowOptionsProps = DataType;
 
-export type WindowActionsProps = CurrentWindowType & WindowActionTypes;
+export type TimeframeOptionsProps = DataType;
 
-export type WindowOptionsProps = CurrentWindowType & WindowOptionsType;
-
-export type ItemOptionProps = CurrentWindowType & ItemOptionsTypes;
+export type ItemOptionProps = DataType;
 
 export type ContentProps = {
   children: React.ReactNode;
 };
 
-export type HeaderProps = ItemOptionProps &
-  WindowOptionsProps &
-  WindowActionsProps;
+export type HeaderProps = DataType;
 
-export type DetailWindowProps = ContentProps &
-  HeaderProps & {
+export type DataWindowProps = ContentProps &
+  DataType & {
     className?: string;
   };

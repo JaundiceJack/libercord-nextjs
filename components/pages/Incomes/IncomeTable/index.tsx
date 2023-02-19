@@ -14,12 +14,11 @@ import {
 import type { IncomeType } from "../../../../models/Income";
 import { isSameYear, isSameMonth } from "date-fns";
 import { selectDate } from "../../../../redux/dateSlice";
-import useIncomeData from "../useIncomeData";
+import useListData from "../../../../hooks/useData/useListData";
 import ContentWindow from "../../../elements/containers/ContentWindow";
 
 const IncomeTable: FC = () => {
   // Get redux stuff for incomes
-  const { date, dataTimeframe } = useReduxSelector(selectDate);
   const dispatch = useReduxDispatch();
   const {
     incomes,
@@ -31,7 +30,7 @@ const IncomeTable: FC = () => {
     incomeColumns,
   } = useReduxSelector(selectIncome);
 
-  const { sortedIncomes } = useIncomeData();
+  const { sortedIncomes } = useListData();
 
   // Set up the columns to be displayed
   const columns: ListWindowColumn[] = [

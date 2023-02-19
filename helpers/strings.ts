@@ -1,5 +1,5 @@
 // Capitalize the first word of each string
-export const capitalize = (text: string): string => {
+export const capitalize = (text?: string): string => {
   if (text && text.length > 0) {
     const words: Array<string> = text.split(" ");
     let capitalized: Array<string> = [];

@@ -3,6 +3,8 @@ import dateReducer from "./dateSlice";
 import incomeReducer from "./incomeSlice";
 import expenseReducer from "./expenseSlice";
 import catalogReducer from "./catalogSlice";
+import summaryReducer from "./summarySlice";
+import preferenceReducer from "./preferenceSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     income: incomeReducer,
     expense: expenseReducer,
     catalog: catalogReducer,
+    summary: summaryReducer,
+    preference: preferenceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

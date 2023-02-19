@@ -1,60 +1,64 @@
 import { FC, useState } from "react";
+import { capitalize, months } from "../../../../helpers/strings";
+import useChartData from "../../../../hooks/useData/useChartData";
 import { useReduxSelector } from "../../../../hooks/useRedux";
+import { selectDate } from "../../../../redux/dateSlice";
 import { selectExpense } from "../../../../redux/expenseSlice";
-import EmptyListMessage from "../../../elements/misc/emptyListMessage";
-import PieChart from "../../../elements/charts/Pie";
 import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
 import Options from "../../../elements/charts/Options";
-import { selectDate } from "../../../../redux/dateSlice";
-import { capitalize, months } from "../../../../helpers/strings";
+import PieChart from "../../../elements/charts/Pie";
 import type { Datum } from "../../../elements/charts/types";
-import useExpenseData from "../useExpenseData";
 import ContentWindow from "../../../elements/containers/ContentWindow";
-import GraphContainer from "../../../elements/containers/GraphContainer";
-import GraphOptionsBox from "../../../elements/containers/GraphOptionsBox";
 import GraphBox from "../../../elements/containers/GraphBox";
+import GraphContainer from "../../../elements/containers/GraphContainer";
 import GraphLegendBox from "../../../elements/containers/GraphLegendBox";
+import GraphOptionsBox from "../../../elements/containers/GraphOptionsBox";
+import EmptyListMessage from "../../../elements/misc/emptyListMessage";
 
 const ExpenseGraph: FC = () => {
-  const { expenses } = useReduxSelector(selectExpense);
+  const { expenses, expenseViewBy, expenseGraph } =
+    useReduxSelector(selectExpense);
   const { date, dataTimeframe } = useReduxSelector(selectDate);
-  const [viewBy, setViewBy] = useState<"location" | "category">("category");
-  const [chart, setChart] = useState<"pie" | "bar">("pie");
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
     setActiveIndex(index);
   };
 
-  const { yearData, monthData, locationData, categoryData } = useExpenseData();
+  const {
+    expenseYearlyData: yearData,
+    expenseMonthlyData: monthData,
+    expenseLocationData: locationData,
+    expenseCategoryData: categoryData,
+  } = useChartData();
 
   const barData =
     dataTimeframe === "all"
       ? yearData
       : dataTimeframe === "year"
       ? monthData
-      : viewBy === "category"
+      : expenseViewBy === "category"
       ? categoryData
       : locationData;
 
-  const pieData = viewBy === "category" ? categoryData : locationData;
+  const pieData = expenseViewBy === "category" ? categoryData : locationData;
 
   const legendData =
-    chart === "pie"
-      ? viewBy === "category"
+    expenseGraph === "pie"
+      ? expenseViewBy === "category"
         ? categoryData
         : locationData
       : dataTimeframe === "all"
       ? yearData
       : dataTimeframe === "year"
       ? monthData
-      : viewBy === "category"
+      : expenseViewBy === "category"
       ? categoryData
       : locationData;
 
   const legendTitle =
-    chart === "pie"
-      ? viewBy === "category"
+    expenseGraph === "pie"
+      ? expenseViewBy === "category"
         ? "Categories"
         : "Sources"
       : dataTimeframe === "all"
@@ -70,20 +74,10 @@ const ExpenseGraph: FC = () => {
       ) : (
         <GraphContainer>
           <GraphOptionsBox>
-            <Options
-              toggleFilter={() =>
-                setViewBy(viewBy === "location" ? "category" : "location")
-              }
-              toggleChart={() => {
-                setChart(chart === "pie" ? "bar" : "pie");
-              }}
-              filters={["location", "category"]}
-              currentFilter={viewBy}
-              currentChart={chart}
-            />
+            <Options dataType="expense" />
           </GraphOptionsBox>
           <GraphBox>
-            {chart === "pie" ? (
+            {expenseGraph === "pie" ? (
               <PieChart
                 data={pieData}
                 activeIndex={activeIndex}
