@@ -1,129 +1,85 @@
 import Income, { IncomeType } from "../../models/Income";
 import dbConnect from "../../mongo/dbConnect";
-import { EditOption, RemoveOption } from "../catalog/types";
 import type { UserIdProp } from "../types";
 import type { CreateIncome, EditIncome, RemoveIncome } from "./types";
 
-// Try to find a user's incomes
-export const getIncomesByUserId = async ({
-  user,
-}: UserIdProp): Promise<IncomeType[]> => {
-  try {
-    if (user) {
-      await dbConnect();
-      const incomes = await Income.find<IncomeType>({ user });
-      if (incomes) return incomes;
-      else throw new Error("Could not find user incomes.");
-    } else throw new Error("No user provided for income search.");
-  } catch (e) {
-    throw e;
-  }
-};
-
-// Return the user's incomes with the new one inserted
-export const createIncome = async ({
-  user,
-  income,
-}: CreateIncome): Promise<IncomeType[]> => {
-  try {
-    if (user) {
-      // TODO: Validate the income
-      // Connect to the db and try to save the new income under the user id
-      await dbConnect();
-      const userIncome = {
-        user,
-        ...income,
-      };
-      const saved = await Income.create(userIncome);
-      if (saved) {
-        return await getIncomesByUserId({ user });
-      } else throw new Error("Unable to save new income.");
-    } else throw new Error("No user given for income creation.");
-  } catch (e) {
-    throw e;
-  }
-};
-
-// Modify an income record
-export const editIncome = async ({
-  user,
-  incomeId,
-  updates,
-}: EditIncome): Promise<IncomeType[]> => {
-  try {
-    if (user) {
-      await dbConnect();
-      let found: IncomeType | null = await Income.findById(incomeId);
-      if (found) {
-        // TODO: Validate new income updates
-        found = Object.assign(found, updates);
-        const saved = found.save ? await found.save() : undefined;
-        if (saved) {
-          return await getIncomesByUserId({ user });
-        } else throw new Error("Unable to save edits to the selected income.");
-      } else throw new Error("Selected income not found while editing.");
-    } else throw new Error("No user given when editing income.");
-  } catch (e) {
-    throw e;
-  }
-};
-
-// Remove the given income
-export const removeIncome = async ({
-  user,
-  incomeId,
-}: RemoveIncome): Promise<IncomeType[]> => {
-  try {
-    if (user) {
-      await dbConnect();
-      const found = await Income.findById(incomeId);
-      if (found) {
-        const deleted = await found.delete();
-        if (deleted) {
-          return await getIncomesByUserId({ user });
-        } else throw new Error("Unable to remove selected income.");
-      } else throw new Error("Unable to find selected income.");
-    } else throw new Error("No user given for income removal.");
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const editIncomeFieldsAfterCatalogModified = async ({
-  user,
-  field,
-  oldItem,
-  newItem,
-}: Omit<EditOption, "section">) => {
+const getIncomes = async ({ user }: UserIdProp) => {
   const incomes = await Income.find<IncomeType>({ user });
-  if (!incomes) return;
-  incomes.forEach(async (income) => {
-    let modified = false;
-    if (field === "sources" && income.source === oldItem) {
-      income.source = newItem;
-      modified = true;
-    } else if (field === "categories" && income.category === oldItem) {
-      income.category = newItem;
-      modified = true;
-    }
-    if (modified) await income.save();
-  });
+  if (!incomes) throw new Error("Income Error: Unable to find incomes.");
+
+  return incomes;
 };
 
-export const defaultIncomeFieldsAfterCatalogModified = async ({
+const createUserIncome = async ({ user, income }: CreateIncome) => {
+  const created = await Income.create({
+    user,
+    ...income,
+  });
+  if (!created) throw new Error("Income Error: Unable to create an income.");
+
+  return await getIncomes({ user });
+};
+
+const editUserIncome = async ({ user, incomeId, updates }: EditIncome) => {
+  const edited = await Income.findByIdAndUpdate(incomeId, updates);
+  if (!edited) throw new Error("Income Error: Unable to edit income.");
+
+  return await getIncomes({ user });
+};
+
+const removeUserIncome = async ({ user, incomeId }: RemoveIncome) => {
+  const deleted = await Income.findByIdAndDelete(incomeId);
+  if (!deleted) throw new Error("Income Error: Unable to delete income.");
+
+  return await getIncomes({ user });
+};
+
+const handleIncome =
+  (action: string) =>
+  async (
+    props: UserIdProp | CreateIncome | EditIncome | RemoveIncome
+  ): Promise<IncomeType[]> => {
+    try {
+      if (props.user) {
+        await dbConnect();
+        switch (action) {
+          case "get":
+            return getIncomes(props as UserIdProp);
+          case "make":
+            return createUserIncome(props as CreateIncome);
+          case "edit":
+            return editUserIncome(props as EditIncome);
+          case "remove":
+            return removeUserIncome(props as RemoveIncome);
+          default:
+            throw new Error("Incorrect action given.");
+        }
+      } else throw new Error("No user given.");
+    } catch (e) {
+      throw e;
+    }
+  };
+
+export const getIncomesByUserId = handleIncome("get");
+export const createIncome = handleIncome("make");
+export const editIncome = handleIncome("edit");
+export const removeIncome = handleIncome("remove");
+
+export const updateIncomeFieldsAfterCatalogModified = async ({
   user,
   field,
   item,
-}: Omit<RemoveOption, "section">) => {
+  replaceWith,
+}: UserIdProp & { field: string; item: string; replaceWith?: string }) => {
   const incomes = await Income.find<IncomeType>({ user });
   if (!incomes) return;
   incomes.forEach(async (income) => {
     let modified = false;
-    if (field === "sources" && income.source === item) {
-      income.source = "n/a";
+    if (field === "source" && income.source === item) {
+      income.source = replaceWith ?? "n/a";
       modified = true;
     } else if (field === "categories" && income.category === item) {
-      income.category = "n/a";
+      income.category = replaceWith ?? "n/a";
       modified = true;
     }
     if (modified) await income.save();

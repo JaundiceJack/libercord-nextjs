@@ -41,9 +41,7 @@ const NavLink: FC<NavLinkProps> = ({
         >
           <div
             className={`relative flex items-center justify-center ${
-              path === basePath
-                ? "text-gray-200"
-                : "text-slate-700 group-hover:text-slate-900"
+              path === basePath ? "text-gray-200" : "text-slate-900"
             }`}
           >
             {icon}

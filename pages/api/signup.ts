@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { errString } from "../../helpers/errors";
 import { createUser } from "../../handlers/user";
 import { setLoginSession } from "../../passport/session";
+import { UserType } from "../../models/User";
 
 const signup = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
