@@ -1,8 +1,9 @@
-import { FC } from "react";
 import Link from "next/link";
+import { FC } from "react";
 import { capitalize } from "../../../helpers/strings";
-import NavCSS from "../../../styles/Nav.module.css";
+import usePath from "../../../hooks/usePath";
 import BtnCSS from "../../../styles/Button.module.css";
+import NavCSS from "../../../styles/Nav.module.css";
 
 interface NavLinkProps {
   path: string;
@@ -21,6 +22,8 @@ const NavLink: FC<NavLinkProps> = ({
   onClick,
   className,
 }) => {
+  const { basePath } = usePath();
+
   return (
     <Link href={path} className={` ${className}`}>
       <div
@@ -29,13 +32,22 @@ const NavLink: FC<NavLinkProps> = ({
         rounded-lg cursor-pointer sm:px-3 px-2 py-2 sm:mr-0 mx-1 sm:mb-3 `}
       >
         <div
+          style={{ boxShadow: path === basePath ? "0 0 8px 1px #555" : "" }}
           className={`absolute flex items-center justify-center bottom-0 left-0 
           right-0 py-2 px-6 h-12 w-12 rounded-lg border-b-4 transform duration-300
-          hover:border-b-0 hover:h-11 focus:outline-none ${
+          hover:border-b-0 hover:h-11 focus:outline-none group ${
             NavCSS[`nav-button-${color}`]
           }`}
         >
-          <div className="flex items-center justify-center">{icon}</div>
+          <div
+            className={`relative flex items-center justify-center ${
+              path === basePath
+                ? "text-gray-200"
+                : "text-slate-700 group-hover:text-slate-900"
+            }`}
+          >
+            {icon}
+          </div>
         </div>
 
         <div

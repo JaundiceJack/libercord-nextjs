@@ -1,82 +1,65 @@
 .nav-button-gray {
-  background: radial-gradient(
-    rgba(var(--gray_8), 0.95),
-    rgba(var(--gray_8), 0.65)
+  background: conic-gradient(
+    rgba(var(--gray_8)),
+    rgba(var(--gray_8), 0.8),
+    rgba(var(--gray_8)),
+    rgba(var(--gray_8), 0.8),
+    rgba(var(--gray_8))
   );
   border-color: rgba(var(--gray_3), 0.95);
 }
-.nav-button-gray:hover {
-  background: radial-gradient(
-    rgba(var(--gray_8), 0.95),
-    rgba(var(--gray_8), 0.85)
-  );
-}
 
 .nav-button-green {
-  background: radial-gradient(
-    rgba(var(--green_base), 0.95),
-    rgba(var(--green_base), 0.65)
+  background: conic-gradient(
+    rgba(var(--green_base)),
+    rgba(var(--green_base), 0.8),
+    rgba(var(--green_base)),
+    rgba(var(--green_base), 0.8),
+    rgba(var(--green_base))
   );
   border-color: rgba(var(--green_dark), 0.95);
 }
-.nav-button-green:hover {
-  background: radial-gradient(
-    rgba(var(--green_base), 0.95),
-    rgba(var(--green_base), 0.85)
-  );
-}
 
 .nav-button-blue {
-  background: radial-gradient(
-    rgba(var(--blue_base), 0.95),
-    rgba(var(--blue_base), 0.65)
+  background: conic-gradient(
+    rgba(var(--blue_base)),
+    rgba(var(--blue_base), 0.8),
+    rgba(var(--blue_base)),
+    rgba(var(--blue_base), 0.8),
+    rgba(var(--blue_base))
   );
   border-color: rgba(var(--blue_dark), 0.95);
 }
-.nav-button-blue:hover {
-  background: radial-gradient(
-    rgba(var(--blue_base), 0.95),
-    rgba(var(--blue_base), 0.85)
-  );
-}
 
 .nav-button-yellow {
-  background: radial-gradient(
-    rgba(var(--yellow_base), 0.95),
-    rgba(var(--yellow_base), 0.65)
+  background: conic-gradient(
+    rgba(var(--yellow_base)),
+    rgba(var(--yellow_base), 0.8),
+    rgba(var(--yellow_base)),
+    rgba(var(--yellow_base), 0.8),
+    rgba(var(--yellow_base))
   );
   border-color: rgba(var(--yellow_dark), 0.95);
 }
-.nav-button-yellow:hover {
-  background: radial-gradient(
-    rgba(var(--yellow_base), 0.95),
-    rgba(var(--yellow_base), 0.85)
-  );
-}
+
 .nav-button-red {
-  background: radial-gradient(
-    rgba(var(--red_base), 0.95),
-    rgba(var(--red_base), 0.65)
+  background: conic-gradient(
+    rgba(var(--red_base)),
+    rgba(var(--red_base), 0.8),
+    rgba(var(--red_base)),
+    rgba(var(--red_base), 0.8),
+    rgba(var(--red_base))
   );
   border-color: rgba(var(--red_dark), 0.95);
 }
-.nav-button-red:hover {
-  background: radial-gradient(
-    rgba(var(--red_base), 0.95),
-    rgba(var(--red_base), 0.85)
-  );
-}
 
 .nav-button-indigo {
-  background: radial-gradient(
-    rgba(var(--indigo_base), 0.95),
-    rgba(var(--indigo_base), 0.65)
+  background: conic-gradient(
+    rgba(var(--indigo_base)),
+    rgba(var(--indigo_base), 0.8),
+    rgba(var(--indigo_base)),
+    rgba(var(--indigo_base), 0.8),
+    rgba(var(--indigo_base))
   );
   border-color: rgba(var(--indigo_dark), 0.95);
-}
-.nav-button-indigo:hover {
-  background: radial-gradient(
-    rgba(var(--indigo_base), 0.95),
-    rgba(var(--indigo_base), 0.85)
-  );
 }
