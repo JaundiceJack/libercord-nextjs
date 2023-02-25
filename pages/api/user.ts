@@ -7,7 +7,7 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getLoginSession(req);
     const user =
       (session && (await findUser({ email: session.email }))) ?? null;
-    // TODO: do this better somehow... idk
+
     if (user) {
       res.status(200).json({ user });
     } else {

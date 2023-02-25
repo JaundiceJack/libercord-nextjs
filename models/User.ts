@@ -1,12 +1,11 @@
-import { Schema, Types, model, models } from "mongoose";
+import { Schema, Types, model, models, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface UserType {
+export interface UserType extends Document {
   _id: Types.ObjectId;
   email: string;
   password?: string;
   isAdmin: boolean;
-  save?: () => Promise<UserType | Error>;
   matchPassword?: (password: string) => Promise<boolean>;
 }
 

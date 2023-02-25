@@ -3,32 +3,32 @@ import dbConnect from "../../mongo/dbConnect";
 import { createDefaultCatalog, createDefaultPreferences } from "../defaults";
 import type { CreateUser, FindUser, ValidateUser } from "./types";
 
+const validateCredentials = (email: string, password: string) => {
+  if (email === "") throw new Error("Email not submitted.");
+  if (password.length < 8)
+    throw new Error("Password must be at least 8 characters in length");
+};
+
 // Make a new user and return them with private info filtered out
 export const createUser = async ({
   email,
   password,
   initialSavings,
-}: CreateUser): Promise<UserType> => {
+}: CreateUser) => {
   try {
-    // Validate credentials
-    if (email === "") throw new Error("Email not submitted.");
-    if (password.length < 8)
-      throw new Error("Password must be at least 8 characters in length");
-
-    // Connect to a DB, make sure the account's not take, and create the new user
+    validateCredentials(email, password);
     await dbConnect();
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       const newUser = await User.create({ email, password });
       if (newUser) {
-        // Create a default option catalog & preferences for the new user
         await createDefaultCatalog({ user: newUser._id });
         await createDefaultPreferences({ user: newUser._id, initialSavings });
         return {
           _id: newUser._id,
           email: newUser.email,
           isAdmin: newUser.isAdmin,
-        };
+        } as UserType;
       } else throw new Error("User creation failed.");
     } else throw new Error("A user with that email already exists.");
   } catch (e) {
@@ -37,7 +37,7 @@ export const createUser = async ({
 };
 
 // Get a user with private info filtered out
-export const findUser = async ({ email }: FindUser): Promise<any> => {
+export const findUser = async ({ email }: FindUser) => {
   try {
     await dbConnect();
     const user = await User.findOne({ email });
@@ -54,9 +54,7 @@ export const findUser = async ({ email }: FindUser): Promise<any> => {
 };
 
 // Get a user's info including password for authentication
-export const findUserPrivateInfo = async ({
-  email,
-}: FindUser): Promise<any> => {
+export const findUserPrivateInfo = async ({ email }: FindUser) => {
   try {
     await dbConnect();
     const user = await User.findOne({ email });
@@ -69,10 +67,7 @@ export const findUserPrivateInfo = async ({
 };
 
 // Check if the password input matches the given user's
-export const validatePassword = async ({
-  user,
-  password,
-}: ValidateUser): Promise<boolean> => {
+export const validatePassword = async ({ user, password }: ValidateUser) => {
   if (user.matchPassword && (await user.matchPassword(password))) return true;
   else return false;
 };

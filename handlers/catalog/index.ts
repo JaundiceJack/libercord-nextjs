@@ -1,14 +1,8 @@
 import Catalog, { CatalogType } from "../../models/Catalog";
 import dbConnect from "../../mongo/dbConnect";
 import { createDefaultCatalog } from "../defaults";
-import {
-  defaultExpenseFieldsAfterCatalogModified,
-  editExpenseFieldsAfterCatalogModified,
-} from "../expense";
-import {
-  defaultIncomeFieldsAfterCatalogModified,
-  editIncomeFieldsAfterCatalogModified,
-} from "../income";
+import { updateExpenseFieldsAfterCatalogModified } from "../expense";
+import { updateIncomeFieldsAfterCatalogModified } from "../income";
 import type { UserIdProp } from "../types";
 import type {
   CreateOption,
@@ -74,12 +68,28 @@ const makeCatalogItem = async ({
   else throw new Error(`Catalog Error: Unable to save to ${section}.`);
 };
 
-const editAssociatedItems = ({ section, ...props }: EditOption) => {
+const editAssociatedItems = ({
+  user,
+  section,
+  field,
+  oldItem,
+  newItem,
+}: EditOption) => {
   switch (section) {
     case "income":
-      editIncomeFieldsAfterCatalogModified(props);
+      updateIncomeFieldsAfterCatalogModified({
+        user,
+        field,
+        item: oldItem,
+        replaceWith: newItem,
+      });
     case "expense":
-      editExpenseFieldsAfterCatalogModified(props);
+      updateExpenseFieldsAfterCatalogModified({
+        user,
+        field,
+        item: oldItem,
+        replaceWith: newItem,
+      });
     default:
       return;
   }
@@ -109,12 +119,17 @@ const editCatalogItem = async ({
   } else throw new Error("Catalog Error: Unable to find item to edit.");
 };
 
-const removeAssociatedItems = ({ section, ...props }: RemoveOption) => {
+const removeAssociatedItems = ({
+  user,
+  section,
+  field,
+  item,
+}: RemoveOption) => {
   switch (section) {
     case "income":
-      defaultIncomeFieldsAfterCatalogModified(props);
+      updateIncomeFieldsAfterCatalogModified({ user, field, item });
     case "expense":
-      defaultExpenseFieldsAfterCatalogModified(props);
+      updateExpenseFieldsAfterCatalogModified({ user, field, item });
     default:
       return;
   }
