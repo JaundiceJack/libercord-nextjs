@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const usePath = () => {
   const router = useRouter();
+  const [basePath, setBasePath] = useState<string | undefined>();
   const [recordPath, setRecordPath] = useState<string | undefined>();
 
   const getRecordPath = () =>
@@ -13,9 +14,10 @@ const usePath = () => {
 
   useEffect(() => {
     setRecordPath(getRecordPath());
+    setBasePath(router.pathname);
   }, [router]);
 
-  return { recordPath };
+  return { basePath, recordPath };
 };
 
 export default usePath;

@@ -1,10 +1,7 @@
-// Import components
-import NavLink from "./navlink";
-// Import Icons
-import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
-import { IoWalletOutline } from "react-icons/io5";
-import { AiOutlineLineChart } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
+import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
+import { IoWalletOutline } from "react-icons/io5";
+import NavLink from "./navlink";
 
 const NavLinks = () => {
   interface LinkFace {
@@ -18,25 +15,25 @@ const NavLinks = () => {
     {
       path: "records/summary",
       label: "summary",
-      icon: <IoWalletOutline size="30" color="rgb(39, 39, 42)" />,
+      icon: <IoWalletOutline size="30" />,
       color: "blue",
     },
     {
       path: "records/income",
       label: "income",
-      icon: <GiReceiveMoney size="30" color="rgb(39, 39, 42)" />,
+      icon: <GiReceiveMoney size="30" />,
       color: "green",
     },
     {
       path: "records/expenses",
       label: "expenses",
-      icon: <GiPayMoney size="30" color="rgb(39, 39, 42)" />,
+      icon: <GiPayMoney size="30" />,
       color: "indigo",
     },
     {
       path: "settings",
       label: "settings",
-      icon: <BsGearFill size="30" color="rgb(39, 39, 42)" />,
+      icon: <BsGearFill size="30" />,
       color: "yellow",
     },
     //{
