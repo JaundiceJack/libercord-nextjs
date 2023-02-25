@@ -5,14 +5,16 @@ import PageLayout from "../../components/PageLayout";
 import ExpensePage from "../../components/pages/Expenses";
 import { useReduxDispatch } from "../../hooks/useRedux";
 import useUser from "../../hooks/useUser";
-import { getInitialCatalog } from "../../redux/catalogSlice";
-import { getInitialExpenses } from "../../redux/expenseSlice";
+import { getInitialCatalog } from "../../redux/catalog";
+import { getInitialExpenses } from "../../redux/expense";
+import { getInitialPreferences } from "../../redux/preferences";
 
 const Expense: NextPage = () => {
   const { user } = useUser({});
   const dispatch = useReduxDispatch();
   useEffect(() => {
     dispatch(getInitialExpenses());
+    dispatch(getInitialPreferences());
     dispatch(getInitialCatalog());
   }, []);
 

@@ -1,19 +1,19 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import dateReducer from "./dateSlice";
-import incomeReducer from "./incomeSlice";
-import expenseReducer from "./expenseSlice";
-import catalogReducer from "./catalogSlice";
-import summaryReducer from "./summarySlice";
-import preferenceReducer from "./preferenceSlice";
+import dateReducer from "./date";
+import incomeReducer from "./income";
+import expenseReducer from "./expense";
+import catalogReducer from "./catalog";
+import summaryReducer from "./summary";
+import preferencesReducer from "./preferences";
 
 const store = configureStore({
   reducer: {
+    preferences: preferencesReducer,
     date: dateReducer,
     income: incomeReducer,
     expense: expenseReducer,
     catalog: catalogReducer,
     summary: summaryReducer,
-    preference: preferenceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

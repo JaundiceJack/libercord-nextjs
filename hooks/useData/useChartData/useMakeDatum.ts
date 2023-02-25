@@ -1,6 +1,6 @@
 import { capitalize } from "../../../helpers/strings";
-import { selectExpense } from "../../../redux/expenseSlice";
-import { selectIncome } from "../../../redux/incomeSlice";
+import { selectExpense } from "../../../redux/expense";
+import { selectIncome } from "../../../redux/income";
 import { useReduxSelector } from "../../useRedux";
 import {
   totalValueAllIncomes,

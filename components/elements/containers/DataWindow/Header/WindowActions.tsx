@@ -14,16 +14,16 @@ import {
   exportExpenseData,
   selectExpense,
   toggleExpenseColumnModal,
-} from "../../../../../redux/expenseSlice";
+} from "../../../../../redux/expense";
 import {
   exportIncomeData,
   selectIncome,
   toggleIncomeColumnModal,
-} from "../../../../../redux/incomeSlice";
+} from "../../../../../redux/income";
 import {
   selectSummary,
   toggleSummaryLineModal,
-} from "../../../../../redux/summarySlice";
+} from "../../../../../redux/summary";
 import ItemOptionButton from "../../../input/button/ItemOptionButton";
 
 const WindowActions: FC = () => {

@@ -7,6 +7,7 @@ import ErrorMessages from "../../../elements/misc/errorMessages";
 import Spinner from "../../../elements/misc/spinner";
 import BareButton from "../../../elements/input/button/BareButton";
 import HomeCSS from "../../../../styles/Home.module.css";
+import NumberEntry from "../../../elements/input/form/Number";
 
 interface SignUpProps {
   toggle: () => void;
@@ -16,6 +17,8 @@ interface SignUpProps {
   setPassword: (e: React.FormEvent<HTMLInputElement>) => void;
   confirm: string;
   setConfirm: (e: React.FormEvent<HTMLInputElement>) => void;
+  initialSavings: string;
+  setInitialSavings: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 const SignUp: FC<SignUpProps> = ({
@@ -26,6 +29,8 @@ const SignUp: FC<SignUpProps> = ({
   setPassword,
   confirm,
   setConfirm,
+  initialSavings,
+  setInitialSavings,
 }) => {
   const { errMsgs, setErrMsgs, clearErrors } = useErrMsgs();
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,10 +49,13 @@ const SignUp: FC<SignUpProps> = ({
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          initialSavings: Number(initialSavings),
+        }),
       });
       if (res.status === 200) {
-        console.log(res);
         Router.push("/records/summary");
       } else {
         throw new Error(await res.text());
@@ -93,6 +101,16 @@ const SignUp: FC<SignUpProps> = ({
         type="password"
         value={confirm}
         onChange={setConfirm}
+        className="mb-2"
+        labelWidth="6rem"
+        inputWidth="1fr"
+      />
+      <NumberEntry
+        label="Savings:"
+        placeholder="current cash balance (optional)"
+        name="initialSavings"
+        value={initialSavings}
+        onChange={setInitialSavings}
         className="mb-2"
         labelWidth="6rem"
         inputWidth="1fr"

@@ -1,8 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import {
-  deleteExpense,
-  selectExpense,
-} from "../../../../../redux/expenseSlice";
+import { deleteExpense, selectExpense } from "../../../../../redux/expense";
 import {
   useReduxDispatch,
   useReduxSelector,

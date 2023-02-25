@@ -1,6 +1,5 @@
-import dbConnect from "../../mongo/dbConnect";
-import { Types } from "mongoose";
 import Income, { IncomeType } from "../../models/Income";
+import dbConnect from "../../mongo/dbConnect";
 import type { UserIdProp } from "../types";
 import type { CreateIncome, EditIncome, RemoveIncome } from "./types";
 

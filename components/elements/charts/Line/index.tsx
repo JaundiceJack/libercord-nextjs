@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
   Cell,
+  ReferenceLine,
 } from "recharts";
 import COLORS from "../colors";
 import type {
@@ -22,6 +23,9 @@ import type { ChartProps } from "../types";
 import { capitalize } from "../../../../helpers/strings";
 import { xAxisTick, yAxisTick } from "../ticks";
 import usePath from "../../../../hooks/usePath";
+import { useReduxSelector } from "../../../../hooks/useRedux";
+import { selectSummary } from "../../../../redux/summary";
+import { SummaryLines } from "../../../../redux/types";
 
 const CustomLine: FC<ChartProps & DataKeys> = ({
   data,
@@ -30,6 +34,8 @@ const CustomLine: FC<ChartProps & DataKeys> = ({
   onHover,
 }) => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  const { summaryLines } = useReduxSelector(selectSummary);
 
   const { recordPath } = usePath();
 
@@ -73,6 +79,7 @@ const CustomLine: FC<ChartProps & DataKeys> = ({
               <CartesianGrid strokeDasharray="5 5" vertical={false} />
               <XAxis tickFormatter={xAxisTick} dataKey="name" />
               <YAxis tickFormatter={yAxisTick} />
+              <ReferenceLine y={0} stroke="#000" />
               <Legend
                 formatter={(
                   value: any,
@@ -85,28 +92,34 @@ const CustomLine: FC<ChartProps & DataKeys> = ({
                   },
                   index: number
                 ) => {
-                  return dataKeys ? dataKeys[index] : recordPath;
+                  return dataKeys ? value : recordPath;
                 }}
               />
               <Tooltip content={<CustomTooltip />} />
               {dataKeys ? (
-                dataKeys.map((key, i) => (
-                  <Line
-                    type="monotone"
-                    key={i}
-                    stroke={
-                      key === "income"
-                        ? "rgba(74, 222, 128, 0.75)"
-                        : key === "expense"
-                        ? "rgba(248, 113, 113, 0.75)"
-                        : key === "savings"
-                        ? "rgba(250, 204, 21, 0.75)"
-                        : COLORS[i % COLORS.length]
-                    }
-                    dataKey={key}
-                    onMouseOut={() => setHoverIndex(null)}
-                  />
-                ))
+                dataKeys.map(
+                  (key, i) =>
+                    recordPath === "summary" &&
+                    summaryLines.includes(key as SummaryLines) && (
+                      <Line
+                        type="monotone"
+                        key={i}
+                        stroke={
+                          key === "income"
+                            ? "rgba(74, 222, 128, 0.75)"
+                            : key === "expense"
+                            ? "rgba(248, 113, 113, 0.75)"
+                            : key === "savings"
+                            ? "rgba(250, 204, 21, 0.75)"
+                            : key === "cash"
+                            ? "rgba(78, 176, 241, 0.75)"
+                            : COLORS[i % COLORS.length]
+                        }
+                        dataKey={key}
+                        onMouseOut={() => setHoverIndex(null)}
+                      />
+                    )
+                )
               ) : (
                 <Line
                   type="monotone"

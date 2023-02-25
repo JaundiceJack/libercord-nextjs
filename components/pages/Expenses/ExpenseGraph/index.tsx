@@ -1,9 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { capitalize, months } from "../../../../helpers/strings";
 import useChartData from "../../../../hooks/useData/useChartData";
-import { useReduxSelector } from "../../../../hooks/useRedux";
-import { selectDate } from "../../../../redux/dateSlice";
-import { selectExpense } from "../../../../redux/expenseSlice";
+import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
+import { selectDate } from "../../../../redux/date";
+import { selectExpense, setExpenseChartType } from "../../../../redux/expense";
+import { selectPreferences } from "../../../../redux/preferences";
 import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
 import LineChart from "../../../elements/charts/Line";
@@ -19,14 +20,10 @@ import GraphOptionsBox from "../../../elements/containers/GraphOptionsBox";
 import EmptyListMessage from "../../../elements/misc/emptyListMessage";
 
 const ExpenseGraph: FC = () => {
-  const {
-    expenses,
-    expenseViewBy,
-    expenseChartMode,
-    expenseDistributionChartType,
-    expenseSequentialChartType,
-  } = useReduxSelector(selectExpense);
+  const { expenses, expenseViewBy, expenseChartType } =
+    useReduxSelector(selectExpense);
   const { date, dataTimeframe } = useReduxSelector(selectDate);
+  const { defaultExpenseChartType } = useReduxSelector(selectPreferences);
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
     setActiveIndex(index);
@@ -51,7 +48,7 @@ const ExpenseGraph: FC = () => {
   const pieData = expenseViewBy === "category" ? categoryData : locationData;
 
   const legendData =
-    expenseChartMode === "distribution"
+    expenseChartType === "pie" || expenseChartType === "radar"
       ? expenseViewBy === "category"
         ? categoryData
         : locationData
@@ -64,7 +61,7 @@ const ExpenseGraph: FC = () => {
       : locationData;
 
   const legendTitle =
-    expenseChartMode === "distribution"
+    expenseChartType === "pie" || expenseChartType === "radar"
       ? expenseViewBy === "category"
         ? "Categories"
         : "Sources"
@@ -73,6 +70,11 @@ const ExpenseGraph: FC = () => {
       : dataTimeframe === "year"
       ? date.getFullYear().toString()
       : capitalize(months[date.getMonth()]);
+
+  const dispatch = useReduxDispatch();
+  useEffect(() => {
+    dispatch(setExpenseChartType(defaultExpenseChartType));
+  }, []);
 
   return (
     <ContentWindow>
@@ -84,21 +86,19 @@ const ExpenseGraph: FC = () => {
             <Options />
           </GraphOptionsBox>
           <GraphBox>
-            {expenseChartMode === "distribution" ? (
-              expenseDistributionChartType === "pie" ? (
-                <PieChart
-                  data={pieData}
-                  activeIndex={activeIndex}
-                  onHover={onHover}
-                />
-              ) : (
-                <RadarChart
-                  data={pieData}
-                  activeIndex={activeIndex}
-                  onHover={onHover}
-                />
-              )
-            ) : expenseSequentialChartType === "line" ? (
+            {expenseChartType === "pie" ? (
+              <PieChart
+                data={pieData}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            ) : expenseChartType === "radar" ? (
+              <RadarChart
+                data={pieData}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            ) : expenseChartType === "line" ? (
               <LineChart
                 data={barData}
                 activeIndex={activeIndex}

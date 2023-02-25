@@ -6,7 +6,7 @@ import {
   toggleDeleteIncomeModal,
   toggleEditIncomeModal,
   toggleIncomeColumnModal,
-} from "../../../redux/incomeSlice";
+} from "../../../redux/income";
 import DataWindow from "../../elements/containers/DataWindow";
 import PageWindow from "../../elements/containers/PageWindow";
 import IncomeGraph from "./IncomeGraph";

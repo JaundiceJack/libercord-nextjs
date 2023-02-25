@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { deleteIncome, selectIncome } from "../../../../../redux/incomeSlice";
+import { deleteIncome, selectIncome } from "../../../../../redux/income";
 import {
   useReduxDispatch,
   useReduxSelector,

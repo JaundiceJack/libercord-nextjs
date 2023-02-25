@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { clearCatalogError, selectCatalog } from "../redux/catalogSlice";
-import { clearExpenseError, selectExpense } from "../redux/expenseSlice";
-import { clearIncomeError, selectIncome } from "../redux/incomeSlice";
+import { clearCatalogError, selectCatalog } from "../redux/catalog";
+import { clearExpenseError, selectExpense } from "../redux/expense";
+import { clearIncomeError, selectIncome } from "../redux/income";
 import { useReduxDispatch, useReduxSelector } from "./useRedux";
 
 const useErrMsgs = () => {

@@ -12,7 +12,7 @@ import {
   incrementMonth,
   incrementYear,
   selectDate,
-} from "../../../../../redux/dateSlice";
+} from "../../../../../redux/date";
 import BrowseButton from "../../../input/button/BrowseButton";
 
 const DateOptions: FC = () => {

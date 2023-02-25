@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { editIncome, selectIncome } from "../../../../../redux/incomeSlice";
+import { editIncome, selectIncome } from "../../../../../redux/income";
 import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import { selectCatalog } from "../../../../../redux/catalogSlice";
+import { selectCatalog } from "../../../../../redux/catalog";
 import type { IncomeType } from "../../../../../models/Income";
 import type { Currencies } from "../../../../../models/types";
 import type { ToggleProps } from "../../../../elements/containers/Modal/types";

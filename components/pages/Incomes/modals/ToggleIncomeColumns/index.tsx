@@ -3,10 +3,7 @@ import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import {
-  selectIncome,
-  toggleIncomeColumn,
-} from "../../../../../redux/incomeSlice";
+import { selectIncome, toggleIncomeColumn } from "../../../../../redux/income";
 import Modal from "../../../../elements/containers/Modal";
 import type { ToggleProps } from "../../../../elements/containers/Modal/types";
 import Checkbox from "../../../../elements/input/form/Checkbox";

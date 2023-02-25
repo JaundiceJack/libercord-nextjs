@@ -1,10 +1,15 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import useChartData from "../../../../hooks/useData/useChartData";
-import { useReduxSelector } from "../../../../hooks/useRedux";
-import { selectDate } from "../../../../redux/dateSlice";
-import { selectExpense } from "../../../../redux/expenseSlice";
-import { selectIncome } from "../../../../redux/incomeSlice";
-import { selectSummary } from "../../../../redux/summarySlice";
+import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
+import { selectDate } from "../../../../redux/date";
+import { selectExpense } from "../../../../redux/expense";
+import { selectIncome } from "../../../../redux/income";
+import { selectPreferences } from "../../../../redux/preferences";
+import {
+  selectSummary,
+  setSummaryChartType,
+  setSummaryExpensesNegative,
+} from "../../../../redux/summary";
 import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
 import LineChart from "../../../elements/charts/Line";
@@ -21,8 +26,11 @@ const SummaryGraph: FC = () => {
   const { incomes } = useReduxSelector(selectIncome);
   const { expenses } = useReduxSelector(selectExpense);
   const { dataTimeframe } = useReduxSelector(selectDate);
-  const { summarySequentialChartType, summaryExpensesNegative } =
+  const { defaultSummaryChartType, useNegativeExpenses } =
+    useReduxSelector(selectPreferences);
+  const { summaryChartType, summaryExpensesNegative } =
     useReduxSelector(selectSummary);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
     setActiveIndex(index);
@@ -38,6 +46,12 @@ const SummaryGraph: FC = () => {
         }
       : { ...d };
 
+  const dispatch = useReduxDispatch();
+  useEffect(() => {
+    dispatch(setSummaryChartType(defaultSummaryChartType));
+    dispatch(setSummaryExpensesNegative(useNegativeExpenses));
+  }, []);
+
   return (
     <ContentWindow>
       {incomes.length === 0 && expenses.length === 0 ? (
@@ -48,14 +62,14 @@ const SummaryGraph: FC = () => {
             <Options />
           </GraphOptionsBox>
           <GraphBox>
-            {summarySequentialChartType === "bar" ? (
+            {summaryChartType === "bar" ? (
               <BarChart
                 data={
                   dataTimeframe === "all"
                     ? summaryYearlyData.map(negateExpenses)
                     : summaryMonthlyData.map(negateExpenses)
                 }
-                dataKeys={["income", "expense", "savings"]}
+                dataKeys={["income", "expense", "savings", "cash"]}
                 activeIndex={activeIndex}
                 onHover={onHover}
               />
@@ -66,7 +80,7 @@ const SummaryGraph: FC = () => {
                     ? summaryYearlyData.map(negateExpenses)
                     : summaryMonthlyData.map(negateExpenses)
                 }
-                dataKeys={["income", "expense", "savings"]}
+                dataKeys={["income", "expense", "savings", "cash"]}
                 activeIndex={activeIndex}
                 onHover={onHover}
               />

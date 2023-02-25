@@ -5,7 +5,8 @@ import BgCSS from "../../../../../styles/Background.module.css";
 const Title: FC<TitleProps> = ({ title }) => {
   return (
     <div
-      className={`flex items-center justify-center h-14 mb-2 ${BgCSS.container}`}
+      style={{ minHeight: "45px" }}
+      className={`flex items-center justify-center mb-2 ${BgCSS.container}`}
     >
       <h2 className={`font-jose text-white text-lg`}>{title}</h2>
     </div>

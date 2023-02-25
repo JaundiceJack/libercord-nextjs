@@ -1,9 +1,6 @@
 import { FC } from "react";
 import { useReduxDispatch, useReduxSelector } from "../../../hooks/useRedux";
-import {
-  selectSummary,
-  toggleSummaryLineModal,
-} from "../../../redux/summarySlice";
+import { selectSummary, toggleSummaryLineModal } from "../../../redux/summary";
 import DataWindow from "../../elements/containers/DataWindow";
 import PageWindow from "../../elements/containers/PageWindow";
 import ToggleLines from "./modals/ToggleLines";

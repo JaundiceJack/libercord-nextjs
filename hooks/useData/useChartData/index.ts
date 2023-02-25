@@ -3,10 +3,10 @@ import { Datum } from "../../../components/elements/charts/types";
 import { useReduxSelector } from "../../useRedux";
 import { ExpenseType } from "../../../models/Expense";
 import { IncomeType } from "../../../models/Income";
-import { selectCatalog } from "../../../redux/catalogSlice";
-import { selectDate } from "../../../redux/dateSlice";
-import { selectExpense } from "../../../redux/expenseSlice";
-import { selectIncome } from "../../../redux/incomeSlice";
+import { selectCatalog } from "../../../redux/catalog";
+import { selectDate } from "../../../redux/date";
+import { selectExpense } from "../../../redux/expense";
+import { selectIncome } from "../../../redux/income";
 import { filterByTimeframe } from "../filters";
 import useDataComposer from "./useDataComposer";
 import { totalValue } from "./useDataComposer/totalReducers";
@@ -16,7 +16,7 @@ import {
   totalValueAllIncomes,
 } from "./useDataComposer/totalValues";
 import useMakeDatum from "./useMakeDatum";
-import { selectSummary } from "../../../redux/summarySlice";
+import { selectSummary } from "../../../redux/summary";
 
 const useChartData = () => {
   // States from Redux

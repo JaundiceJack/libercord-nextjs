@@ -1,8 +1,7 @@
 import { Datum } from "../../components/elements/charts/types";
 import { ExpenseType } from "../../models/Expense";
 import { IncomeType } from "../../models/Income";
-import { ExpenseSortOption } from "../../redux/expenseSlice";
-import { IncomeSortOption } from "../../redux/incomeSlice";
+import { ExpenseSortOption, IncomeSortOption } from "../../redux/types";
 import { SortDirection } from "../../redux/types";
 
 // By Datum Percent

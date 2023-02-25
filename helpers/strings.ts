@@ -35,3 +35,17 @@ export const months = [
   "november",
   "december",
 ];
+
+// Give the plural version of the field (since they are in the catalog but not the sections)
+export const pluralizeField = (field: string) => {
+  switch (field) {
+    case "source":
+      return "sources";
+    case "category":
+      return "categories";
+    case "location":
+      return "locations";
+    default:
+      return "sources";
+  }
+};

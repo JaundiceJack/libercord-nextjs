@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { CatalogType } from "../../../../../models/Catalog";
 import { ExpenseType } from "../../../../../models/Expense";
 import { IncomeType } from "../../../../../models/Income";
-import { selectCatalog } from "../../../../../redux/catalogSlice";
+import { selectCatalog } from "../../../../../redux/catalog";
 import { useReduxSelector } from "../../../../useRedux";
 import {
   uniqueIncomeCategories,

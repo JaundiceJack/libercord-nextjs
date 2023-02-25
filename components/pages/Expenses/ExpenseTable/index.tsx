@@ -1,13 +1,15 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import useListData from "../../../../hooks/useData/useListData";
 import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
-import { selectDate } from "../../../../redux/dateSlice";
+import { selectDate } from "../../../../redux/date";
 import {
-  ExpenseSortOption,
   pickExpense,
   selectExpense,
+  setExpenseColumns,
   setExpenseSortBy,
-} from "../../../../redux/expenseSlice";
+} from "../../../../redux/expense";
+import { selectPreferences } from "../../../../redux/preferences";
+import { ExpenseSortOption } from "../../../../redux/types";
 import ContentWindow from "../../../elements/containers/ContentWindow";
 import ListWindow from "../../../elements/containers/ListWindow";
 import type { ListWindowColumn } from "../../../elements/containers/ListWindow/types";
@@ -28,6 +30,11 @@ const ExpenseTable: FC = () => {
     expenseSortDir,
     expenseColumns,
   } = useReduxSelector(selectExpense);
+
+  const { defaultExpenseColumns } = useReduxSelector(selectPreferences);
+  useEffect(() => {
+    dispatch(setExpenseColumns(defaultExpenseColumns));
+  }, []);
 
   const { sortedExpenses } = useListData();
 

@@ -9,6 +9,8 @@ import {
   XAxis,
   YAxis,
   Cell,
+  Legend,
+  LegendType,
   ReferenceLine,
 } from "recharts";
 import COLORS from "../colors";
@@ -18,8 +20,9 @@ import { DataKeys } from "../Line/types";
 import { xAxisTick, yAxisTick } from "../ticks";
 import { capitalize } from "../../../../helpers/strings";
 import { useReduxSelector } from "../../../../hooks/useRedux";
-import { selectSummary, SummaryLines } from "../../../../redux/summarySlice";
+import { selectSummary } from "../../../../redux/summary";
 import usePath from "../../../../hooks/usePath";
+import { SummaryLines } from "../../../../redux/types";
 
 const CustomBar: FC<ChartProps & DataKeys> = ({
   data,
@@ -46,7 +49,7 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
               )}:`}</p>
               <p className="">{`${
                 pl?.value && pl.value < 0 ? "-" : ""
-              }$${Math.abs(pl?.value || 0)}`}</p>
+              }$${Math.abs(Number(pl?.value) || 0)}`}</p>
             </div>
           ))}
         </div>
@@ -95,6 +98,54 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
     );
   };
 
+  const CustomSummaryLegend = ({ payload }: TooltipInnerProps) => {
+    return (
+      <ul
+        className={`grid 
+        ${summaryLines.length > 2 ? "grid-cols-2" : "grid-cols-1"} 
+        ${
+          summaryLines.length === 4
+            ? "sm:grid-cols-4"
+            : summaryLines.length === 3
+            ? "sm:grid-cols-3"
+            : summaryLines.length === 2
+            ? "sm:grid-cols-2"
+            : "sm:grid-cols-1"
+        } 
+        gap-2 items-center justify-center sm:w-3/4 mx-auto`}
+      >
+        {payload &&
+          payload.map((entry, index) => (
+            <li
+              key={index}
+              className={`flex flex-row items-center ${
+                summaryLines.length === 1
+                  ? "justify-center"
+                  : index % 2 === 0
+                  ? "justify-end"
+                  : "justify-start"
+              } sm:justify-center`}
+            >
+              <div
+                style={{
+                  background:
+                    entry.value === "income"
+                      ? "rgba(74, 222, 128, 0.75)"
+                      : entry.value === "expense"
+                      ? "rgba(248, 113, 113, 0.75)"
+                      : entry.value === "savings"
+                      ? "rgba(250, 204, 21, 0.75)"
+                      : "rgba(78, 176, 241, 0.75)",
+                }}
+                className="mr-1 h-4 w-4 rounded"
+              />
+              <p className="text-white">{entry.value}</p>
+            </li>
+          ))}
+      </ul>
+    );
+  };
+
   const barHeight = 450;
 
   return (
@@ -119,6 +170,9 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
               <XAxis tickFormatter={xAxisTick} dataKey="name" />
               <YAxis tickFormatter={yAxisTick} />
               <ReferenceLine y={0} stroke="#000" />
+              {recordPath === "summary" && (
+                <Legend content={<CustomSummaryLegend />} />
+              )}
               <Tooltip
                 cursor={{ fill: "transparent" }}
                 wrapperStyle={{ outline: "none" }}
@@ -132,7 +186,9 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
                         key={i}
                         dataKey={key}
                         opacity="80%"
-                        stackId={summaryExpensesNegative ? "a" : key}
+                        stackId={
+                          summaryExpensesNegative && key !== "cash" ? "a" : key
+                        }
                         onMouseOut={() => setHoverIndex(null)}
                         onMouseOver={(_, index) => {
                           onHover(null, index);
@@ -150,6 +206,8 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
                                 ? "rgba(248, 113, 113, 0.75)"
                                 : key === "savings"
                                 ? "rgba(250, 204, 21, 0.75)"
+                                : key === "cash"
+                                ? "rgba(78, 176, 241, 0.75)"
                                 : COLORS[i % COLORS.length]
                             }
                           />

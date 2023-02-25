@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { capitalize, months } from "../../../helpers/strings";
 import { useReduxSelector } from "../../useRedux";
 import { IncomeType } from "../../../models/Income";
-import { selectDate } from "../../../redux/dateSlice";
-import { selectIncome } from "../../../redux/incomeSlice";
+import { selectDate } from "../../../redux/date";
+import { selectIncome } from "../../../redux/income";
 import { Datum } from "../../../components/elements/charts/types";
 import { ExpenseType } from "../../../models/Expense";
-import { selectExpense } from "../../../redux/expenseSlice";
+import { selectExpense } from "../../../redux/expense";
 import { filterByTimeframe } from "../filters";
 import { sortExpensesByColumn, sortIncomesByColumn } from "../sorters";
 

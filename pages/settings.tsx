@@ -5,13 +5,15 @@ import SettingsContent from "../components/pages/Settings";
 import useUser from "../hooks/useUser";
 import { useEffect } from "react";
 import { useReduxDispatch } from "../hooks/useRedux";
-import { getInitialCatalog } from "../redux/catalogSlice";
+import { getInitialCatalog } from "../redux/catalog";
+import { getInitialPreferences } from "../redux/preferences";
 
 const Settings: NextPage = () => {
   const { user } = useUser({});
   const dispatch = useReduxDispatch();
   useEffect(() => {
     dispatch(getInitialCatalog());
+    dispatch(getInitialPreferences());
   }, []);
 
   return (
