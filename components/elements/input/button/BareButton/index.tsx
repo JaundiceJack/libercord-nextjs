@@ -19,12 +19,14 @@ const BareButton: FC<BareButtonProps> = ({
       type={type}
       onClick={onClick}
       className={`relative flex items-center justify-center
-        h-10 w-full font-jose font-semibold text-lg
-        focus:outline-none ${BtnCSS.bareButton} ${
-        disabled
-          ? `cursor-not-allowed ${BtnCSS["button-gray"]}`
-          : `cursor-pointer ${BtnCSS[`button-${color}`]}`
-      } ${className}`}
+        h-10 w-full font-semibold focus:outline-none 
+        ${BtnCSS.bareButton} 
+        ${
+          disabled
+            ? `cursor-not-allowed ${BtnCSS["button-gray"]}`
+            : `cursor-pointer ${BtnCSS[`button-${color}`]}`
+        } 
+        ${className}`}
       disabled={disabled}
       title={title}
     >

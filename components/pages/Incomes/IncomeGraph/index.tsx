@@ -1,12 +1,12 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
-import { selectIncome } from "../../../../redux/incomeSlice";
+import { selectIncome, setIncomeChartType } from "../../../../redux/income";
 import EmptyListMessage from "../../../elements/misc/emptyListMessage";
 import PieChart from "../../../elements/charts/Pie";
 import BarChart from "../../../elements/charts/Bar";
 import Legend from "../../../elements/charts/Legend";
 import Options from "../../../elements/charts/Options";
-import { selectDate } from "../../../../redux/dateSlice";
+import { selectDate } from "../../../../redux/date";
 import { capitalize, months } from "../../../../helpers/strings";
 import type { Datum } from "../../../elements/charts/types";
 import useChartData from "../../../../hooks/useData/useChartData";
@@ -17,16 +17,13 @@ import GraphLegendBox from "../../../elements/containers/GraphLegendBox";
 import GraphBox from "../../../elements/containers/GraphBox";
 import LineChart from "../../../elements/charts/Line";
 import RadarChart from "../../../elements/charts/Radar";
+import { selectPreferences } from "../../../../redux/preferences";
 
 const IncomeGraph: FC = () => {
-  const {
-    incomes,
-    incomeChartMode,
-    incomeDistributionChartType,
-    incomeSequentialChartType,
-    incomeViewBy,
-  } = useReduxSelector(selectIncome);
+  const { incomes, incomeChartType, incomeViewBy } =
+    useReduxSelector(selectIncome);
   const { date, dataTimeframe } = useReduxSelector(selectDate);
+  const { defaultIncomeChartType } = useReduxSelector(selectPreferences);
   const [activeIndex, setActiveIndex] = useState(0);
   const onHover = (data: Datum | null, index: number) => {
     setActiveIndex(index);
@@ -51,7 +48,7 @@ const IncomeGraph: FC = () => {
   const pieData = incomeViewBy === "category" ? categoryData : sourceData;
 
   const legendData =
-    incomeChartMode === "distribution"
+    incomeChartType === "pie" || incomeChartType === "radar"
       ? incomeViewBy === "category"
         ? categoryData
         : sourceData
@@ -64,7 +61,7 @@ const IncomeGraph: FC = () => {
       : sourceData;
 
   const legendTitle =
-    incomeChartMode === "distribution"
+    incomeChartType === "pie" || incomeChartType === "radar"
       ? incomeViewBy === "category"
         ? "Categories"
         : "Sources"
@@ -73,6 +70,11 @@ const IncomeGraph: FC = () => {
       : dataTimeframe === "year"
       ? date.getFullYear().toString()
       : capitalize(months[date.getMonth()]);
+
+  const dispatch = useReduxDispatch();
+  useEffect(() => {
+    dispatch(setIncomeChartType(defaultIncomeChartType));
+  }, []);
 
   return (
     <ContentWindow>
@@ -84,21 +86,19 @@ const IncomeGraph: FC = () => {
             <Options />
           </GraphOptionsBox>
           <GraphBox>
-            {incomeChartMode === "distribution" ? (
-              incomeDistributionChartType === "pie" ? (
-                <PieChart
-                  data={pieData}
-                  activeIndex={activeIndex}
-                  onHover={onHover}
-                />
-              ) : (
-                <RadarChart
-                  data={pieData}
-                  activeIndex={activeIndex}
-                  onHover={onHover}
-                />
-              )
-            ) : incomeSequentialChartType === "line" ? (
+            {incomeChartType === "pie" ? (
+              <PieChart
+                data={pieData}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            ) : incomeChartType === "radar" ? (
+              <RadarChart
+                data={pieData}
+                activeIndex={activeIndex}
+                onHover={onHover}
+              />
+            ) : incomeChartType === "line" ? (
               <LineChart
                 data={barData}
                 activeIndex={activeIndex}

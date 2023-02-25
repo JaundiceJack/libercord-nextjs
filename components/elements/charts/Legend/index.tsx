@@ -1,7 +1,7 @@
 import { createRef, FC, RefObject, useEffect, useRef, useState } from "react";
 import { useReduxSelector } from "../../../../hooks/useRedux";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { selectDate } from "../../../../redux/dateSlice";
+import { selectDate } from "../../../../redux/date";
 import { Datum } from "../types";
 import Item from "./Item";
 import Title from "./Title";

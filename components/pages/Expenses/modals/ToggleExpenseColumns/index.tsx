@@ -6,7 +6,7 @@ import {
 import {
   selectExpense,
   toggleExpenseColumn,
-} from "../../../../../redux/expenseSlice";
+} from "../../../../../redux/expense";
 import Modal from "../../../../elements/containers/Modal";
 import type { ToggleProps } from "../../../../elements/containers/Modal/types";
 import Checkbox from "../../../../elements/input/form/Checkbox";

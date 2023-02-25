@@ -31,11 +31,7 @@ export const defaultExpenseCategory = (
 export const defaultIncomeCategory = (
   catalog: CatalogType | null,
   selected?: IncomeType
-) => {
-  console.log("cats:", catalog?.income?.categories);
-  console.log("seld:", selected?.category);
-  return selected?.category || catalog?.income?.categories[0] || "";
-};
+) => selected?.category || catalog?.income?.categories[0] || "";
 
 export const defaultLocation = (
   catalog: CatalogType | null,

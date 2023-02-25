@@ -11,6 +11,7 @@ const Login: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [initialSavings, setInitialSavings] = useState("");
 
   return (
     <div className="flex flex-col w-80 sm:w-120 md:w-136">
@@ -45,6 +46,10 @@ const Login: FC = () => {
               setPassword={(e) => setPassword(e.currentTarget.value)}
               confirm={confirm}
               setConfirm={(e) => setConfirm(e.currentTarget.value)}
+              initialSavings={initialSavings}
+              setInitialSavings={(e) =>
+                setInitialSavings(e.currentTarget.value)
+              }
             />
           )}
         </>

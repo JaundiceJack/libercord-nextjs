@@ -1,6 +1,5 @@
-import dbConnect from "../../mongo/dbConnect";
-import { Types } from "mongoose";
 import Expense, { ExpenseType } from "../../models/Expense";
+import dbConnect from "../../mongo/dbConnect";
 import type { UserIdProp } from "../types";
 import type { CreateExpense, EditExpense, RemoveExpense } from "./types";
 

@@ -13,13 +13,13 @@ import {
   toggleAddExpenseModal,
   toggleDeleteExpenseModal,
   toggleEditExpenseModal,
-} from "../../../../../redux/expenseSlice";
+} from "../../../../../redux/expense";
 import {
   selectIncome,
   toggleAddIncomeModal,
   toggleDeleteIncomeModal,
   toggleEditIncomeModal,
-} from "../../../../../redux/incomeSlice";
+} from "../../../../../redux/income";
 import ItemOptionButton from "../../../input/button/ItemOptionButton";
 
 const ItemOptions: FC = () => {

@@ -1,13 +1,12 @@
 // The Catalog document contains user-created options for select-elements
 
-import { Schema, Types, model, models } from "mongoose";
+import { Schema, Types, model, models, Document } from "mongoose";
 
 /* While it increases the chance that I can accidentally try to save to a DB 
 field that doesn't exist, defining the catalog by shape allows me to access
 the arrays by less specific indices, like catalog[section][field] in TS. */
-interface CatalogDetails {
+interface CatalogDetails extends Document {
   user: Types.ObjectId;
-  save?: () => Promise<CatalogType>;
 }
 interface CatalogShape {
   [key: string]: {

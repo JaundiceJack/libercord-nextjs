@@ -5,5 +5,13 @@ export type Currencies = "$" | "₿" | "€" | "₱" | "¥";
 
 export type TradeType = ExpenseType | IncomeType;
 
-export type SequentialChartPreference = "line" | "bar" | "area";
-export type DistributionChartPreference = "pie" | "tree" | "radar";
+type SequentialChartOptions = "line" | "bar";
+type DistributionChartOptions = "pie" | "radar";
+
+export type SummaryChartTypeOption = SequentialChartOptions;
+export type IncomeChartTypeOption =
+  | SequentialChartOptions
+  | DistributionChartOptions;
+export type ExpenseChartTypeOption =
+  | SequentialChartOptions
+  | DistributionChartOptions;

@@ -4,7 +4,6 @@ import usePath from "../../../../hooks/usePath";
 import BgCSS from "../../../../styles/Background.module.css";
 import CatalogOption from "./CatalogOption";
 import ChartOption from "./ChartOption";
-import ModeOption from "./ModeOption";
 import NegateExpensesOption from "./NegateExpensesOption";
 import Title from "./Title";
 
@@ -13,7 +12,6 @@ const Options: FC = () => {
   return (
     <div className={`flex flex-col w-full h-full ${BgCSS.sidebar}`}>
       <Title title={capitalize(dataType)} />
-      <ModeOption />
       <ChartOption />
       <CatalogOption />
       <NegateExpensesOption />

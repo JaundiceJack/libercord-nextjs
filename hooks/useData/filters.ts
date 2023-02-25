@@ -1,6 +1,6 @@
 import { isSameMonth, isSameYear } from "date-fns";
 import { TradeType } from "../../models/types";
-import { Timeframe } from "../../redux/dateSlice";
+import { Timeframe } from "../../redux/types";
 
 // Limit trade data to the currently selected dataTimeframe
 export const filterByTimeframe =

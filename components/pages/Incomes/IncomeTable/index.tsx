@@ -1,21 +1,20 @@
-import { FC, useEffect, useState } from "react";
-import ListWindow from "../../../elements/containers/ListWindow";
-import type { ListWindowColumn } from "../../../elements/containers/ListWindow/types";
-import Spinner from "../../../elements/misc/spinner";
-import Message from "../../../elements/misc/message";
-import EmptyListMessage from "../../../elements/misc/emptyListMessage";
+import { FC, useEffect } from "react";
+import useListData from "../../../../hooks/useData/useListData";
 import { useReduxDispatch, useReduxSelector } from "../../../../hooks/useRedux";
 import {
   pickIncome,
   selectIncome,
+  setIncomeColumns,
   setIncomeSortBy,
-  IncomeSortOption,
-} from "../../../../redux/incomeSlice";
-import type { IncomeType } from "../../../../models/Income";
-import { isSameYear, isSameMonth } from "date-fns";
-import { selectDate } from "../../../../redux/dateSlice";
-import useListData from "../../../../hooks/useData/useListData";
+} from "../../../../redux/income";
+import { selectPreferences } from "../../../../redux/preferences";
+import { IncomeSortOption } from "../../../../redux/types";
 import ContentWindow from "../../../elements/containers/ContentWindow";
+import ListWindow from "../../../elements/containers/ListWindow";
+import type { ListWindowColumn } from "../../../elements/containers/ListWindow/types";
+import EmptyListMessage from "../../../elements/misc/emptyListMessage";
+import Message from "../../../elements/misc/message";
+import Spinner from "../../../elements/misc/spinner";
 
 const IncomeTable: FC = () => {
   // Get redux stuff for incomes
@@ -29,6 +28,11 @@ const IncomeTable: FC = () => {
     incomeSortDir,
     incomeColumns,
   } = useReduxSelector(selectIncome);
+
+  const { defaultIncomeColumns } = useReduxSelector(selectPreferences);
+  useEffect(() => {
+    dispatch(setIncomeColumns(defaultIncomeColumns));
+  }, []);
 
   const { sortedIncomes } = useListData();
 

@@ -6,7 +6,7 @@ import {
   toggleDeleteExpenseModal,
   toggleEditExpenseModal,
   toggleExpenseColumnModal,
-} from "../../../redux/expenseSlice";
+} from "../../../redux/expense";
 import DataWindow from "../../elements/containers/DataWindow";
 import PageWindow from "../../elements/containers/PageWindow";
 import ExpenseGraph from "./ExpenseGraph";

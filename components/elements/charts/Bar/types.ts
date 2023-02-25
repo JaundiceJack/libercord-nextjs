@@ -9,7 +9,7 @@ export type BarInnerProps = {
 
 export interface PayloadType {
   name?: string;
-  value?: number;
+  value?: string | number;
 }
 
 export type TooltipInnerProps = {

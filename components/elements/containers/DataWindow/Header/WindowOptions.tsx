@@ -4,14 +4,8 @@ import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import {
-  selectExpense,
-  setExpenseWindow,
-} from "../../../../../redux/expenseSlice";
-import {
-  selectIncome,
-  setIncomeWindow,
-} from "../../../../../redux/incomeSlice";
+import { selectExpense, setExpenseWindow } from "../../../../../redux/expense";
+import { selectIncome, setIncomeWindow } from "../../../../../redux/income";
 import HeaderButton from "../../../input/button/HeaderButton";
 
 const WindowOptions: FC = () => {

@@ -5,14 +5,8 @@ import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import {
-  selectExpense,
-  setExpenseViewBy,
-} from "../../../../../redux/expenseSlice";
-import {
-  selectIncome,
-  setIncomeViewBy,
-} from "../../../../../redux/incomeSlice";
+import { selectExpense, setExpenseViewBy } from "../../../../../redux/expense";
+import { selectIncome, setIncomeViewBy } from "../../../../../redux/income";
 import {
   ExpenseViewByOption,
   IncomeViewByOption,
@@ -21,46 +15,48 @@ import GraphOptionToggle from "../../../input/button/GraphOptionToggle";
 
 const CatalogOption: FC = () => {
   const dispatch = useReduxDispatch();
-  const { incomeChartMode, incomeDistributionChartType, incomeViewBy } =
-    useReduxSelector(selectIncome);
-  const { expenseChartMode, expenseDistributionChartType, expenseViewBy } =
-    useReduxSelector(selectExpense);
+  const { incomeChartType, incomeViewBy } = useReduxSelector(selectIncome);
+  const { expenseChartType, expenseViewBy } = useReduxSelector(selectExpense);
 
   const { recordPath: dataType } = usePath();
 
+  const condi1 =
+    dataType === "income" &&
+    (incomeChartType === "pie" || incomeChartType === "radar");
+  const condi2 =
+    dataType === "expenses" &&
+    (expenseChartType === "pie" || expenseChartType === "radar");
+
   return (
     <>
-      {((dataType === "income" && incomeChartMode === "distribution") ||
-        (dataType === "expenses" && expenseChartMode === "distribution")) && (
-        <>
-          <GraphOptionToggle
-            className="my-2"
-            label="View"
-            selected={
-              dataType === "income"
-                ? capitalize(incomeViewBy)
-                : capitalize(expenseViewBy)
-            }
-            options={
-              dataType === "income"
-                ? ["Source", "Category"]
-                : ["Location", "Category"]
-            }
-            toggleOption={(option: string) => {
-              dataType == "income"
-                ? dispatch(
-                    setIncomeViewBy(
-                      option.toLocaleLowerCase() as IncomeViewByOption
-                    )
+      {(condi1 || condi2) && (
+        <GraphOptionToggle
+          className="my-2"
+          label="View"
+          selected={
+            dataType === "income"
+              ? capitalize(incomeViewBy)
+              : capitalize(expenseViewBy)
+          }
+          options={
+            dataType === "income"
+              ? ["Source", "Category"]
+              : ["Location", "Category"]
+          }
+          toggleOption={(option: string) => {
+            dataType == "income"
+              ? dispatch(
+                  setIncomeViewBy(
+                    option.toLocaleLowerCase() as IncomeViewByOption
                   )
-                : dispatch(
-                    setExpenseViewBy(
-                      option.toLocaleLowerCase() as ExpenseViewByOption
-                    )
-                  );
-            }}
-          />
-        </>
+                )
+              : dispatch(
+                  setExpenseViewBy(
+                    option.toLocaleLowerCase() as ExpenseViewByOption
+                  )
+                );
+          }}
+        />
       )}
     </>
   );

@@ -5,9 +5,10 @@ import PageLayout from "../../components/PageLayout";
 import SummaryContent from "../../components/pages/Summary";
 import { useReduxDispatch } from "../../hooks/useRedux";
 import useUser from "../../hooks/useUser";
-import { setTimeframe } from "../../redux/dateSlice";
-import { getInitialExpenses } from "../../redux/expenseSlice";
-import { getInitialIncomes } from "../../redux/incomeSlice";
+import { setTimeframe } from "../../redux/date";
+import { getInitialExpenses } from "../../redux/expense";
+import { getInitialIncomes } from "../../redux/income";
+import { getInitialPreferences } from "../../redux/preferences";
 
 const Summary: NextPage = () => {
   const { user } = useUser({});
@@ -15,6 +16,7 @@ const Summary: NextPage = () => {
   useEffect(() => {
     dispatch(getInitialIncomes());
     dispatch(getInitialExpenses());
+    dispatch(getInitialPreferences());
     dispatch(setTimeframe("year"));
   }, []);
 

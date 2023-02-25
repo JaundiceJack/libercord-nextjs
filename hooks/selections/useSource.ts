@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useErrMsgs from "../../hooks/useErrMsgs";
 import { useReduxDispatch } from "../../hooks/useRedux";
-import { addItemToCatalog } from "../../redux/catalogSlice";
+import { addItemToCatalog } from "../../redux/catalog";
 import { errString } from "../../helpers/errors";
 import { CatalogType } from "../../models/Catalog";
 import { defaultOption } from "../../helpers/defaults/fields";

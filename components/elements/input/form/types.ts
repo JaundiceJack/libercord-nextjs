@@ -3,7 +3,7 @@ import { SelectItem } from "@mantine/core";
 interface CommonTypes {
   label?: string;
   labelColor?: string;
-  value: string;
+  value: string | number | undefined;
   name: string;
   className?: string;
   required?: boolean;

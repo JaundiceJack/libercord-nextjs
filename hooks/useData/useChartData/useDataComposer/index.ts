@@ -1,12 +1,17 @@
+import { getYear } from "date-fns";
 import type { Datum } from "../../../../components/elements/charts/types";
 import { capitalize, months } from "../../../../helpers/strings";
 import type { ExpenseType } from "../../../../models/Expense";
 import type { IncomeType } from "../../../../models/Income";
-import { selectExpense } from "../../../../redux/expenseSlice";
-import { selectIncome } from "../../../../redux/incomeSlice";
+import { TradeType } from "../../../../models/types";
+import { selectDate } from "../../../../redux/date";
+import { selectExpense } from "../../../../redux/expense";
+import { selectIncome } from "../../../../redux/income";
+import { selectPreferences } from "../../../../redux/preferences";
+import { selectSummary } from "../../../../redux/summary";
 import { useReduxSelector } from "../../../useRedux";
-import useUniqueData from "./useUniqueData";
 import { sortDataAlphabetically, sortDataByValue } from "../../sorters";
+import { totalValue } from "./totalReducers";
 import {
   totalValueAllExpenses,
   totalValueAllIncomes,
@@ -15,7 +20,7 @@ import {
   totalValueByMonth,
   totalValueByYear,
 } from "./totalValues";
-import { selectSummary } from "../../../../redux/summarySlice";
+import useUniqueData from "./useUniqueData";
 
 const useDataComposer = ({
   incomes,
@@ -25,6 +30,27 @@ const useDataComposer = ({
   expenses: ExpenseType[];
 }) => {
   const { summaryLines } = useReduxSelector(selectSummary);
+  const { initialSavings, preferencesLoading } =
+    useReduxSelector(selectPreferences);
+  const { incomes: allIncomes } = useReduxSelector(selectIncome);
+  const { expenses: allExpenses } = useReduxSelector(selectExpense);
+  const { date } = useReduxSelector(selectDate);
+
+  console.log("loading prefs:", preferencesLoading);
+
+  const filterByOccursBefore =
+    (year: number, month?: number) => (trade: TradeType, i: number) =>
+      new Date(trade?.date) < new Date(year, month || 0);
+
+  const totalTillMonth = (year: number, month?: number) => {
+    const incomesTillMonth = allIncomes
+      .filter(filterByOccursBefore(year, month))
+      .reduce(totalValue, 0);
+    const expensesTillMonth = allExpenses
+      .filter(filterByOccursBefore(year, month))
+      .reduce(totalValue, 0);
+    return incomesTillMonth - expensesTillMonth;
+  };
 
   // Arrays of the unique fields and years found in the data
   const {
@@ -197,6 +223,9 @@ const useDataComposer = ({
       savings: summaryLines.includes("savings")
         ? savingsMonthlyData[index]?.value
         : undefined,
+      cash: summaryLines.includes("cash")
+        ? initialSavings + totalTillMonth(getYear(date), index)
+        : undefined,
     }));
 
   const summaryByYear = ({
@@ -219,6 +248,9 @@ const useDataComposer = ({
         : undefined,
       savings: summaryLines.includes("savings")
         ? savingsYearlyData[index]?.value
+        : undefined,
+      cash: summaryLines.includes("cash")
+        ? initialSavings + totalTillMonth(year)
         : undefined,
     }));
 

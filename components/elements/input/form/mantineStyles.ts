@@ -35,7 +35,6 @@ export const mantineStyles = ({
       gridTemplateColumns: hasLabel
         ? `${labelWidth} ${inputWidth}`
         : inputWidth,
-      alignItems: "end",
     },
   };
   return styles;

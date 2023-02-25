@@ -4,7 +4,7 @@ import {
   useReduxDispatch,
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
-import { selectDate, setTimeframe } from "../../../../../redux/dateSlice";
+import { selectDate, setTimeframe } from "../../../../../redux/date";
 import HeaderButton from "../../../input/button/HeaderButton";
 
 const TimeframeOptions: FC = () => {

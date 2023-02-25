@@ -5,14 +5,16 @@ import IncomePage from "../../components/pages/Incomes";
 import useUser from "../../hooks/useUser";
 import { useEffect } from "react";
 import { useReduxDispatch } from "../../hooks/useRedux";
-import { getInitialIncomes } from "../../redux/incomeSlice";
-import { getInitialCatalog } from "../../redux/catalogSlice";
+import { getInitialIncomes } from "../../redux/income";
+import { getInitialCatalog } from "../../redux/catalog";
+import { getInitialPreferences } from "../../redux/preferences";
 
 const Income: NextPage = () => {
   const { user } = useUser({});
   const dispatch = useReduxDispatch();
   useEffect(() => {
     dispatch(getInitialIncomes());
+    dispatch(getInitialPreferences());
     dispatch(getInitialCatalog());
   }, []);
 

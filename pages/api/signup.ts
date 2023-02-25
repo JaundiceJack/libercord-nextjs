@@ -5,9 +5,11 @@ import { setLoginSession } from "../../passport/session";
 
 const signup = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const body = JSON.parse(req.body);
     const user = await createUser({
-      email: req.body.email,
-      password: req.body.password,
+      email: body.email,
+      password: body.password,
+      initialSavings: body.initialSavings,
     });
     await setLoginSession(res, user);
     res.status(200).send({ done: true });

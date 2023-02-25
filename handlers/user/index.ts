@@ -1,12 +1,13 @@
-import dbConnect from "../../mongo/dbConnect";
 import User, { UserType } from "../../models/User";
-import { createDefaultCatalog } from "../catalog";
+import dbConnect from "../../mongo/dbConnect";
+import { createDefaultCatalog, createDefaultPreferences } from "../defaults";
 import type { CreateUser, FindUser, ValidateUser } from "./types";
 
 // Make a new user and return them with private info filtered out
 export const createUser = async ({
   email,
   password,
+  initialSavings,
 }: CreateUser): Promise<UserType> => {
   try {
     // Validate credentials
@@ -20,8 +21,9 @@ export const createUser = async ({
     if (!existingUser) {
       const newUser = await User.create({ email, password });
       if (newUser) {
-        // Create a default option catalog for the new user
-        await createDefaultCatalog(newUser._id);
+        // Create a default option catalog & preferences for the new user
+        await createDefaultCatalog({ user: newUser._id });
+        await createDefaultPreferences({ user: newUser._id, initialSavings });
         return {
           _id: newUser._id,
           email: newUser.email,

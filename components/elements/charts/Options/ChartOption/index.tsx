@@ -6,47 +6,32 @@ import {
   useReduxSelector,
 } from "../../../../../hooks/useRedux";
 import {
-  selectExpense,
-  setExpenseChartMode,
-  setExpenseDistributionChartType,
-  setExpenseSequentialChartType,
-} from "../../../../../redux/expenseSlice";
+  IncomeChartTypeOption,
+  ExpenseChartTypeOption,
+  SummaryChartTypeOption,
+} from "../../../../../models/types";
 import {
-  selectIncome,
-  setIncomeChartMode,
-  setIncomeDistributionChartType,
-  setIncomeSequentialChartType,
-} from "../../../../../redux/incomeSlice";
+  selectExpense,
+  setExpenseChartType,
+} from "../../../../../redux/expense";
+import { selectIncome, setIncomeChartType } from "../../../../../redux/income";
 import {
   selectSummary,
-  setSummarySequentialChartType,
-} from "../../../../../redux/summarySlice";
-import {
-  DistributionChartOption,
-  SequentialChartOption,
-} from "../../../../../redux/types";
-import GraphOptionButton from "../../../input/button/GraphOptionButton";
+  setSummaryChartType,
+} from "../../../../../redux/summary";
 import GraphOptionToggle from "../../../input/button/GraphOptionToggle";
 import OptionHR from "../OptionHR";
 
 const ChartOption: FC = () => {
   const dispatch = useReduxDispatch();
-  const {
-    incomeChartMode,
-    incomeSequentialChartType,
-    incomeDistributionChartType,
-  } = useReduxSelector(selectIncome);
-  const {
-    expenseChartMode,
-    expenseSequentialChartType,
-    expenseDistributionChartType,
-  } = useReduxSelector(selectExpense);
-  const { summarySequentialChartType } = useReduxSelector(selectSummary);
+  const { incomeChartType } = useReduxSelector(selectIncome);
+  const { expenseChartType } = useReduxSelector(selectExpense);
+  const { summaryChartType } = useReduxSelector(selectSummary);
 
   const { recordPath: dataType } = usePath();
 
-  const sequentialCharts = ["Line", "Bar"]; // ["Line", "Bar", "Area"];
-  const distributionCharts = ["Pie", "Radar"]; // ["Pie", "Radar", "Tree"];
+  const tradeCharts = ["Line", "Bar", "Pie", "Radar"];
+  const summaryCharts = ["Line", "Bar"];
 
   return (
     <>
@@ -55,64 +40,46 @@ const ChartOption: FC = () => {
         label="Chart"
         selected={
           dataType === "income"
-            ? incomeChartMode === "sequential"
-              ? capitalize(incomeSequentialChartType)
-              : capitalize(incomeDistributionChartType)
+            ? capitalize(incomeChartType)
             : dataType === "expenses"
-            ? expenseChartMode === "sequential"
-              ? capitalize(expenseSequentialChartType)
-              : capitalize(expenseDistributionChartType)
-            : capitalize(summarySequentialChartType)
+            ? capitalize(expenseChartType)
+            : capitalize(summaryChartType)
         }
         options={
-          dataType === "income"
-            ? incomeChartMode === "sequential"
-              ? sequentialCharts
-              : distributionCharts
-            : dataType === "expenses"
-            ? expenseChartMode === "sequential"
-              ? sequentialCharts
-              : distributionCharts
-            : sequentialCharts
+          dataType === "income" || dataType === "expenses"
+            ? tradeCharts
+            : summaryCharts
         }
         toggleOption={(type: string) =>
           dataType === "income"
-            ? incomeChartMode === "sequential"
-              ? dispatch(
-                  setIncomeSequentialChartType(
-                    type.toLocaleLowerCase() as SequentialChartOption
-                  )
+            ? dispatch(
+                setIncomeChartType(
+                  type.toLocaleLowerCase() as IncomeChartTypeOption
                 )
-              : dispatch(
-                  setIncomeDistributionChartType(
-                    type.toLocaleLowerCase() as DistributionChartOption
-                  )
-                )
+              )
             : dataType === "expenses"
-            ? expenseChartMode === "sequential"
-              ? dispatch(
-                  setExpenseSequentialChartType(
-                    type.toLocaleLowerCase() as SequentialChartOption
-                  )
+            ? dispatch(
+                setExpenseChartType(
+                  type.toLocaleLowerCase() as ExpenseChartTypeOption
                 )
-              : dispatch(
-                  setExpenseDistributionChartType(
-                    type.toLocaleLowerCase() as DistributionChartOption
-                  )
-                )
+              )
             : dispatch(
-                setSummarySequentialChartType(
-                  type.toLocaleLowerCase() as SequentialChartOption
+                setSummaryChartType(
+                  type.toLocaleLowerCase() as SummaryChartTypeOption
                 )
               )
         }
       />
-      {dataType === "income" ? (
-        incomeChartMode === "distribution" && <OptionHR follows={false} />
-      ) : dataType === "expenses" ? (
-        expenseChartMode === "distribution" && <OptionHR follows={false} />
-      ) : (
+      {dataType === "summary" ? (
         <OptionHR />
+      ) : dataType === "income" &&
+        (incomeChartType === "pie" || incomeChartType === "radar") ? (
+        <OptionHR />
+      ) : (
+        dataType === "expenses" &&
+        (expenseChartType === "pie" || expenseChartType === "radar") && (
+          <OptionHR />
+        )
       )}
     </>
   );

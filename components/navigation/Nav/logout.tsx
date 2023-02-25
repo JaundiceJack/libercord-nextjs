@@ -2,10 +2,10 @@ import { FC } from "react";
 import NavLink from "./navlink";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { useReduxDispatch } from "../../../hooks/useRedux";
-import { resetIncome } from "../../../redux/incomeSlice";
-import { resetCatalog } from "../../../redux/catalogSlice";
-import { resetDate } from "../../../redux/dateSlice";
-import { resetExpense } from "../../../redux/expenseSlice";
+import { resetIncome } from "../../../redux/income";
+import { resetCatalog } from "../../../redux/catalog";
+import { resetDate } from "../../../redux/date";
+import { resetExpense } from "../../../redux/expense";
 
 const Logout: FC = () => {
   const dispatch = useReduxDispatch();

@@ -6,6 +6,7 @@ export type Datum = {
   income?: number;
   expense?: number;
   savings?: number;
+  cash?: number;
 };
 
 export type ChartProps = {
