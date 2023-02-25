@@ -1,5 +1,6 @@
 import Expense, { ExpenseType } from "../../models/Expense";
 import dbConnect from "../../mongo/dbConnect";
+import { EditOption, RemoveOption } from "../catalog/types";
 import type { UserIdProp } from "../types";
 import type { CreateExpense, EditExpense, RemoveExpense } from "./types";
 
@@ -20,16 +21,13 @@ export const getExpensesByUserId = async ({
 };
 
 // Return the user's expenses with the new one inserted
-export const createExpense = async ({
-  user,
-  expense,
-}: CreateExpense): Promise<ExpenseType[]> => {
+export const createExpense = async ({ user, expense }: CreateExpense) => {
   try {
     if (user) {
       // TODO: Validate the expense
       // Connect to the db and try to save the new expense under the user id
       await dbConnect();
-      const userExpense: ExpenseType = {
+      const userExpense = {
         user,
         ...expense,
       };
@@ -86,4 +84,45 @@ export const removeExpense = async ({
   } catch (e) {
     throw e;
   }
+};
+
+export const editExpenseFieldsAfterCatalogModified = async ({
+  user,
+  field,
+  oldItem,
+  newItem,
+}: Omit<EditOption, "section">) => {
+  const expenses = await Expense.find<ExpenseType>({ user });
+  if (!expenses) return;
+  expenses.forEach(async (expense) => {
+    let modified = false;
+    if (field === "locations" && expense.location === oldItem) {
+      expense.location = newItem;
+      modified = true;
+    } else if (field === "categories" && expense.category === oldItem) {
+      expense.category = newItem;
+      modified = true;
+    }
+    if (modified) await expense.save();
+  });
+};
+
+export const defaultExpenseFieldsAfterCatalogModified = async ({
+  user,
+  field,
+  item,
+}: Omit<RemoveOption, "section">) => {
+  const expenses = await Expense.find<ExpenseType>({ user });
+  if (!expenses) return;
+  expenses.forEach(async (expense) => {
+    let modified = false;
+    if (field === "locations" && expense.location === item) {
+      expense.location = "n/a";
+      modified = true;
+    } else if (field === "categories" && expense.category === item) {
+      expense.category = "n/a";
+      modified = true;
+    }
+    if (modified) await expense.save();
+  });
 };

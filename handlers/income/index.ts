@@ -1,5 +1,6 @@
 import Income, { IncomeType } from "../../models/Income";
 import dbConnect from "../../mongo/dbConnect";
+import { EditOption, RemoveOption } from "../catalog/types";
 import type { UserIdProp } from "../types";
 import type { CreateIncome, EditIncome, RemoveIncome } from "./types";
 
@@ -29,7 +30,7 @@ export const createIncome = async ({
       // TODO: Validate the income
       // Connect to the db and try to save the new income under the user id
       await dbConnect();
-      const userIncome: IncomeType = {
+      const userIncome = {
         user,
         ...income,
       };
@@ -86,4 +87,45 @@ export const removeIncome = async ({
   } catch (e) {
     throw e;
   }
+};
+
+export const editIncomeFieldsAfterCatalogModified = async ({
+  user,
+  field,
+  oldItem,
+  newItem,
+}: Omit<EditOption, "section">) => {
+  const incomes = await Income.find<IncomeType>({ user });
+  if (!incomes) return;
+  incomes.forEach(async (income) => {
+    let modified = false;
+    if (field === "sources" && income.source === oldItem) {
+      income.source = newItem;
+      modified = true;
+    } else if (field === "categories" && income.category === oldItem) {
+      income.category = newItem;
+      modified = true;
+    }
+    if (modified) await income.save();
+  });
+};
+
+export const defaultIncomeFieldsAfterCatalogModified = async ({
+  user,
+  field,
+  item,
+}: Omit<RemoveOption, "section">) => {
+  const incomes = await Income.find<IncomeType>({ user });
+  if (!incomes) return;
+  incomes.forEach(async (income) => {
+    let modified = false;
+    if (field === "sources" && income.source === item) {
+      income.source = "n/a";
+      modified = true;
+    } else if (field === "categories" && income.category === item) {
+      income.category = "n/a";
+      modified = true;
+    }
+    if (modified) await income.save();
+  });
 };

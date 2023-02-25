@@ -1,6 +1,14 @@
 import Catalog, { CatalogType } from "../../models/Catalog";
 import dbConnect from "../../mongo/dbConnect";
 import { createDefaultCatalog } from "../defaults";
+import {
+  defaultExpenseFieldsAfterCatalogModified,
+  editExpenseFieldsAfterCatalogModified,
+} from "../expense";
+import {
+  defaultIncomeFieldsAfterCatalogModified,
+  editIncomeFieldsAfterCatalogModified,
+} from "../income";
 import type { UserIdProp } from "../types";
 import type {
   CreateOption,
@@ -15,7 +23,7 @@ const getCatalog = async ({ user }: UserIdProp) => {
   else return createDefaultCatalog({ user }); // Create catalog if not found
 };
 
-const _saveCatalogItem = async ({
+const saveCatalogItem = async ({
   catalog,
   section,
   field,
@@ -56,7 +64,7 @@ const makeCatalogItem = async ({
     (await createDefaultCatalog({ user }));
   if (!catalog) throw new Error("Catalog Error: No user catalog found.");
 
-  const saved = await _saveCatalogItem({
+  const saved = await saveCatalogItem({
     catalog,
     section,
     field,
@@ -64,6 +72,17 @@ const makeCatalogItem = async ({
   });
   if (saved) return saved;
   else throw new Error(`Catalog Error: Unable to save to ${section}.`);
+};
+
+const editAssociatedItems = ({ section, ...props }: EditOption) => {
+  switch (section) {
+    case "income":
+      editIncomeFieldsAfterCatalogModified(props);
+    case "expense":
+      editExpenseFieldsAfterCatalogModified(props);
+    default:
+      return;
+  }
 };
 
 const editCatalogItem = async ({
@@ -83,9 +102,22 @@ const editCatalogItem = async ({
   if (editIndex !== -1) {
     catalog[section][field][editIndex] = newItem;
     const saved = await catalog.save();
-    if (saved) return saved;
-    else throw new Error("Catalog Error: Unable to save edited item.");
+    if (saved) {
+      editAssociatedItems({ user, section, field, oldItem, newItem });
+      return saved;
+    } else throw new Error("Catalog Error: Unable to save edited item.");
   } else throw new Error("Catalog Error: Unable to find item to edit.");
+};
+
+const removeAssociatedItems = ({ section, ...props }: RemoveOption) => {
+  switch (section) {
+    case "income":
+      defaultIncomeFieldsAfterCatalogModified(props);
+    case "expense":
+      defaultExpenseFieldsAfterCatalogModified(props);
+    default:
+      return;
+  }
 };
 
 const removeCatalogItem = async ({
@@ -101,8 +133,10 @@ const removeCatalogItem = async ({
     (option: string) => option.toLowerCase() !== item.toLowerCase()
   );
   const saved = await catalog.save();
-  if (saved) return saved;
-  else throw new Error("Catalog Error: Unable to remove option.");
+  if (saved) {
+    removeAssociatedItems({ user, section, field, item });
+    return saved;
+  } else throw new Error("Catalog Error: Unable to remove option.");
 };
 
 const handleCatalog =
