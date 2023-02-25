@@ -1,7 +1,7 @@
-import { Schema, Types, model, models } from "mongoose";
+import { Schema, Types, model, models, Document } from "mongoose";
 import type { Currencies } from "./types";
 
-export interface IncomeType {
+export interface IncomeType extends Document {
   _id?: Types.ObjectId;
   name?: string;
   user?: Types.ObjectId;
@@ -10,7 +10,6 @@ export interface IncomeType {
   amount: number;
   date: Date;
   currency: Currencies;
-  save?: () => Promise<IncomeType | Error>;
 }
 
 const incomeSchema = new Schema<IncomeType>(
