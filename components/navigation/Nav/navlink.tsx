@@ -32,7 +32,7 @@ const NavLink: FC<NavLinkProps> = ({
         rounded-lg cursor-pointer sm:px-3 px-2 py-2 sm:mr-0 mx-1 sm:mb-3 `}
       >
         <div
-          style={{ boxShadow: path === basePath ? "0 0 8px 1px #555" : "" }}
+          style={{ boxShadow: path === basePath ? "0 0 12px 1px #555a" : "" }}
           className={`absolute flex items-center justify-center bottom-0 left-0 
           right-0 py-2 px-6 h-12 w-12 rounded-lg border-b-4 transform duration-300
           hover:border-b-0 hover:h-11 focus:outline-none group ${
