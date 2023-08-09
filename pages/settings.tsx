@@ -19,8 +19,8 @@ const Settings: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Catalog Management</title>
-        <meta name="description" content="Liberty through finance" />
+        <title>LibreCord - Catalog Management</title>
+        <meta name="description" content="Your finances, simplified." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {user && <SettingsContent />}

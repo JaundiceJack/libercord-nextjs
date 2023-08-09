@@ -15,24 +15,16 @@ const NegateExpensesOption: FC = () => {
   const dispatch = useReduxDispatch();
   const { summaryExpensesNegative } = useReduxSelector(selectSummary);
 
-  const { recordPath: dataType } = usePath();
-
   return (
-    <>
-      {dataType === "summary" && (
-        <>
-          <GraphOptionToggle
-            className="my-2"
-            label="Expenses Negative"
-            selected={summaryExpensesNegative ? "Yes" : "No"}
-            options={["Yes", "No"]}
-            toggleOption={(mode: string) => {
-              dispatch(setSummaryExpensesNegative(mode === "Yes"));
-            }}
-          />
-        </>
-      )}
-    </>
+    <GraphOptionToggle
+      className="my-2"
+      label="Expenses Negative"
+      selected={summaryExpensesNegative ? "Yes" : "No"}
+      options={["Yes", "No"]}
+      toggleOption={(mode: string) => {
+        dispatch(setSummaryExpensesNegative(mode === "Yes"));
+      }}
+    />
   );
 };
 

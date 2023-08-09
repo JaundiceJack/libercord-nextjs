@@ -27,7 +27,7 @@ const BorderButton: FC<BorderButtonProps> = ({
       </div>
       <div
         style={{ height: "3px" }}
-        className={`mx-auto rounded-full mt-2 w-14 sm:w-16  ${borderColor}`}
+        className={`mx-auto rounded-full mt-2 w-14 sm:w-16 transform duration-300 ${borderColor}`}
       />
     </button>
   );

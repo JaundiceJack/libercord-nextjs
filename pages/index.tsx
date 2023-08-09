@@ -7,8 +7,8 @@ const Home: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Home</title>
-        <meta name="description" content="Liberty through finance" />
+        <title>LibreCord - Home</title>
+        <meta name="description" content="Your finances, simplified." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HomeContent />

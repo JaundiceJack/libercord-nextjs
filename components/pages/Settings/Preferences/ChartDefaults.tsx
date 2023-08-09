@@ -5,6 +5,7 @@ import {
   selectPreferences,
 } from "../../../../redux/preferences";
 import BorderButton from "../../../elements/input/button/BorderButton";
+import GroupBox from "../../../elements/containers/GroupBox";
 
 const ChartDefaults: FC = () => {
   const dispatch = useReduxDispatch();
@@ -15,12 +16,7 @@ const ChartDefaults: FC = () => {
   } = useReduxSelector(selectPreferences);
 
   return (
-    <div className="flex flex-col p-3 mb-4">
-      <div className="bg-slate-800 p-2 flex justify-center text-lg font-semibold text-white rounded-lg">
-        {" "}
-        Default Charts
-      </div>
-
+    <GroupBox title="Default Charts">
       <div className="flex flex-row items-center my-4">
         <p className="w-14 text-white mb-2 text-lg">Summary</p>
         <div className="grid grid-cols-2 w-full">
@@ -146,7 +142,7 @@ const ChartDefaults: FC = () => {
           />
         </div>
       </div>
-    </div>
+    </GroupBox>
   );
 };
 

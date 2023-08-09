@@ -64,7 +64,7 @@ const CustomLine: FC<ChartProps & DataKeys> = ({
       {data.length > 0 ? (
         <div
           className="lg:px-6 pt-10 font-jose"
-          style={{ width: "100%", height: barHeight }}
+          style={{ width: "100%", height: "100%" }}
         >
           <ResponsiveContainer>
             <LineChart
@@ -72,7 +72,7 @@ const CustomLine: FC<ChartProps & DataKeys> = ({
               margin={{
                 top: 20,
                 right: 20,
-                left: 20,
+                left: 0,
                 bottom: 10,
               }}
             >

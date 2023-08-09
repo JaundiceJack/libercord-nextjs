@@ -6,7 +6,9 @@ import {
 } from "../../../../redux/preferences";
 import BareButton from "../../../elements/input/button/BareButton";
 import BorderButton from "../../../elements/input/button/BorderButton";
-import NumberEntry from "../../../elements/input/form/Number";
+import TextEntry from "../../../elements/input/form/Text";
+import BasicButton from "../../../elements/input/button/BasicButton";
+import GroupBox from "../../../elements/containers/GroupBox";
 
 const InitialBalance: FC = () => {
   const dispatch = useReduxDispatch();
@@ -17,25 +19,20 @@ const InitialBalance: FC = () => {
   );
 
   return (
-    <div className="flex flex-col p-3 mb-4">
-      <div className="bg-slate-800 mb-4 p-2 flex justify-center text-lg font-semibold text-white rounded-lg">
-        {" "}
-        Balance Options
-      </div>
+    <GroupBox title="Balance Options">
       <div className="flex flex-row items-center mb-4">
-        <NumberEntry
+        <TextEntry
           label="Initial Balance:"
+          shortLabel="Initial:"
           value={newSavings}
           name="newSavings"
-          labelWidth="auto"
-          inputWidth="1fr"
-          className="mr-2"
+          className="mr-2 mb-2"
           onChange={(e: FormEvent<HTMLInputElement>) =>
             setNewSavings(e.currentTarget.value)
           }
         />
-        <BareButton
-          className="w-28 h-8"
+        <BasicButton
+          className="w-28 ml-2"
           label="Submit"
           color="green"
           onClick={() =>
@@ -70,7 +67,7 @@ const InitialBalance: FC = () => {
           selected={useNegativeExpenses === false}
         />
       </div>
-    </div>
+    </GroupBox>
   );
 };
 

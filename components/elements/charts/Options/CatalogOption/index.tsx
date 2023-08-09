@@ -15,50 +15,37 @@ import GraphOptionToggle from "../../../input/button/GraphOptionToggle";
 
 const CatalogOption: FC = () => {
   const dispatch = useReduxDispatch();
-  const { incomeChartType, incomeViewBy } = useReduxSelector(selectIncome);
-  const { expenseChartType, expenseViewBy } = useReduxSelector(selectExpense);
+  const { incomeViewBy } = useReduxSelector(selectIncome);
+  const { expenseViewBy } = useReduxSelector(selectExpense);
 
   const { recordPath: dataType } = usePath();
 
-  const condi1 =
-    dataType === "income" &&
-    (incomeChartType === "pie" || incomeChartType === "radar");
-  const condi2 =
-    dataType === "expenses" &&
-    (expenseChartType === "pie" || expenseChartType === "radar");
-
   return (
-    <>
-      {(condi1 || condi2) && (
-        <GraphOptionToggle
-          className="my-2"
-          label="View"
-          selected={
-            dataType === "income"
-              ? capitalize(incomeViewBy)
-              : capitalize(expenseViewBy)
-          }
-          options={
-            dataType === "income"
-              ? ["Source", "Category"]
-              : ["Location", "Category"]
-          }
-          toggleOption={(option: string) => {
-            dataType == "income"
-              ? dispatch(
-                  setIncomeViewBy(
-                    option.toLocaleLowerCase() as IncomeViewByOption
-                  )
-                )
-              : dispatch(
-                  setExpenseViewBy(
-                    option.toLocaleLowerCase() as ExpenseViewByOption
-                  )
-                );
-          }}
-        />
-      )}
-    </>
+    <GraphOptionToggle
+      className="my-2"
+      label="View"
+      selected={
+        dataType === "income"
+          ? capitalize(incomeViewBy)
+          : capitalize(expenseViewBy)
+      }
+      options={
+        dataType === "income"
+          ? ["Source", "Category"]
+          : ["Location", "Category"]
+      }
+      toggleOption={(option: string) => {
+        dataType == "income"
+          ? dispatch(
+              setIncomeViewBy(option.toLocaleLowerCase() as IncomeViewByOption)
+            )
+          : dispatch(
+              setExpenseViewBy(
+                option.toLocaleLowerCase() as ExpenseViewByOption
+              )
+            );
+      }}
+    />
   );
 };
 

@@ -1,7 +1,7 @@
 import { serialize, parse } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const TOKEN_NAME = "libercord-token";
+const TOKEN_NAME = "librecord-token";
 
 export const MAX_AGE = 60 * 60 * 8; // 8 hours
 

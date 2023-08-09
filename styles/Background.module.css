@@ -5,7 +5,6 @@
     rgb(var(--gray_5))
   );
   box-shadow: 0 1px 3px -2px rgb(var(--gray_1));
-  z-index: 10;
 }
 
 .content {
@@ -15,7 +14,6 @@
     rgba(var(--gray_7), 0.85),
     rgba(var(--gray_7), 0.5)
   );
-  z-index: 5;
 }
 
 .container {

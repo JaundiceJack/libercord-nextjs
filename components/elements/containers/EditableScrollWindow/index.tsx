@@ -19,6 +19,7 @@ interface EditableScrollWindowProps {
   sortDirection: "asc" | "desc";
   editItem: (value: string) => void;
   deleteItem: (value: string) => void;
+  className?: string;
 }
 
 const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
@@ -27,6 +28,7 @@ const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
   sortDirection,
   editItem,
   deleteItem,
+  className = "",
 }) => {
   // Assign row classes for alternating colors and selected item highlighting
   const rowClasses = (index: number) => {
@@ -75,7 +77,7 @@ const EditableScrollWindow: FC<EditableScrollWindowProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full h-full overflow-x-scroll sm:overflow-auto">
+    <div className={`flex flex-col w-full h-full ${className}`}>
       {/* Column Labels */}
       <div className={`border-b border-gray-800 ${BgCSS.header} shadow-xl `}>
         <button

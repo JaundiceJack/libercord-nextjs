@@ -20,13 +20,14 @@ const Carousel: FC<CarouselProps> = ({ slides }) => {
       effect="fade"
       spaceBetween={0}
       slidesPerView={1}
+      centeredSlides={true}
       pagination={{ clickable: true }}
       loop={true}
       autoplay={{
         delay: 6500,
         disableOnInteraction: false,
       }}
-      className="w-full h-full"
+      className="w-full h-full "
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       style={carouselColor}

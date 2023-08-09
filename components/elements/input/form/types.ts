@@ -1,8 +1,9 @@
 import { SelectItem } from "@mantine/core";
+import { Dispatch, SetStateAction } from "react";
 
 interface CommonTypes {
   label?: string;
-  labelColor?: string;
+  shortLabel?: string;
   value: string | number | undefined;
   name: string;
   className?: string;
@@ -19,15 +20,19 @@ interface TextualTypes {
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
   placeholder?: string;
   autoFocus?: boolean;
-  inputWidth?: string;
-  labelWidth?: string;
 }
+
+export type SelectOption = {
+  value: string;
+  label?: string;
+  disabled?: boolean;
+  [key: string]: any;
+};
 
 interface SelectTypes {
   loading?: boolean;
-  options?: (string | SelectItem)[];
-  onChange: (value: string) => void;
-  createOption?: (query: string) => string | SelectItem | null | undefined;
+  options?: SelectOption[];
+  onChange: (e: React.FormEvent<HTMLSelectElement>) => void;
 }
 
 interface TextEntryType {
@@ -45,3 +50,8 @@ export type NumberEntryProps = CommonTypes & TextualTypes;
 export type SelectProps = CommonTypes &
   Omit<TextualTypes, "onChange"> &
   SelectTypes;
+
+export type CreatableSelect = SelectProps & {
+  onTextEntry: (e: React.FormEvent<HTMLInputElement>) => void;
+  setValue: Dispatch<SetStateAction<string>>;
+};

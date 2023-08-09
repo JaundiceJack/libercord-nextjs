@@ -1,13 +1,16 @@
 import Link from "next/link";
 import Router from "next/router";
 import React, { useState, FC } from "react";
-import TextEntry from "../../../elements/input/form/Text";
+// import TextEntry from "../../../elements/input/form/Text";
 import { errString } from "../../../../helpers/errors";
 import ErrorMessages from "../../../elements/misc/errorMessages";
 import Spinner from "../../../elements/misc/spinner";
 import useErrMsgs from "../../../../hooks/useErrMsgs";
 import BareButton from "../../../elements/input/button/BareButton";
+import BasicButton from "../../../elements/input/button/BasicButton";
 import HomeCSS from "../../../../styles/Home.module.css";
+import Loading from "../../../elements/misc/loading";
+import TextEntry from "../../../elements/input/form/Text";
 
 interface SignInProps {
   toggle: () => void;
@@ -55,61 +58,57 @@ const SignIn: FC<SignInProps> = ({
   return (
     <form
       onSubmit={onSubmit}
-      className={`px-5 pt-4 pb-2 w-full ${HomeCSS.tab} rounded-b-xl`}
+      className={`flex flex-col px-5 pb-2 w-full ${HomeCSS.tab} rounded-b-xl`}
     >
       <TextEntry
         label="Email:"
         name="email"
         type="email"
+        className="mb-4 mt-10"
         value={email}
         onChange={setEmail}
-        className="mb-2"
         autoFocus={true}
-        labelWidth="6rem"
-        inputWidth="1fr"
       />
       <TextEntry
         label="Password:"
         name="password"
         type="password"
+        className="mb-4"
         value={password}
         onChange={setPassword}
-        className="mb-2"
-        labelWidth="6rem"
-        inputWidth="1fr"
       />
-      <ErrorMessages errors={errMsgs} />
-      <div className="grid grid-cols-6 items-center justify-center">
-        {loading ? (
-          <Spinner className="my-2 col-span-6" />
-        ) : (
-          <BareButton
+
+      {errMsgs.length !== 0 ? (
+        <ErrorMessages errors={errMsgs} />
+      ) : loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-6 content-between justify-center w-full mt-10 mb-2">
+          <BasicButton
             label="Login"
             type="submit"
             color="green"
-            className={`col-span-4 col-start-2 mt-2`}
+            className={`col-span-4 col-start-2`}
           />
-        )}
-      </div>
-      {!loading && (
-        <div className="flex flex-row mt-2 ">
-          <button onClick={toggle}>
-            <p
-              className={`font-jose text-sm text-white cursor-pointer z-50 
-              transform duration-300 hover:scale-105`}
-            >
-              Make a new account.
-            </p>
-          </button>
-          <div className="grow" />
-          <Link href="forgot">
-            <p
-              className={`font-jose text-sm text-white cursor-pointer z-50 
-              transform duration-300 hover:scale-105`}
-            >
-              Forgot password?
-            </p>
-          </Link>
+          <div className="col-span-6 flex flex-row mt-2 ">
+            <button onClick={toggle}>
+              <p
+                className={`font-jose text-sm text-white cursor-pointer z-50 
+          transform duration-300 hover:scale-105`}
+              >
+                Make a new account.
+              </p>
+            </button>
+            <div className="grow" />
+            <Link href="forgot">
+              <p
+                className={`font-jose text-sm text-white cursor-pointer z-50 
+                transform duration-300 hover:scale-105`}
+              >
+                Forgot password?
+              </p>
+            </Link>
+          </div>
         </div>
       )}
     </form>

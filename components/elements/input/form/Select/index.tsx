@@ -1,9 +1,6 @@
-import { FC } from "react";
-import { Select } from "@mantine/core";
-import Spinner from "../../../misc/spinner";
-import { mantineStyles } from "../mantineStyles";
+import { FC, useEffect, useRef, useState } from "react";
+import Loading from "../../../misc/loading";
 import type { SelectProps } from "../types";
-import { CSSObject, SelectStylesNames } from "@mantine/core";
 
 /*
   mantine bug:
@@ -12,7 +9,7 @@ import { CSSObject, SelectStylesNames } from "@mantine/core";
 
 const SelectEntry: FC<SelectProps> = ({
   label,
-  labelColor = "#EEE",
+  shortLabel,
   value,
   name,
   loading = false,
@@ -20,28 +17,18 @@ const SelectEntry: FC<SelectProps> = ({
   options = [],
   className,
   onChange,
-  createOption,
-  inputWidth = "10rem",
-  labelWidth = "max-content",
 }) => {
-  // Extra input styling for Mantine components
-  const dropdownStyle: Partial<Record<SelectStylesNames, CSSObject>> = {
-    dropdown: {
-      transform: "translate(0px, -6px)",
-      borderRadius: "8px",
-      borderTopLeftRadius: 0,
-    },
-  };
+  const [focused, setFocused] = useState(value !== "");
+  const [hovered, setHovered] = useState(false);
+  const element = useRef<HTMLSelectElement>(null);
+  const onFocus = () => setFocused(true);
+  const onBlur = () => !value && setFocused(false);
+  const onHover = () => setHovered(true);
+  const onExit = () => setTimeout(() => setHovered(false), 150);
 
-  const inputStyles = {
-    ...mantineStyles({
-      labelColor,
-      hasLabel: label !== "",
-      inputWidth,
-      labelWidth,
-    }),
-    ...dropdownStyle,
-  };
+  useEffect(() => {
+    value !== "" && setFocused(true);
+  }, [value]);
 
   const sortedData = options.sort((a, b) => {
     const first = typeof a === "string" ? a : a.label || "";
@@ -52,26 +39,62 @@ const SelectEntry: FC<SelectProps> = ({
   return loading ? (
     <div className="grid grid-cols-3 items-center">
       <p className="text-right text-gray-500 font-bold">{label}</p>
-      <Spinner className="mb-2 col-span-2" />
+      <Loading className="mb-2 col-span-2" />
     </div>
   ) : (
-    <Select
-      label={label}
-      name={name}
-      searchable
-      placeholder={`Select or create a ${name}`}
-      creatable
-      getCreateLabel={(query: string) => `+ Create ${query}`}
-      onCreate={createOption}
-      radius="md"
-      size="xs"
-      data={sortedData}
-      styles={inputStyles}
-      className={className}
-      required={required}
-      value={value}
-      onChange={onChange}
-    />
+    <div
+      onMouseEnter={onHover}
+      onMouseLeave={onExit}
+      onClick={() => element?.current?.focus()}
+      className={`flex items-center justify-center w-full h-10 relative 
+      group rounded-md overflow-hidden text-white ${className}`}
+    >
+      <div
+        className={`flex items-center justify-center h-10 z-10
+        transform duration-300 ease-in-out relative ${
+          focused ? "w-24 text-sm" : "w-full text-md"
+        } group-hover:w-24 group-hover:text-sm border-b-2 border-blue-300`}
+      >
+        <label className={`whitespace-nowrap absolute transform duration-150`}>
+          {(focused || hovered) && shortLabel ? shortLabel : label}
+        </label>
+      </div>
+      <div
+        className={`flex items-center justify-center h-10 z-0 
+        transform duration-300 ease-in-out ${
+          focused ? "w-full opacity-100" : "w-0 opacity-0"
+        } group-hover:w-full group-hover:opacity-100 group-hover:block border-b-2 border-blue-400`}
+      >
+        <select
+          ref={element}
+          name={name}
+          placeholder={`Select or create a ${name}`}
+          required={required}
+          value={value}
+          style={{ scrollbarWidth: "thin" }}
+          className={`w-full h-full p-2 removeInputOutline`}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onChange={onChange}
+        >
+          {sortedData.map((option, i) => (
+            <option
+              key={i}
+              className={`${
+                option.value === "new option"
+                  ? "bg-green-base text-black font-semibold"
+                  : i % 2 === 0
+                  ? "bg-gray-700"
+                  : "bg-gray-700/50"
+              }`}
+              value={option.value}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 };
 

@@ -10,13 +10,8 @@ const GraphOptionToggle: FC<GraphOptionToggleProps> = ({
 }) => {
   return (
     <div
-      className={`grid grid-cols-3 items-center overflow-hidden ${className}`}
+      className={`grid grid-cols-2 gap-4 mb-4 justify-center items-center overflow-hidden ${className}`}
     >
-      <div
-        className={`row-span-5 col-span-1 flex items-center justify-center h-full text-white`}
-      >
-        <p className={`text-center font-bold w-16`}>{label}:</p>
-      </div>
       {options.map((option, index) => (
         <button
           onClick={() => toggleOption(option)}

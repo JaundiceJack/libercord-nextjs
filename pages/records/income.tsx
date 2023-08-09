@@ -21,7 +21,7 @@ const Income: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Income</title>
+        <title>LibreCord - Income</title>
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

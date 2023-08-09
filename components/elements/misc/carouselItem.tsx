@@ -1,6 +1,5 @@
-import { FC } from "react";
 import Image from "next/image";
-import { SwiperSlide } from "swiper/react";
+import { FC } from "react";
 
 interface CarouselItemProps {
   header: string;
@@ -27,7 +26,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
           style={{
             position: "fixed",
             height: "100vh",
-            width: "100vh",
+            width: "100%",
             overflow: "hidden",
             zIndex: "-1",
             filter: "blur(3px)",
@@ -37,7 +36,7 @@ const CarouselItem: FC<CarouselItemProps> = ({
             src={image}
             layout="fill"
             objectFit="cover"
-            objectPosition="center"
+            objectPosition="left"
             quality={100}
           />
         </div>

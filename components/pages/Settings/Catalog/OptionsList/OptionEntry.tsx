@@ -3,6 +3,7 @@ import { FaPlus } from "react-icons/fa";
 import BareButton from "../../../../elements/input/button/BareButton";
 import TextEntry from "../../../../elements/input/form/Text";
 import { OptionEntryProps } from "../types";
+import { capitalize } from "../../../../../helpers/strings";
 
 const OptionEntry: FC<OptionEntryProps> = ({
   field,
@@ -16,12 +17,13 @@ const OptionEntry: FC<OptionEntryProps> = ({
       className="flex items-center px-2 py-1 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800"
     >
       <TextEntry
+        label={`Add New ${capitalize(field)}:`}
+        shortLabel={`${capitalize(field)}:`}
         placeholder={`Enter a new ${field}:`}
         value={newOption}
         name="newOption"
         onChange={setNewOption}
         className={`w-full`}
-        inputWidth="full"
       />
       <BareButton
         color="green"

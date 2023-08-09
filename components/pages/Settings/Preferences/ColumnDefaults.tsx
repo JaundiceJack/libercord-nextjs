@@ -7,6 +7,7 @@ import {
 import { ExpenseSortOption, IncomeSortOption } from "../../../../redux/types";
 import BorderButton from "../../../elements/input/button/BorderButton";
 import CheckboxEntry from "../../../elements/input/form/Checkbox";
+import GroupBox from "../../../elements/containers/GroupBox";
 
 const ColumnDefaults: FC = () => {
   const dispatch = useReduxDispatch();
@@ -46,12 +47,7 @@ const ColumnDefaults: FC = () => {
   };
 
   return (
-    <div className="flex flex-col p-3 mb-4">
-      <div className="bg-slate-800 p-2 flex justify-center text-lg font-semibold text-white rounded-lg">
-        {" "}
-        Default Data Columns
-      </div>
-
+    <GroupBox title="Default Data Columns">
       <div className="flex flex-row items-center my-4">
         <p className="w-36 text-white mb-2 text-lg">Income</p>
         <div className="grid grid-cols-2 w-full">
@@ -135,7 +131,7 @@ const ColumnDefaults: FC = () => {
           />
         </div>
       </div>
-    </div>
+    </GroupBox>
   );
 };
 
