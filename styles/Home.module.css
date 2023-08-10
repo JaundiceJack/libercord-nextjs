@@ -2,22 +2,35 @@
   background: radial-gradient(at top, rgb(var(--gray_6)), rgb(var(--gray_4)));
 }
 
-.tab-left {
+.tab-right {
+  position: relative;
+  z-index: 1;
   background: radial-gradient(
     at bottom right,
     rgb(var(--gray_6)),
     rgb(var(--gray_3))
   );
 }
-.tab-left:hover {
+.tab-right::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(
     at bottom right,
     rgb(var(--gray_7)),
-    rgb(var(--gray_5)),
     rgb(var(--gray_3))
   );
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: -1;
 }
-.tab-left-active {
+.tab-right:hover::before {
+  opacity: 1;
+}
+.tab-right-active {
   background: radial-gradient(
     at bottom right,
     rgb(var(--gray_7)),
@@ -25,22 +38,35 @@
   );
 }
 
-.tab-right {
+.tab-left {
+  position: relative;
+  z-index: 1;
   background: radial-gradient(
     at bottom left,
     rgb(var(--gray_6)),
     rgb(var(--gray_3))
   );
 }
-.tab-right:hover {
+.tab-left::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: radial-gradient(
     at bottom left,
     rgb(var(--gray_7)),
-    rgb(var(--gray_5)),
     rgb(var(--gray_3))
   );
+  opacity: 0;
+  transition: opacity 1s;
+  z-index: -1;
 }
-.tab-right-active {
+.tab-left:hover::before {
+  opacity: 1;
+}
+.tab-left-active {
   background: radial-gradient(
     at bottom left,
     rgb(var(--gray_7)),

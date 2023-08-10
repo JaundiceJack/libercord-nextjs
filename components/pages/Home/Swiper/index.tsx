@@ -27,6 +27,13 @@ const Swiper: FC = () => {
       image="/images/chart.jpg"
       key={2}
     />,
+    <CarouselItem
+      header="Grow Your Savings"
+      text="The best way to grow your money is to know your money."
+      icon={<AiOutlineLineChart size="40px" />}
+      image="/images/plant.jpg"
+      key={2}
+    />,
   ];
 
   return <Carousel slides={slides} />;

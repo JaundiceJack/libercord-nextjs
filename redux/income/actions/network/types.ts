@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { IncomeType } from "../../../../models/Income";
 
 interface IncomeId {
-  expenseId: Types.ObjectId | null;
+  incomeId: Types.ObjectId | null;
 }
 
 interface EditIncome {
@@ -10,7 +10,7 @@ interface EditIncome {
 }
 
 interface AddIncome {
-  expense: IncomeType;
+  income: IncomeType;
 }
 
 export type AddIncomeProps = AddIncome;

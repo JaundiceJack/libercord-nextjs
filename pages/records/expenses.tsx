@@ -21,7 +21,7 @@ const Expense: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Expenses</title>
+        <title>LibreCord - Expenses</title>
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

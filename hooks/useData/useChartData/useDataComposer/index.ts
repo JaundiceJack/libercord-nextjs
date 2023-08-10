@@ -36,8 +36,6 @@ const useDataComposer = ({
   const { expenses: allExpenses } = useReduxSelector(selectExpense);
   const { date } = useReduxSelector(selectDate);
 
-  console.log("loading prefs:", preferencesLoading);
-
   const filterByOccursBefore =
     (year: number, month?: number) => (trade: TradeType, i: number) =>
       new Date(trade?.date) < new Date(year, month || 0);

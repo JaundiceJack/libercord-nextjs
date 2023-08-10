@@ -6,8 +6,9 @@ import TextEntry from "../../../elements/input/form/Text";
 import ErrorMessages from "../../../elements/misc/errorMessages";
 import Spinner from "../../../elements/misc/spinner";
 import BareButton from "../../../elements/input/button/BareButton";
+import BasicButton from "../../../elements/input/button/BasicButton";
 import HomeCSS from "../../../../styles/Home.module.css";
-import NumberEntry from "../../../elements/input/form/Number";
+import Loading from "../../../elements/misc/loading";
 
 interface SignUpProps {
   toggle: () => void;
@@ -69,65 +70,61 @@ const SignUp: FC<SignUpProps> = ({
   return (
     <form
       onSubmit={onSubmit}
-      className={`px-5 pt-4 pb-2 w-full ${HomeCSS.tab} rounded-b-xl`}
+      className={`flex flex-col px-5 pb-2 w-full ${HomeCSS.tab} rounded-b-xl`}
     >
       <TextEntry
         label="Email:"
         placeholder="example@gmail.com"
         name="email"
+        className="mb-4 mt-10"
         value={email}
         type="email"
         onChange={setEmail}
-        className="mb-2"
-        labelWidth="6rem"
-        inputWidth="1fr"
         autoFocus={true}
       />
       <TextEntry
         label="Password:"
         placeholder="enter a new password"
         name="password"
+        className="mb-4"
         value={password}
         type="password"
         onChange={setPassword}
-        className="mb-2"
-        labelWidth="6rem"
-        inputWidth="1fr"
       />
       <TextEntry
-        label="Retype:"
-        placeholder="confirm your password"
+        label="Confirm Password:"
+        shortLabel="Confirm:"
+        placeholder="re-enter your password"
         name="confirm"
         type="password"
+        className="mb-4"
         value={confirm}
         onChange={setConfirm}
-        className="mb-2"
-        labelWidth="6rem"
-        inputWidth="1fr"
       />
-      <NumberEntry
-        label="Savings:"
+      <TextEntry
+        label="Initial Balance:"
+        shortLabel="Balance:"
         placeholder="current cash balance (optional)"
         name="initialSavings"
+        className="mb-4"
         value={initialSavings}
         onChange={setInitialSavings}
-        className="mb-2"
-        labelWidth="6rem"
-        inputWidth="1fr"
       />
-      <ErrorMessages errors={errMsgs} />
-      <div className="grid grid-cols-6 mb-2 items-center justify-center">
-        {loading ? (
-          <Spinner className="my-2 col-span-6" />
-        ) : (
-          <BareButton
+
+      {errMsgs.length !== 0 ? (
+        <ErrorMessages errors={errMsgs} />
+      ) : loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-6 items-center justify-center w-full mb-2 mt-10">
+          <BasicButton
             label="Create"
             type="submit"
             color="green"
-            className="col-span-4 col-start-2 mt-2"
+            className="col-span-4 col-start-2"
           />
-        )}
-      </div>
+        </div>
+      )}
     </form>
   );
 };

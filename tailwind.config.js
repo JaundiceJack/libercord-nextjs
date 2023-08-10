@@ -1,10 +1,26 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    colors: {
+      ...colors,
+      "green-base": "#4ADE80",
+      "green-dark": "#256F40",
+      "yellow-base": "#facc15",
+      "yellow-dark": "#7d660a",
+      "blue-base": "#4eb0f1",
+      "blue-dark": "#1d417b",
+      "red-base": "#f87171",
+      "red-dark": "#7c3838",
+      "indigo-base": "#818cf8",
+      "indigo-dark": "#41467c",
+    },
     extend: {
       scale: {
         99.5: "0.995",

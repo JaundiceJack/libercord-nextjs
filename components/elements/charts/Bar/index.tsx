@@ -48,7 +48,7 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
                 dataKeys ? pl?.name : recordPath
               )}:`}</p>
               <p className="">{`${
-                pl?.value && pl.value < 0 ? "-" : ""
+                pl?.value && Number(pl.value) < 0 ? "-" : ""
               }$${Math.abs(Number(pl?.value) || 0)}`}</p>
             </div>
           ))}
@@ -153,7 +153,7 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
       {data.length > 0 ? (
         <div
           className="lg:px-6 pt-10 font-jose"
-          style={{ width: "100%", height: barHeight }}
+          style={{ width: "100%", height: "100%" }}
         >
           <ResponsiveContainer>
             <BarChart
@@ -162,7 +162,7 @@ const CustomBar: FC<ChartProps & DataKeys> = ({
               margin={{
                 top: 20,
                 right: 20,
-                left: 20,
+                left: 0,
                 bottom: 10,
               }}
             >

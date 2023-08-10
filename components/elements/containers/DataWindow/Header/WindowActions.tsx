@@ -56,20 +56,12 @@ const WindowActions: FC = () => {
           })),
         ]),
       ]),
-      `Libercord_Data-${formatDateMMDDYYYY(new Date())}.csv`
+      `LibreCord_Data-${formatDateMMDDYYYY(new Date())}.csv`
     );
   };
 
   return (
     <div className="flex flex-row items-center mr-1">
-      {dataType === "summary" && (
-        <ItemOptionButton
-          icon={<AiOutlineLineChart />}
-          onClick={() => dispatch(toggleSummaryLineModal())}
-          color="blue"
-          label={`Toggle Visible Data`}
-        />
-      )}
       {(dataType === "income"
         ? incomes
         : dataType === "expenses"
@@ -106,8 +98,8 @@ const WindowActions: FC = () => {
                 : exportSummaryData()
             }
             color="blue"
-            label={`Export to .CSV`}
-            className="ml-1"
+            label={`Export your data to a .CSV file`}
+            className={dataType !== "summary" ? "ml-1" : "ml-0"}
           />
         </>
       )}

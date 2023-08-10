@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import useSWR from "swr";
 import { UserType } from "../models/User";
 
@@ -15,30 +15,30 @@ interface UseUserProps {
 }
 
 const useUser = ({ redirectTo, redirectIfFound = false }: UseUserProps) => {
-  const { data, error } = useSWR("/api/user", fetcher);
+  const { data, error, isValidating } = useSWR("/api/user", fetcher);
   const user: UserType = data?.user;
-  const finished = Boolean(data);
   const hasUser = Boolean(user);
+  const router = useRouter();
 
   useEffect(() => {
-    if (!redirectTo || !finished) return;
+    if (!redirectTo || isValidating) return;
     if (
       // If redirectTo is set, redirect if the user was not found.
       (redirectTo && !redirectIfFound && !hasUser) ||
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && hasUser)
     ) {
-      Router.push(redirectTo);
+      if (router.pathname !== redirectTo) router.push(redirectTo);
     }
-  }, [redirectTo, redirectIfFound, finished, hasUser]);
+  }, [redirectTo, redirectIfFound, hasUser]);
 
   useEffect(() => {
-    if (error) Router.push("/");
+    if (error && router.pathname !== "/") router.push("/");
   }, [error]);
 
   return error
-    ? { user: null, loading: !finished }
-    : { user, loading: !finished };
+    ? { user: null, loading: false, error }
+    : { user, loading: isValidating, error: null };
 };
 
 export default useUser;

@@ -8,7 +8,7 @@ const Account: NextPage = () => {
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - My Account</title>
+        <title>LibreCord - My Account</title>
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

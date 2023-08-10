@@ -70,17 +70,6 @@ const ChartOption: FC = () => {
               )
         }
       />
-      {dataType === "summary" ? (
-        <OptionHR />
-      ) : dataType === "income" &&
-        (incomeChartType === "pie" || incomeChartType === "radar") ? (
-        <OptionHR />
-      ) : (
-        dataType === "expenses" &&
-        (expenseChartType === "pie" || expenseChartType === "radar") && (
-          <OptionHR />
-        )
-      )}
     </>
   );
 };

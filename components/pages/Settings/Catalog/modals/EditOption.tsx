@@ -37,7 +37,6 @@ const EditModal: FC<EditModalProps> = ({
         name="editOption"
         onChange={onEdit}
         className="mb-6"
-        inputWidth="auto"
       />
       <BareButton label="Confirm" onClick={onSubmit} color="green" />
     </Modal>

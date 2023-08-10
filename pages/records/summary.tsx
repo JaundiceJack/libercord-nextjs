@@ -9,6 +9,7 @@ import { setTimeframe } from "../../redux/date";
 import { getInitialExpenses } from "../../redux/expense";
 import { getInitialIncomes } from "../../redux/income";
 import { getInitialPreferences } from "../../redux/preferences";
+import { getInitialCatalog } from "../../redux/catalog";
 
 const Summary: NextPage = () => {
   const { user } = useUser({});
@@ -17,13 +18,14 @@ const Summary: NextPage = () => {
     dispatch(getInitialIncomes());
     dispatch(getInitialExpenses());
     dispatch(getInitialPreferences());
+    dispatch(getInitialCatalog());
     dispatch(setTimeframe("year"));
   }, []);
 
   return (
     <PageLayout>
       <Head>
-        <title>Libercord - Summary</title>
+        <title>LibreCord - Summary</title>
         <meta name="description" content="Liberty through finance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
