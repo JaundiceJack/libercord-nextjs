@@ -3,6 +3,8 @@ import type { IncomeType } from "./Income";
 
 export type Currencies = "$" | "₿" | "€" | "₱" | "¥";
 
+export type TaxStatus = "exempt" | "long-term" | "short-term" | "other";
+
 export type TradeType = ExpenseType | IncomeType;
 
 type SequentialChartOptions = "line" | "bar";
@@ -15,3 +17,4 @@ export type IncomeChartTypeOption =
 export type ExpenseChartTypeOption =
   | SequentialChartOptions
   | DistributionChartOptions;
+export type AssetChartTypeOption = DistributionChartOptions;

@@ -51,10 +51,12 @@ const GroupBox: FC<GroupBoxProps> = ({
       </span>
       <div
         className={`${
-          toggled ? "opacity-100 h-full" : "opacity-0 h-0"
-        } transform transition-all duration-500 `}
+          toggled
+            ? "opacity-100 h-full origin-top-right scale-y-100"
+            : "opacity-0 pointer-events-none h-0 scale-y-0"
+        } transform duration-150 ease-linear`}
       >
-        {toggled && children}
+        {children}
       </div>
     </div>
   );

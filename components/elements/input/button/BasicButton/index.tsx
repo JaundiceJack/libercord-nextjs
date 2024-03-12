@@ -8,6 +8,7 @@ import { FC } from "react";
 import Btn from "../../../../../styles/Button.module.css";
 import { BasicButtonProps } from "./types";
 import { borderClass, textClass } from "../../../../../helpers/colors";
+import IOButtonHint from "../ItemOptionButton/IOButtonHint";
 const Tailwind = require("../../../../../tailwind.config");
 
 const BasicButton: FC<BasicButtonProps> = ({
@@ -20,83 +21,95 @@ const BasicButton: FC<BasicButtonProps> = ({
   className,
   disabled = false,
   active = false,
+  hint,
 }) => {
   // I need to set up a color palette/theme
   // or just some way to connect tailwind colors to regular
 
   return (
-    <button
-      onClick={onClick}
-      className={`w-full h-10 mb-2 border transform duration-500 ${
-        color === "white"
-          ? "border-white"
-          : color === "black"
-          ? "border-black"
-          : color === "green"
-          ? "border-green-base"
-          : color === "red"
-          ? "border-red-base "
-          : "border-white"
-      } 
-      hover:border-transparent rounded-sm overflow-hidden group ${
-        Btn.container
-      } ${className} `}
-    >
-      <span
-        style={{
-          background: `linear-gradient(to right, transparent, ${
-            Tailwind?.theme?.colors[`${color}-base`]
-          })`,
-        }}
-      ></span>
-      <span
-        style={{
-          background: `linear-gradient(to bottom, transparent, ${
-            Tailwind?.theme?.colors[`${color}-base`]
-          })`,
-        }}
-      ></span>
-      <span
-        style={{
-          background: `linear-gradient(to left, transparent, ${
-            Tailwind?.theme?.colors[`${color}-base`]
-          })`,
-        }}
-      ></span>
-      <span
-        style={{
-          background: `linear-gradient(to top, transparent, ${
-            Tailwind?.theme?.colors[`${color}-base`]
-          })`,
-        }}
-      ></span>
-      <div
-        className={`flex items-center justify-center w-full h-full font-jose text-lg ${
-          color === "white"
-            ? "text-white"
+    <div className={`group relative ${icon ? "h-8" : "h-10"} ${className}`}>
+      <button
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        className={`h-full w-full border transform duration-500 group 
+        hover:border-transparent overflow-hidden 
+        ${icon ? "rounded-md" : "rounded-sm"}
+        ${
+          disabled
+            ? "border-gray-400"
+            : color === "white"
+            ? "border-white"
             : color === "black"
-            ? "text-black"
+            ? "border-black"
             : color === "green"
-            ? "text-green-base"
+            ? "border-green-base"
             : color === "red"
-            ? "text-red-base"
-            : "text-white"
+            ? "border-red-base "
+            : color === "blue"
+            ? "border-blue-base"
+            : color === "yellow"
+            ? "border-yellow-base"
+            : "border-white"
         } 
-        transform duration-500 ease-in ${
-          color === "white"
-            ? "group-hover:text-gray-100"
-            : color === "black"
-            ? "group-hover:text-gray-900"
-            : color === "green"
-            ? "group-hover:text-green-300"
-            : color === "red"
-            ? "group-hover:text-red-300"
-            : "group-hover:text-white"
-        } `}
+        ${Btn.container}`}
       >
-        {label || icon}
-      </div>
-    </button>
+        <span
+          style={{
+            background: `linear-gradient(to right, transparent, ${
+              Tailwind?.theme?.colors[`${color}-base`]
+            })`,
+          }}
+        ></span>
+        <span
+          style={{
+            background: `linear-gradient(to bottom, transparent, ${
+              Tailwind?.theme?.colors[`${color}-base`]
+            })`,
+          }}
+        ></span>
+        <span
+          style={{
+            background: `linear-gradient(to left, transparent, ${
+              Tailwind?.theme?.colors[`${color}-base`]
+            })`,
+          }}
+        ></span>
+        <span
+          style={{
+            background: `linear-gradient(to top, transparent, ${
+              Tailwind?.theme?.colors[`${color}-base`]
+            })`,
+          }}
+        ></span>
+        <div
+          className={`flex items-center justify-center w-full h-full
+        transform duration-500 ease-in px-2 font-jose text-lg 
+        ${
+          disabled
+            ? "text-gray-400"
+            : color === "white"
+            ? "text-white group-hover:text-gray-100"
+            : color === "black"
+            ? "text-black group-hover:text-gray-900"
+            : color === "green"
+            ? "text-green-base group-hover:text-green-300"
+            : color === "red"
+            ? "text-red-base group-hover:text-red-300"
+            : color === "blue"
+            ? "text-blue-base group-hover:text-blue-300"
+            : color === "yellow"
+            ? "text-yellow-base group-hover:text-yellow-300"
+            : "text-white group-hover:text-white"
+        } 
+        `}
+        >
+          {label || icon}
+        </div>
+      </button>
+
+      {hint && <IOButtonHint label={hint} />}
+    </div>
   );
 };
 

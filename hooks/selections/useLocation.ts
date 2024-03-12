@@ -6,6 +6,7 @@ import { errString } from "../../helpers/errors";
 import { CatalogType } from "../../models/Catalog";
 import { defaultOption } from "../../helpers/defaults/fields";
 import { ExpenseType } from "../../models/Expense";
+import { capitalize } from "../../helpers/strings";
 
 interface UseLocationProps {
   catalog: CatalogType | null;
@@ -37,16 +38,16 @@ export const useLocation = ({ catalog, selected }: UseLocationProps) => {
   };
 
   const setDefaultLocation = () => {
-    setLocation(defaultOption("location", catalog, selected));
+    setLocation(capitalize(defaultOption("location", catalog, selected)));
   };
 
   const setCatalogLocation = () => {
-    const catalogIndex = catalog?.expense?.locations.findIndex(
+    const catalogOption = catalog?.expense?.locations.find(
       (cat) => cat === location.toLowerCase()
     );
-    !catalogIndex || catalogIndex === -1
+    !catalogOption
       ? setDefaultLocation()
-      : setLocation(catalog?.expense?.locations[catalogIndex] || "");
+      : setLocation(capitalize(catalogOption));
   };
 
   useEffect(() => {

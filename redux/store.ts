@@ -4,7 +4,9 @@ import incomeReducer from "./income";
 import expenseReducer from "./expense";
 import catalogReducer from "./catalog";
 import summaryReducer from "./summary";
+import assetReducer from "./asset";
 import preferencesReducer from "./preferences";
+import tickersReducer from "./tickers";
 
 const store = configureStore({
   reducer: {
@@ -12,8 +14,10 @@ const store = configureStore({
     date: dateReducer,
     income: incomeReducer,
     expense: expenseReducer,
+    asset: assetReducer,
     catalog: catalogReducer,
     summary: summaryReducer,
+    tickers: tickersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

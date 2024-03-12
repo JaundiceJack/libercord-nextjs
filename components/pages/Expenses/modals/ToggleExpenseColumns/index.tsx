@@ -10,6 +10,7 @@ import {
 import Modal from "../../../../elements/containers/Modal";
 import type { ToggleProps } from "../../../../elements/containers/Modal/types";
 import Checkbox from "../../../../elements/input/form/Checkbox";
+import Toggler from "../../../../elements/input/form/Toggler";
 
 const EditExpenseColumns: FC<ToggleProps> = ({ opened, toggle }) => {
   const dispatch = useReduxDispatch();
@@ -22,51 +23,33 @@ const EditExpenseColumns: FC<ToggleProps> = ({ opened, toggle }) => {
     >
       <div className="flex justify-center sm:flex-row flex-col">
         <div className="flex flex-col">
-          <Checkbox
-            value="date"
-            name="date"
+          <Toggler
             label="Date"
-            labelColor="white"
             onClick={() => {
               dispatch(toggleExpenseColumn("date"));
             }}
             defaultChecked={expenseColumns.includes("date")}
-            className="ml-4"
           />
-          <Checkbox
-            value="location"
-            name="location"
+          <Toggler
             label="Location"
-            labelColor="white"
             onClick={() => {
               dispatch(toggleExpenseColumn("location"));
             }}
             defaultChecked={expenseColumns.includes("location")}
-            className="ml-4"
           />
-        </div>
-        <div className="flex flex-col">
-          <Checkbox
-            value="category"
-            name="category"
+          <Toggler
             label="Category"
-            labelColor="white"
             onClick={() => {
               dispatch(toggleExpenseColumn("category"));
             }}
             defaultChecked={expenseColumns.includes("category")}
-            className="ml-4"
           />
-          <Checkbox
-            value="amount"
-            name="amount"
+          <Toggler
             label="Amount"
-            labelColor="white"
             onClick={() => {
               dispatch(toggleExpenseColumn("amount"));
             }}
             defaultChecked={expenseColumns.includes("amount")}
-            className="ml-4"
           />
         </div>
       </div>

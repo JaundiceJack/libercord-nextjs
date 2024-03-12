@@ -8,4 +8,5 @@ export interface BasicButtonProps {
   className?: string;
   disabled?: boolean;
   active?: boolean;
+  hint?: string;
 }

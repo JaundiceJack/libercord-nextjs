@@ -1,0 +1,174 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 30px;
+}
+
+.cross {
+  position: absolute;
+  left: -19px;
+  top: calc(50% - 7px);
+  z-index: 5;
+  color: #444e;
+  font-size: 14px;
+}
+
+.checkmark {
+  position: absolute;
+  left: 5px;
+  top: calc(50% - 8px);
+  z-index: 5;
+  color: #555e;
+  font-size: 16px;
+}
+
+.shrinkIcon {
+  animation: shrink 0.25s cubic-bezier(0.45, 0.55, 0.55, 0.75) forwards;
+}
+.growIcon {
+  animation: grow 0.25s cubic-bezier(0.45, 0.55, 0.55, 0.75) forwards;
+}
+@keyframes grow {
+  0% {
+    transform: scale(0.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.35);
+  }
+}
+
+.toggler {
+  position: relative;
+  filter: url(#gooey);
+}
+
+.svg {
+  width: 0;
+  height: 0;
+}
+
+.toggler .orb {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.fixedOrb1 {
+  left: -12px;
+}
+
+.fixedOrb2 {
+  left: 12px;
+}
+
+.toggleOn {
+  animation: toggleOn 0.25s cubic-bezier(0.45, 0.55, 0.55, 0.75) forwards;
+}
+
+.toggleOff {
+  animation: toggleOff 0.25s cubic-bezier(0.45, 0.55, 0.55, 0.75) forwards;
+}
+
+.toggler .activeOrb::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: calc(50% - 10px);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(rgb(var(--gray_10)), rgb(var(--gray_5)));
+  box-shadow: 0 0 5px rgb(var(--blue_base));
+  animation: inflate 0.25s ease-in forwards;
+}
+
+.toggler .inactiveOrb::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: calc(50% - 10px);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(rgb(var(--gray_10)), rgb(var(--gray_5)));
+  box-shadow: 0 0 5px rgb(var(--blue_base));
+  animation: deflate 0.25s ease-in forwards;
+}
+
+.toggler .movingOrbActive::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -20px;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(
+    rgba(var(--green_base), 1),
+    rgba(var(--green_base), 0.9)
+  );
+}
+
+.toggler .movingOrbInactive::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: -20px;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(
+    rgba(var(--red_base), 1),
+    rgba(var(--red_base), 0.9)
+  );
+}
+
+@keyframes toggleOn {
+  0% {
+    translate: -5px 0;
+  }
+  100% {
+    translate: 20px 0;
+  }
+}
+
+@keyframes toggleOff {
+  0% {
+    translate: 20px 0;
+  }
+  100% {
+    translate: -5px 0;
+  }
+}
+
+@keyframes inflate {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+
+@keyframes deflate {
+  0% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

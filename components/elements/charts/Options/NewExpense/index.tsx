@@ -21,10 +21,9 @@ import { getInitialCatalog, selectCatalog } from "../../../../../redux/catalog";
 import { addExpense, selectExpense } from "../../../../../redux/expense";
 import ErrorMessages from "../../../../elements/misc/errorMessages";
 import BasicButton from "../../../input/button/BasicButton";
+import Creatable from "../../../input/form/Creatable";
 import TextEntry from "../../../input/form/Text";
 import Loading from "../../../misc/loading";
-import CreatableSelect from "../../../input/form/CreatableSelect";
-import Creatable from "../../../input/form/Creatable";
 
 const NewExpense: FC = () => {
   const dispatch = useReduxDispatch();
@@ -38,8 +37,8 @@ const NewExpense: FC = () => {
   const [amount, setAmount] = useState(defaultAmount());
   const [date, setDate] = useState(defaultDate());
   const [currency, setCurrency] = useState<Currencies>(defaultCurrency());
-  const { location, setLocation, createLocation } = useLocation({ catalog });
-  const { category, setCategory, createCategory } = useExpenseCategory({
+  const { location, setLocation } = useLocation({ catalog });
+  const { category, setCategory } = useExpenseCategory({
     catalog,
   });
 
@@ -75,10 +74,11 @@ const NewExpense: FC = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!catalog?.expense?.locations?.includes(location.trim().toLowerCase()))
-      createLocation(location);
-    if (!catalog?.expense?.categories?.includes(category.trim().toLowerCase()))
-      createCategory(category);
+    // TODO: Remove this and just create them in the backend
+    // if (!catalog?.expense?.locations?.includes(location.trim().toLowerCase()))
+    //   createLocation(location);
+    // if (!catalog?.expense?.categories?.includes(category.trim().toLowerCase()))
+    //   createCategory(category);
 
     !invalidEntries({ setErrMsgs, errMsgs, location, category, amount }) &&
       submitEntries();
@@ -109,6 +109,10 @@ const NewExpense: FC = () => {
         name="location"
         value={location}
         onTextEntry={(e) => setLocation(e.currentTarget.value)}
+        catalog={catalog}
+        catalogField="locations"
+        catalogSection="expense"
+        catalogLoading={catalogLoading}
         setValue={setLocation}
         loading={catalogLoading}
         className="mb-4"
@@ -125,6 +129,10 @@ const NewExpense: FC = () => {
         name="category"
         value={category}
         onTextEntry={(e) => setCategory(e.currentTarget.value)}
+        catalog={catalog}
+        catalogField="categories"
+        catalogSection="expense"
+        catalogLoading={catalogLoading}
         setValue={setCategory}
         loading={catalogLoading}
         className="mb-6"
@@ -143,7 +151,7 @@ const NewExpense: FC = () => {
       ) : (
         <BasicButton
           type="submit"
-          disabled={catalogLoading || !amount}
+          disabled={catalogLoading}
           label="Save"
           className={`w-full col-span-2`}
           color={"green"}

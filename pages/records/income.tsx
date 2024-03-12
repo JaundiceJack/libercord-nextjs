@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
 import PageLayout from "../../components/PageLayout";
 import IncomePage from "../../components/pages/Incomes";
-import useUser from "../../hooks/useUser";
-import { useEffect } from "react";
 import { useReduxDispatch } from "../../hooks/useRedux";
-import { getInitialIncomes } from "../../redux/income";
+import useUser from "../../hooks/useUser";
 import { getInitialCatalog } from "../../redux/catalog";
+import { getInitialIncomes } from "../../redux/income";
 import { getInitialPreferences } from "../../redux/preferences";
 
 const Income: NextPage = () => {
