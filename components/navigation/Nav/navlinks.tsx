@@ -36,6 +36,7 @@ const NavLinks = () => {
       icon: <BsGearFill size="30" />,
       color: "yellow",
     },
+    // VERSION_2:
     //{
     //path: '/records/assets',
     //label: 'assets',

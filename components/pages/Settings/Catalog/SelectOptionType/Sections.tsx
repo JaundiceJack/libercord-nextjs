@@ -22,7 +22,7 @@ const OptionSection: FC<OptionSectionProps> = ({ selected, setSection }) => {
         onClick={() => setSection("expense")}
         color="orange"
       />
-      <BorderButton
+      {/* VERSION_2: <BorderButton
         name="asset"
         selected={selected === "asset"}
         onClick={() => setSection("asset")}
@@ -33,7 +33,7 @@ const OptionSection: FC<OptionSectionProps> = ({ selected, setSection }) => {
         selected={selected === "debt"}
         onClick={() => setSection("debt")}
         color="orange"
-      />
+      /> */}
     </div>
   );
 };
