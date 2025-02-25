@@ -32,12 +32,6 @@ const NavLinks = () => {
       color: "indigo",
     },
     {
-      path: "/records/assets",
-      label: "assets",
-      icon: <AiOutlineLineChart size="30" color="rgb(39, 39, 42)" />,
-      color: "yellow",
-    },
-    {
       path: "settings",
       label: "settings",
       icon: <BsGearFill size="30" />,
