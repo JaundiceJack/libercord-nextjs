@@ -6,6 +6,7 @@ import { errString } from "../../helpers/errors";
 import { CatalogType } from "../../models/Catalog";
 import { defaultOption } from "../../helpers/defaults/fields";
 import { IncomeType } from "../../models/Income";
+import { capitalize } from "../../helpers/strings";
 
 interface UseSourceProps {
   catalog: CatalogType | null;
@@ -37,16 +38,14 @@ export const useSource = ({ catalog, selected }: UseSourceProps) => {
   };
 
   const setDefaultSource = () => {
-    setSource(defaultOption("source", catalog, selected));
+    setSource(capitalize(defaultOption("source", catalog, selected)));
   };
 
   const setCatalogSource = () => {
-    const catalogIndex = catalog?.income?.sources.findIndex(
+    const catalogOption = catalog?.income?.sources.find(
       (cat) => cat === source.toLowerCase()
     );
-    !catalogIndex || catalogIndex === -1
-      ? setDefaultSource()
-      : setSource(catalog?.income?.sources[catalogIndex] || "");
+    !catalogOption ? setDefaultSource() : setSource(capitalize(catalogOption));
   };
 
   useEffect(() => {

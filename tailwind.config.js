@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     colors: {
       ...colors,
-      "green-base": "#4ADE80",
+      "green-base": "#26cf64",
       "green-dark": "#256F40",
       "yellow-base": "#facc15",
       "yellow-dark": "#7d660a",

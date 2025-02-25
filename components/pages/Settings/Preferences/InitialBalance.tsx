@@ -9,6 +9,7 @@ import BorderButton from "../../../elements/input/button/BorderButton";
 import TextEntry from "../../../elements/input/form/Text";
 import BasicButton from "../../../elements/input/button/BasicButton";
 import GroupBox from "../../../elements/containers/GroupBox";
+import { PreferenceType } from "../../../../models/Preferences";
 
 const InitialBalance: FC = () => {
   const dispatch = useReduxDispatch();
@@ -32,13 +33,15 @@ const InitialBalance: FC = () => {
           }
         />
         <BasicButton
-          className="w-28 ml-2"
+          className="w-28 ml-2 mb-1"
           label="Submit"
           color="green"
           onClick={() =>
             dispatch(
               editPreferences({
-                updates: { initialSavings: Number(newSavings) },
+                updates: {
+                  initialSavings: Number(newSavings),
+                } as PreferenceType,
               })
             )
           }
@@ -50,7 +53,9 @@ const InitialBalance: FC = () => {
           color="green"
           onClick={() =>
             dispatch(
-              editPreferences({ updates: { useNegativeExpenses: true } })
+              editPreferences({
+                updates: { useNegativeExpenses: true } as PreferenceType,
+              })
             )
           }
           name="Yes"
@@ -60,7 +65,9 @@ const InitialBalance: FC = () => {
           color="green"
           onClick={() =>
             dispatch(
-              editPreferences({ updates: { useNegativeExpenses: false } })
+              editPreferences({
+                updates: { useNegativeExpenses: false } as PreferenceType,
+              })
             )
           }
           name="No"

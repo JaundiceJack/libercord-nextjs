@@ -6,6 +6,7 @@ import { errString } from "../../helpers/errors";
 import { CatalogType } from "../../models/Catalog";
 import { ExpenseType } from "../../models/Expense";
 import { defaultOption } from "../../helpers/defaults/fields";
+import { capitalize } from "../../helpers/strings";
 
 interface UseExpenseCategoryProps {
   catalog: CatalogType | null;
@@ -39,16 +40,18 @@ export const useExpenseCategory = ({
   };
 
   const setDefaultCategory = () => {
-    setCategory(defaultOption("expenseCategory", catalog, selected));
+    setCategory(
+      capitalize(defaultOption("expenseCategory", catalog, selected))
+    );
   };
 
   const setCatalogCategory = () => {
-    const catalogIndex = catalog?.expense?.categories.findIndex(
+    const catalogOption = catalog?.expense?.categories.find(
       (cat) => cat === category.toLowerCase()
     );
-    !catalogIndex || catalogIndex === -1
+    !catalogOption
       ? setDefaultCategory()
-      : setCategory(catalog?.expense?.categories[catalogIndex] || "");
+      : setCategory(capitalize(catalogOption));
   };
 
   useEffect(() => {

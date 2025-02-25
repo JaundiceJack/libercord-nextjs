@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Spinner from "../../../misc/spinner";
 import { FcPrevious, FcNext } from "react-icons/fc";
-import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs";
+import { BsCaretRight, BsCaretLeft } from "react-icons/bs";
 import type { BrowseButtonProps } from "./types";
 
 const BrowseButton: FC<BrowseButtonProps> = ({
@@ -29,9 +29,9 @@ const BrowseButton: FC<BrowseButtonProps> = ({
         {loading ? (
           <Spinner />
         ) : direction === "next" ? (
-          <BsFillCaretRightFill color={color} size="25" />
+          <BsCaretRight color={color} size="25" />
         ) : (
-          <BsFillCaretLeftFill color={color} size="25" />
+          <BsCaretLeft color={color} size="25" />
         )}
       </button>
     </div>

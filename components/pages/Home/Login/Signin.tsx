@@ -90,7 +90,7 @@ const SignIn: FC<SignInProps> = ({
             color="green"
             className={`col-span-4 col-start-2`}
           />
-          <div className="col-span-6 flex flex-row mt-2 ">
+          <div className="col-span-6 flex flex-row mt-8 ">
             <button onClick={toggle}>
               <p
                 className={`font-jose text-sm text-white cursor-pointer z-50 

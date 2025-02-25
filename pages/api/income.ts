@@ -17,8 +17,8 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       // Get the user's incomes
       if (req.method === "GET") {
         const incomes = await getIncomesByUserId({ user: session._id });
-        if (incomes) res.status(200).json(incomes);
-        else if (incomes === []) res.status(200).json([]);
+        if (incomes && incomes.length > 0) res.status(200).json(incomes);
+        else if (incomes && !incomes.length) res.status(200).json([]);
         else throw new Error("Unable to retrieve user incomes.");
       }
       // Make a new income
@@ -49,8 +49,8 @@ const incomeRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           user: session._id,
           incomeId: body.incomeId,
         });
-        if (incomes) res.status(200).json(incomes);
-        else if (incomes === []) res.status(200).json([]);
+        if (incomes && incomes.length > 0) res.status(200).json(incomes);
+        else if (incomes && !incomes.length) res.status(200).json([]);
         else throw new Error("Unable to remove income.");
       }
     } else throw new Error("Log in for incomes.");

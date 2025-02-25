@@ -5,23 +5,21 @@ import colors from "../../colors";
 const Percentage: FC<PercentageProps> = ({ index, activeIndex, entry }) => {
   return (
     <div
-      className={`col-span-1 h-11 w-11 p-0.5 bg-transparent rounded-lg
+      className={`col-span-2 ml-auto mr-4 h-12 w-12 p-0.5 bg-transparent rounded-full relative
       flex justify-center items-center ${
-        index === activeIndex && "border-2 border-green-400"
+        index === activeIndex
+          ? "border-4 border-green-base"
+          : "border border-blue-base"
       }`}
     >
       <div
-        className={`w-9 h-9 rounded-md whitespace-nowrap flex 
-        justify-center items-center font-semibold font-jose text-xs `}
-        style={{
-          boxShadow: "inset 0 0 2px 1px #2a2a30",
-          background: `conic-gradient(
-            ${colors[index % colors.length]}, 
-            ${colors[index % colors.length] + "95"},
-            ${colors[index % colors.length]},
-            ${colors[index % colors.length] + "95"},
-            ${colors[index % colors.length]})`,
-        }}
+        className={`h-px w-24 absolute left-12 ${
+          index === activeIndex ? "bg-green-base" : "bg-blue-base"
+        }`}
+      ></div>
+      <div
+        className={`w-12 h-12 rounded-full whitespace-nowrap flex 
+        justify-center items-center font-semibold font-jose text-md text-white `}
       >
         {`${
           !entry?.percent

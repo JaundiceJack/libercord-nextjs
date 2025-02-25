@@ -7,6 +7,7 @@ import Item from "./Item";
 import Title from "./Title";
 import type { LegendProps } from "./types";
 import BgCSS from "../../../../styles/Background.module.css";
+import StaticBox from "../../containers/StaticBox";
 
 const Legend: FC<LegendProps> = ({ title, data, onHover, activeIndex }) => {
   const refs = useRef<RefObject<HTMLLIElement>[]>([]);
@@ -41,25 +42,26 @@ const Legend: FC<LegendProps> = ({ title, data, onHover, activeIndex }) => {
 
   return (
     <div
-      className={`flex flex-col w-full h-full mb-10 md:mb-0 ${BgCSS.sidebar} `}
+      style={{ scrollbarWidth: "thin", scrollbarColor: "#567 #333" }}
+      className={`flex flex-col w-full h-full pt-6 mb-10 md:mb-0 overflow-y-auto ${BgCSS.sidebar} `}
     >
-      <Title title={title} />
-      <ul
-        className="overflow-y-auto"
-        onMouseEnter={() => setMouseInUL(true)}
-        onMouseLeave={() => setMouseInUL(false)}
-      >
-        {data.map((entry: Datum, index: number) => (
-          <Item
-            key={index}
-            onHover={onHover}
-            activeIndex={activeIndex}
-            refs={refs}
-            index={index}
-            entry={entry}
-          />
-        ))}
-      </ul>
+      <StaticBox title={title} className={``} zIndex={5}>
+        <ul
+          onMouseEnter={() => setMouseInUL(true)}
+          onMouseLeave={() => setMouseInUL(false)}
+        >
+          {data.map((entry: Datum, index: number) => (
+            <Item
+              key={index}
+              onHover={onHover}
+              activeIndex={activeIndex}
+              refs={refs}
+              index={index}
+              entry={entry}
+            />
+          ))}
+        </ul>
+      </StaticBox>
     </div>
   );
 };

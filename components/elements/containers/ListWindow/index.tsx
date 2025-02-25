@@ -1,12 +1,10 @@
-import { CSSProperties, FC } from "react";
+import { FC } from "react";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
-import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
-import { IncomeType } from "../../../../models/Income";
+import { useWindowSize } from "../../../../hooks/useWindowSize";
 import Row from "./Row";
 import Titles from "./Titles";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { AutoSizerProps, ListWindowProps, PresentRowProps } from "./types";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
 
 const ListWindow: FC<ListWindowProps> = ({
   items,
@@ -21,7 +19,7 @@ const ListWindow: FC<ListWindowProps> = ({
 }) => {
   const { width: screenWidth } = useWindowSize();
   return (
-    <div className="flex flex-col w-full h-full overflow-x-scroll sm:overflow-auto">
+    <div className="flex flex-col w-full h-full">
       <Titles
         columns={columns}
         currentSort={currentSort}

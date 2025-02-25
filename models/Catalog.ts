@@ -34,7 +34,7 @@ const catalogSchema = new Schema<CatalogType>(
       locations: [{ type: String }],
     },
     asset: {
-      categories: [{ type: String }],
+      accounts: [{ type: String }],
     },
     debt: {
       categories: [{ type: String }],

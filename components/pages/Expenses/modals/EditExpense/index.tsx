@@ -71,7 +71,9 @@ const EditExpense: FC<ToggleProps> = ({ opened, toggle }) => {
     setAmount(defaultAmount(newSelection));
     setCurrency(defaultCurrency(newSelection));
     setDate(defaultDate(newSelection));
-    setLocation(defaultOption("location", catalog, newSelection).toLowerCase());
+    setLocation(
+      newSelection?.location || catalog?.expense?.locations?.[0] || ""
+    );
     setCategory(
       defaultOption("expenseCategory", catalog, newSelection).toLowerCase()
     );

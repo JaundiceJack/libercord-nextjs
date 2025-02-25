@@ -6,6 +6,7 @@ import { errString } from "../../helpers/errors";
 import { CatalogType } from "../../models/Catalog";
 import { IncomeType } from "../../models/Income";
 import { defaultOption } from "../../helpers/defaults/fields";
+import { capitalize } from "../../helpers/strings";
 
 interface UseIncomeCategoryProps {
   catalog: CatalogType | null;
@@ -39,16 +40,16 @@ export const useIncomeCategory = ({
   };
 
   const setDefaultCategory = () => {
-    setCategory(defaultOption("incomeCategory", catalog, selected));
+    setCategory(capitalize(defaultOption("incomeCategory", catalog, selected)));
   };
 
   const setCatalogCategory = () => {
-    const catalogIndex = catalog?.income?.categories.findIndex(
+    const catalogOption = catalog?.income?.categories.find(
       (cat) => cat === category.toLowerCase()
     );
-    !catalogIndex || catalogIndex === -1
+    !catalogOption
       ? setDefaultCategory()
-      : setCategory(catalog?.income?.categories[catalogIndex] || "");
+      : setCategory(capitalize(catalogOption));
   };
 
   useEffect(() => {

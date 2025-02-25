@@ -19,13 +19,11 @@ import type { IncomeType } from "../../../../../models/Income";
 import type { Currencies } from "../../../../../models/types";
 import { selectCatalog } from "../../../../../redux/catalog";
 import { addIncome, selectIncome } from "../../../../../redux/income";
-import SelectEntry from "../../../../elements/input/form/Select";
 import ErrorMessages from "../../../../elements/misc/errorMessages";
 import BasicButton from "../../../input/button/BasicButton";
+import Creatable from "../../../input/form/Creatable";
 import TextEntry from "../../../input/form/Text";
 import Loading from "../../../misc/loading";
-import CreatableSelect from "../../../input/form/CreatableSelect";
-import Creatable from "../../../input/form/Creatable";
 
 const NewIncome: FC = () => {
   const dispatch = useReduxDispatch();
@@ -106,6 +104,10 @@ const NewIncome: FC = () => {
       <Creatable
         label="Source:"
         name="source"
+        catalog={catalog}
+        catalogField="source"
+        catalogSection="income"
+        catalogLoading={catalogLoading}
         value={source}
         setValue={setSource}
         onTextEntry={(e) => setSource(e.currentTarget.value)}
@@ -124,6 +126,10 @@ const NewIncome: FC = () => {
         name="category"
         value={category}
         setValue={setCategory}
+        catalog={catalog}
+        catalogField="incomeCategory"
+        catalogSection="income"
+        catalogLoading={catalogLoading}
         onTextEntry={(e) => setCategory(e.currentTarget.value)}
         loading={catalogLoading}
         className="mb-6"
@@ -142,7 +148,7 @@ const NewIncome: FC = () => {
       ) : (
         <BasicButton
           type="submit"
-          disabled={catalogLoading || !amount}
+          disabled={catalogLoading}
           label="Save"
           className={`w-full col-span-2`}
           color={"green"}

@@ -17,12 +17,15 @@ import { AiOutlineLineChart, AiOutlineMinusCircle } from "react-icons/ai";
 import { CgOptions } from "react-icons/cg";
 import { GrAddCircle } from "react-icons/gr";
 import { BiHide } from "react-icons/bi";
+import { selectAsset } from "../../../../redux/asset";
+import NewAsset from "./NewAsset";
 
 const Options: FC = () => {
   const { recordPath: dataType } = usePath();
 
   const { incomeChartType } = useReduxSelector(selectIncome);
-  const { expenses, expenseChartType } = useReduxSelector(selectExpense);
+  const { expenseChartType } = useReduxSelector(selectExpense);
+  const { assetChartType } = useReduxSelector(selectAsset);
   const { summaryChartType } = useReduxSelector(selectSummary);
 
   const condi1 =
@@ -59,6 +62,17 @@ const Options: FC = () => {
         </GroupBox>
       )}
 
+      {dataType === "assets" && (
+        <GroupBox
+          title="Record Asset"
+          expanded={true}
+          icon={<GrAddCircle size="20" />}
+          zIndex={4}
+        >
+          <NewAsset />
+        </GroupBox>
+      )}
+
       <GroupBox
         title={`Chart Type`}
         expanded={false}
@@ -74,7 +88,7 @@ const Options: FC = () => {
         </GroupBox>
       )}
 
-      {dataType === "summary" && expenses.length && (
+      {/* {dataType === "summary" && expenses.length && (
         <GroupBox
           title={`Negative Expenses?`}
           expanded={false}
@@ -83,13 +97,13 @@ const Options: FC = () => {
         >
           <NegateExpensesOption />
         </GroupBox>
-      )}
+      )} */}
 
       {dataType === "summary" && (
         <GroupBox
-          title={`Hide Data`}
+          title={`Toggle Data`}
           expanded={false}
-          icon={<BiHide size="20" />}
+          icon={<CgOptions size="20" />}
           zIndex={0}
         >
           <ToggleData />

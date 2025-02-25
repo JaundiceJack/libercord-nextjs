@@ -21,6 +21,7 @@ import {
   toggleEditIncomeModal,
 } from "../../../../../redux/income";
 import ItemOptionButton from "../../../input/button/ItemOptionButton";
+import BasicButton from "../../../input/button/BasicButton";
 
 const ItemOptions: FC = () => {
   const dispatch = useReduxDispatch();
@@ -32,24 +33,25 @@ const ItemOptions: FC = () => {
 
   return (
     <div className={`flex flew-row items-center`}>
-      {dataType !== "summary" && (
-        <ItemOptionButton
-          label={`Add a New ${capitalize(dataType)}`}
-          icon={<TbFilePlus size="18px" />}
-          color="green"
-          onClick={() =>
-            dataType === "income"
-              ? dispatch(toggleAddIncomeModal())
-              : dispatch(toggleAddExpenseModal())
-          }
-          className="ml-1"
-        />
-      )}
+      {dataType !== "summary" &&
+        (dataType === "income" ? incomeWindow : expenseWindow) === "list" && (
+          <BasicButton
+            hint={`Add a New ${capitalize(dataType)}`}
+            icon={<TbFilePlus size="18px" />}
+            color="green"
+            onClick={() =>
+              dataType === "income"
+                ? dispatch(toggleAddIncomeModal())
+                : dispatch(toggleAddExpenseModal())
+            }
+            className="ml-1"
+          />
+        )}
       {dataType !== "summary" &&
         (dataType === "income" ? incomes : expenses)?.length > 0 &&
         (dataType === "income" ? incomeWindow : expenseWindow) === "list" && (
-          <ItemOptionButton
-            label={
+          <BasicButton
+            hint={
               (dataType === "income" ? incomeId !== null : expenseId !== null)
                 ? `Edit Selected ${capitalize(dataType)}`
                 : `Select ${dataType === "debt" ? "a" : "an"} ${capitalize(
@@ -72,8 +74,8 @@ const ItemOptions: FC = () => {
       {dataType !== "summary" &&
         (dataType === "income" ? incomes : expenses)?.length > 0 &&
         (dataType === "income" ? incomeWindow : expenseWindow) === "list" && (
-          <ItemOptionButton
-            label={
+          <BasicButton
+            hint={
               (dataType === "income" ? incomeId !== null : expenseId !== null)
                 ? `Remove Selected ${capitalize(dataType)}`
                 : `Select ${dataType === "debt" ? "a" : "an"} ${capitalize(

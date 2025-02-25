@@ -61,7 +61,7 @@ const SummaryGraph: FC = () => {
           <GraphOptionsBox>
             <Options />
           </GraphOptionsBox>
-          <GraphBox>
+          <GraphBox className={"md:col-span-8"}>
             {summaryChartType === "bar" ? (
               <BarChart
                 data={
@@ -86,14 +86,14 @@ const SummaryGraph: FC = () => {
               />
             )}
           </GraphBox>
-          <GraphLegendBox>
+          {/* <GraphLegendBox>
             <Legend
               title={""}
               data={[]}
               onHover={onHover}
               activeIndex={activeIndex}
             />
-          </GraphLegendBox>
+          </GraphLegendBox> */}
         </GraphContainer>
       )}
     </ContentWindow>

@@ -1,146 +1,186 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { CreatableProps } from "./types";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { errString } from "../../../../../helpers/errors";
+import useErrMsgs from "../../../../../hooks/useErrMsgs";
+import { useReduxDispatch } from "../../../../../hooks/useRedux";
+import { addItemToCatalog } from "../../../../../redux/catalog";
+import DropDown from "./DropDown";
+import Input from "./Input";
+import Label from "./Label";
+import Container from "./Container";
+import { CreatableProps } from "./types";
+import Spinner from "../../../misc/spinner";
+import ErrorMessages from "../../../misc/errorMessages";
 import { capitalize } from "../../../../../helpers/strings";
+import { ca } from "date-fns/locale";
 
-/**
- * goal here is make it more like react-select
- * where it's always a text entry
- * clicking/focusing shows the options list as a scrollable div
- *
- *
- */
+// 1. filter results as they're typed
+// 2. include a last option that when clicked creates the option
+// 3. only extend dropdown as far as there are options
 
 const Creatable: FC<CreatableProps> = ({
-  name,
+  catalog,
+  catalogSection,
+  catalogField,
+  catalogLoading,
   value,
-  onTextEntry,
   setValue,
+  defaultValue, // the value on the currently selected item
+  name,
+  onTextEntry,
+  isSearchableOnly = false,
   label,
-  type = "text",
   options,
-  loading,
   shortLabel,
   placeholder,
-  autoFocus,
+  autoFocus = false,
   className,
   required,
-  disabled,
 }) => {
-  const [focused, setFocused] = useState(value !== "");
+  // useEffect(() => {
+  //   console.log("catalog", catalog);
+  //   console.log(`${name} value`, value);
+  //   console.log("isDirty", isDirty);
+  // }, [catalog, value]);
+
+  // Hooks
+  const dispatch = useReduxDispatch();
+  const { errMsgs, setErrMsgs } = useErrMsgs();
+
+  // States
+  const [showInput, setShowInput] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const [toggled, setToggled] = useState(false);
+  const [mouseInDropDown, setMouseInDropDown] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
   const element = useRef<HTMLInputElement>(null);
-  const onFocus = () => setFocused(true);
-  const onBlur = () => !value && setFocused(false);
+
+  // Functions
+  const onFocus = () => setShowInput(true);
+  const onBlur = () => !value && setShowInput(false);
   const onHover = () => setHovered(true);
   const onExit = () => setTimeout(() => setHovered(false), 150);
+  const createOption = (query: string) => {
+    if (catalogSection && catalogField) {
+      try {
+        dispatch(
+          addItemToCatalog({
+            section: catalogSection,
+            field: catalogField,
+            item: query,
+          })
+        );
+      } catch (e) {
+        setValue("");
+        setErrMsgs([...errMsgs, errString(e)]);
+      }
+    }
+  };
 
-  const [mouseInDropDown, setMouseInDropDown] = useState(false);
-
-  // Ensure the input is shown if data is already present
-  useEffect(() => {
-    value !== "" && setFocused(true);
-  }, [value]);
-
-  // Sort data by label alphabetically
+  // Memoized values
   const sortedData = useMemo(
     () =>
-      options?.sort((a, b) => {
-        const first = typeof a === "string" ? a : a.label || "";
-        const second = typeof b === "string" ? b : b.label || "";
-        return first > second ? 1 : -1;
-      }),
-    [options]
+      options
+        ?.filter((opt) => {
+          if (
+            isDirty ||
+            !options.find((o) => o.value === value.trim().toLowerCase())
+          ) {
+            const regex = new RegExp(value.replace("\\", ""), "i");
+            return (
+              regex.test(opt.value) || opt.aliases?.some((o) => regex.test(o))
+            );
+          } else {
+            return true;
+          }
+        })
+        .sort((a, b) => {
+          const first = typeof a === "string" ? a : a.label || "";
+          const second = typeof b === "string" ? b : b.label || "";
+          return first > second ? 1 : -1;
+        }),
+    [options, value]
   );
 
+  // UseEffects
+  // Set the default value if it exists
   useEffect(() => {
-    if (
-      options?.findIndex(
-        (option) => option.value === value.trim().toLowerCase()
-      ) !== -1
-    ) {
-      setToggled(false);
-    } else setToggled(true);
+    if (catalogSection && catalogField) {
+      const catalogList = catalog?.[catalogSection]?.[catalogField];
+      const defaultOption = defaultValue ?? catalogList?.[0];
+      const selectedValue = catalogList?.find(
+        (cat) => cat === value.toLowerCase()
+      );
+      value === "" || defaultValue
+        ? setValue(capitalize(defaultOption ?? ""))
+        : setValue(capitalize(selectedValue ?? defaultOption ?? ""));
+    }
+  }, [catalog, defaultValue]);
+  // Ensure the input is shown if data is already present
+  useEffect(() => {
+    value !== "" && setShowInput(true);
   }, [value]);
+  // Close the dropdown on esc press
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) =>
+      event.key === "Escape" ? setShowDropDown(false) : null;
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
-  return (
-    <div
-      onBlur={() => {
-        !mouseInDropDown && setToggled(false);
-      }}
-      onMouseEnter={onHover}
-      onMouseLeave={onExit}
-      onClick={() => {
-        setFocused(true);
-        setToggled(!toggled);
-        element?.current?.focus();
-      }}
-      className={`flex items-center justify-center w-full h-10 relative group rounded-md text-white ${className}`}
-    >
-      <div
-        className={`flex items-center justify-center h-10 transform duration-300 ease-in-out relative ${
-          focused ? "w-24 text-sm" : "w-full text-md"
-        } group-hover:w-24 group-hover:text-sm border-b-2 border-blue-300`}
+  return catalogLoading ? (
+    <Spinner />
+  ) : (
+    <>
+      <Container
+        mouseInDropDown={mouseInDropDown}
+        showDropDown={showDropDown}
+        setShowDropDown={setShowDropDown}
+        setShowInput={setShowInput}
+        onHover={onHover}
+        onExit={onExit}
+        element={element}
+        className={className}
       >
-        <label className={`whitespace-nowrap absolute transform duration-150`}>
-          {(focused || hovered) && shortLabel ? shortLabel : label}
-        </label>
-      </div>
-      <div
-        className={`flex items-center justify-center h-10 relative transform duration-300 ease-in-out ${
-          focused ? "w-full opacity-100" : "w-0 opacity-0"
-        } group-hover:w-full group-hover:opacity-100 group-hover:block border-b-2 border-blue-base`}
-      >
-        <input
-          className={`w-full h-full p-2 removeInputOutline`}
-          type={type}
-          ref={element}
+        <Label
+          showInput={showInput}
+          hovered={hovered}
+          shortLabel={shortLabel}
+          label={label}
+        />
+        <Input
+          showInput={showInput}
           name={name}
           value={value}
           onFocus={onFocus}
           onBlur={onBlur}
-          onChange={onTextEntry}
+          onTextEntry={(e: React.FormEvent<HTMLInputElement>) => {
+            onTextEntry(e);
+            !isDirty && setIsDirty(true);
+          }}
           placeholder={placeholder}
-          required={required}
           autoFocus={autoFocus}
+          required={required}
+          element={element}
         />
-      </div>
-      <MdKeyboardArrowRight
-        className={`absolute right-3 transform duration-150 pointer-events-none ${
-          toggled ? "rotate-90" : "rotate-0"
-        }`}
-      />
+        <MdKeyboardArrowRight
+          className={`absolute right-3 transform duration-150 pointer-events-none ${
+            showDropDown ? "rotate-90" : "rotate-0"
+          }`}
+        />
+        <DropDown
+          setMouseInDropDown={setMouseInDropDown}
+          showDropDown={showDropDown}
+          value={value}
+          setValue={setValue}
+          sortedData={sortedData ?? []}
+          createOption={createOption}
+          isSearchableOnly={isSearchableOnly}
+        />
+      </Container>
 
-      <div
-        onMouseEnter={() => setMouseInDropDown(true)}
-        onMouseLeave={() => setMouseInDropDown(false)}
-        tabIndex={-1}
-        style={{ scrollbarWidth: "thin" }}
-        className={`absolute left-0 top-10 w-full z-50 
-        overflow-y-scroll duration-200 ${
-          toggled ? "h-56 border-b-4 border-blue-base" : "h-0"
-        }`}
-      >
-        {sortedData?.map((option, i) => (
-          <div
-            onClick={() => {
-              setValue(capitalize(option.value));
-            }}
-            className={`p-1 cursor-pointer overflow-x-clip overflow-ellipsis hover:bg-gray-600 ${
-              option.value === value
-                ? "bg-gray-500"
-                : i % 2 === 0
-                ? "bg-gray-700"
-                : "bg-gray-800"
-            }`}
-            key={i}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    </div>
+      {errMsgs.length > 0 && <ErrorMessages errors={errMsgs} />}
+    </>
   );
 };
 

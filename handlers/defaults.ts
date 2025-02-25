@@ -47,7 +47,12 @@ export const createDefaultCatalog = async ({
         locations: ["albertson's", "walmart", "amazon"],
       },
       asset: {
-        categories: ["gold", "real-estate", "bitcoin", "stock", "bond"],
+        // since these would be pretty much the same for all,
+        // might move this out of the users' catalog so its not duplicated eveywhere needlessly
+        // further, shouldn't this be determined from the ticker, or i guess not
+        // i would use the selection here to determine which API to use for querying a list of assets
+        //
+        accounts: ["default"],
       },
       debt: {
         categories: ["mortgage", "student loan", "credit card"],

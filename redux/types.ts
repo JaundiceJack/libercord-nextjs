@@ -8,6 +8,9 @@ export type IncomeViewByOption = "source" | "category";
 export type ExpenseSortOption = "date" | "location" | "category" | "amount";
 export type ExpenseViewByOption = "location" | "category";
 
+export type AssetSortOption = "date" | "location" | "category" | "amount";
+export type AssetViewByOption = "location" | "category";
+
 export type Timeframe = "year" | "month" | "all";
 
 export type SummaryLines = "income" | "expense" | "savings" | "cash";

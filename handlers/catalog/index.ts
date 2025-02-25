@@ -31,13 +31,13 @@ const saveCatalogItem = async ({
       );
 
     // If the item has already been added, don't modify anything
-    if (optionArray.includes(item.toLowerCase())) return catalog;
+    if (optionArray.includes(item.trim().toLowerCase())) return catalog;
 
     // If the user has no array of the given, put the item in a new one
     if (optionArray.length === 0)
       catalog[section][field] = [item.toLowerCase()];
     // Otherwise add the item to the user's catalog
-    else catalog[section][field].push(item.toLowerCase());
+    else catalog[section][field].push(item.trim().toLowerCase());
 
     const saved = await catalog.save();
     if (saved) return saved;

@@ -25,6 +25,7 @@ import {
   toggleSummaryLineModal,
 } from "../../../../../redux/summary";
 import ItemOptionButton from "../../../input/button/ItemOptionButton";
+import BasicButton from "../../../input/button/BasicButton";
 
 const WindowActions: FC = () => {
   const dispatch = useReduxDispatch();
@@ -70,25 +71,25 @@ const WindowActions: FC = () => {
       )?.length > 0 && (
         <>
           {dataType === "income" && incomeWindow === "list" && (
-            <ItemOptionButton
+            <BasicButton
               icon={<BiColumns />}
               onClick={() => dispatch(toggleIncomeColumnModal())}
               color="blue"
-              label={`Toggle Income Columns`}
+              hint={`Toggle Income Columns`}
               className="ml-1"
             />
           )}
           {dataType === "expenses" && expenseWindow === "list" && (
-            <ItemOptionButton
+            <BasicButton
               icon={<BiColumns />}
               onClick={() => dispatch(toggleExpenseColumnModal())}
               color="blue"
-              label={`Toggle Expense Columns`}
+              hint={`Toggle Expense Columns`}
               className="ml-1"
             />
           )}
 
-          <ItemOptionButton
+          <BasicButton
             icon={<TbFileExport />}
             onClick={() =>
               dataType === "income"
@@ -98,7 +99,7 @@ const WindowActions: FC = () => {
                 : exportSummaryData()
             }
             color="blue"
-            label={`Export your data to a .CSV file`}
+            hint={`Export your data to a .CSV file`}
             className={dataType !== "summary" ? "ml-1" : "ml-0"}
           />
         </>

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  AssetChartTypeOption,
   ExpenseChartTypeOption,
   IncomeChartTypeOption,
   SummaryChartTypeOption,
@@ -16,6 +17,7 @@ export interface PreferencesState {
   defaultSummaryChartType: SummaryChartTypeOption;
   defaultExpenseChartType: ExpenseChartTypeOption;
   defaultIncomeChartType: IncomeChartTypeOption;
+  defaultAssetChartType: AssetChartTypeOption;
   defaultExpenseColumns: ExpenseSortOption[];
   defaultIncomeColumns: IncomeSortOption[];
 }
@@ -28,6 +30,7 @@ export const initialState: PreferencesState = {
   defaultSummaryChartType: "line",
   defaultExpenseChartType: "bar",
   defaultIncomeChartType: "bar",
+  defaultAssetChartType: "pie",
   defaultExpenseColumns: ["date", "location", "category", "amount"],
   defaultIncomeColumns: ["date", "source", "category", "amount"],
 };

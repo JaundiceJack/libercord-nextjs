@@ -1,6 +1,7 @@
 import { Schema, Types, model, models, Document } from "mongoose";
 import { ExpenseSortOption, IncomeSortOption } from "../redux/types";
 import {
+  AssetChartTypeOption,
   ExpenseChartTypeOption,
   IncomeChartTypeOption,
   SummaryChartTypeOption,
@@ -14,6 +15,7 @@ export interface PreferenceType extends Document {
   defaultSummaryChartType?: SummaryChartTypeOption;
   defaultIncomeChartType?: IncomeChartTypeOption;
   defaultExpenseChartType?: ExpenseChartTypeOption;
+  defaultAssetChartType?: AssetChartTypeOption;
   defaultExpenseColumns?: ExpenseSortOption[];
   defaultIncomeColumns?: IncomeSortOption[];
 }
@@ -26,6 +28,7 @@ const perferenceSchema = new Schema<PreferenceType>(
     defaultSummaryChartType: { type: String, default: "line" },
     defaultIncomeChartType: { type: String, default: "pie" },
     defaultExpenseChartType: { type: String, default: "pie" },
+    defaultAssetChartType: { type: String, default: "pie" },
 
     defaultExpenseColumns: {
       type: [String],

@@ -5,6 +5,7 @@ import {
 } from "../../../../../hooks/useRedux";
 import { selectSummary, toggleSummaryLine } from "../../../../../redux/summary";
 import Checkbox from "../../../input/form/Checkbox";
+import Toggler from "../../../input/form/Toggler";
 
 const ToggleData: FC = () => {
   const dispatch = useReduxDispatch();
@@ -13,51 +14,37 @@ const ToggleData: FC = () => {
   return (
     <div className="flex justify-center flex-row">
       <div className="flex flex-col">
-        <Checkbox
-          value="income"
-          name="income"
+        <Toggler
           label="Income"
-          labelColor="white"
           onClick={() => {
             dispatch(toggleSummaryLine("income"));
           }}
           defaultChecked={summaryLines.includes("income")}
-          className="sn: "
+          className=""
         />
-        <Checkbox
-          value="expense"
-          name="expense"
+        <Toggler
           label="Expenses"
-          labelColor="white"
           onClick={() => {
             dispatch(toggleSummaryLine("expense"));
           }}
           defaultChecked={summaryLines.includes("expense")}
-          className="sn: "
+          className=""
         />
-      </div>
-      <div className="flex flex-col">
-        <Checkbox
-          value="savings"
-          name="savings"
+        <Toggler
           label="Savings"
-          labelColor="white"
           onClick={() => {
             dispatch(toggleSummaryLine("savings"));
           }}
           defaultChecked={summaryLines.includes("savings")}
-          className="ml-4"
+          className=""
         />
-        <Checkbox
-          value="cash"
-          name="cash"
+        <Toggler
           label="Cash"
-          labelColor="white"
           onClick={() => {
             dispatch(toggleSummaryLine("cash"));
           }}
           defaultChecked={summaryLines.includes("cash")}
-          className="ml-4"
+          className=""
         />
       </div>
     </div>

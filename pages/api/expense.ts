@@ -17,8 +17,8 @@ const expenseRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       // Get the user's expenses
       if (req.method === "GET") {
         const expenses = await getExpensesByUserId({ user: session._id });
-        if (expenses) res.status(200).json(expenses);
-        else if (expenses === []) res.status(200).json([]);
+        if (expenses && expenses.length > 0) res.status(200).json(expenses);
+        else if (expenses && !expenses.length) res.status(200).json([]);
         else throw new Error("Unable to retrieve user expenses.");
       }
       // Make a new expense
@@ -49,8 +49,8 @@ const expenseRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           user: session._id,
           expenseId: body.expenseId,
         });
-        if (expenses) res.status(200).json(expenses);
-        else if (expenses === []) res.status(200).json([]);
+        if (expenses && expenses.length > 0) res.status(200).json(expenses);
+        else if (expenses && !expenses.length) res.status(200).json([]);
         else throw new Error("Unable to remove expense.");
       }
     } else throw new Error("Log in for expenses.");
